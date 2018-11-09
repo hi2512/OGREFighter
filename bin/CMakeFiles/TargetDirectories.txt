@@ -1,0 +1,5 @@
+/home/steve/Downloads/GTechFinal/bin/CMakeFiles/rebuild_cache.dir
+/home/steve/Downloads/GTechFinal/bin/CMakeFiles/run.dir
+/home/steve/Downloads/GTechFinal/bin/CMakeFiles/OgreImgui.dir
+/home/steve/Downloads/GTechFinal/bin/CMakeFiles/edit_cache.dir
+/home/steve/Downloads/GTechFinal/bin/CMakeFiles/Game.dir
