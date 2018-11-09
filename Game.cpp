@@ -41,6 +41,7 @@ public:
 	bool mouseReleased(const OgreBites::MouseButtonEvent &evt);
 	bool frameStarted(const FrameEvent& evt);
 	bool frameRenderingQueued(const FrameEvent& evt);
+	bool frameEnded(const Ogre::FrameEvent& evt);
 	Physics * phys;
 private:
 	void initPhys();
@@ -65,6 +66,16 @@ private:
 	Vector3 moveDir = Vector3(0, 0, 0);
 	int moveVal = 5;
 
+	const int fps = 60;
+	const int frameDelay = 1000 / fps;
+
+	Uint32 frameStart;
+	int frameTime;
+
+	Uint32 frameCount = 0;
+
+	bool debug = false;
+
 };
 
 //! [constructor]
@@ -77,10 +88,12 @@ Game::Game() :
 
 //! [key_handler]
 bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
-	if (gameState->gameIsPaused() && evt.keysym.sym != OgreBites::SDLK_ESCAPE
-			&& evt.keysym.sym != OgreBites::SDLK_RETURN) {
-		return true;
-	}
+	/*
+	 if (gameState->gameIsPaused() && evt.keysym.sym != OgreBites::SDLK_ESCAPE
+	 && evt.keysym.sym != OgreBites::SDLK_RETURN) {
+	 return true;
+	 }
+	 */
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_ESCAPE:
 		gameState->shouldExit = true;
@@ -104,7 +117,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	case OgreBites::SDLK_SPACE:
 		break;
 	case 'r':
-		initPhys();
+		debug = !debug;
 		break;
 	case 'w':
 		moveDir.z = -moveVal;
@@ -136,9 +149,11 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 }
 
 bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
-	if (gameState->gameIsPaused()) {
-		return true;
-	}
+	/*
+	 if (gameState->gameIsPaused()) {
+	 return true;
+	 }
+	 */
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_UP:
 	case OgreBites::SDLK_DOWN:
@@ -271,18 +286,16 @@ void Game::setup(void) {
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
 	Ogre::MeshPtr planePtr = Ogre::MeshManager::getSingleton().createPlane(
 			"ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-			plane, 1500, 2500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+			plane, 3000, 2500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
 
 	Ogre::Entity *entGround = scnMgr->createEntity("GroundEntity", "ground");
-	entGround->setMaterialName("Field");
 	Ogre::SceneNode *groundNode =
 			scnMgr->getRootSceneNode()->createChildSceneNode("GroundNode");
 	btCollisionShape *groundShape = new btBoxShape(
-			btVector3(btScalar(750.), btScalar(0), btScalar(1250.)));
+			btVector3(btScalar(1500.), btScalar(0), btScalar(1250.)));
 
 	Ground * g = new Ground(scnMgr, groundNode, "GroundObject", entGround, phys,
 			groundShape, Vector3(0, 0, 0));
-
 }
 
 void Game::initPhys() {
@@ -299,6 +312,7 @@ void Game::initPhys() {
 
 //! [main]
 int main(int argc, char *argv[]) {
+
 	SDL_Init(SDL_INIT_AUDIO);
 
 	initAudio();
@@ -313,46 +327,54 @@ int main(int argc, char *argv[]) {
 }
 
 bool Game::frameStarted(const FrameEvent &evt) {
+	frameStart = SDL_GetTicks();
+
 	OgreBites::ApplicationContext::frameStarted(evt);
 
 	Ogre::ImguiManager::getSingleton().newFrame(evt.timeSinceLastFrame,
 			Ogre::Rect(0, 0, getRenderWindow()->getWidth(),
 					getRenderWindow()->getHeight()));
-
-	if (gameState->shouldExit) {
-		getRoot()->queueEndRendering();
-		return false;
+	if(debug) {
+		gameGui->showFrameCount();
+		gameState->camPos = Vector3(camNode->getPosition());
+		gameGui->showCamPos();
 	}
+	/*
+	 if (gameState->shouldExit) {
+	 getRoot()->queueEndRendering();
+	 return false;
+	 }
 
-	if (gameState->waitingOnPlayers) {
-		gameGui->showWaitingOnPlayers();
-		return true;
-	}
+	 if (gameState->waitingOnPlayers) {
+	 gameGui->showWaitingOnPlayers();
+	 return true;
+	 }
 
-	if (!gameState->gameStarted) {
-		return true;
-	}
+	 if (!gameState->gameStarted) {
+	 return true;
+	 }
 
-	if (gameState->showingGameScoreboard) {
-		gameGui->showScore();
-	}
-	if (gameState->showLoseScreen) {
-		gameGui->showLoseScreen();
-	}
+	 if (gameState->showingGameScoreboard) {
+	 gameGui->showScore();
+	 }
+	 if (gameState->showLoseScreen) {
+	 gameGui->showLoseScreen();
+	 }
 
-	if (gameState->showWinScreen) {
-		gameGui->showWinScreen();
-	}
-
+	 if (gameState->showWinScreen) {
+	 gameGui->showWinScreen();
+	 }
+	 */
 	return true;
 }
 
 bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	bool frameVal = OgreBites::ApplicationContext::frameRenderingQueued(evt);
-
-	if (gameState->gameIsPaused()) {
-		return frameVal;
-	}
+	/*
+	 if (gameState->gameIsPaused()) {
+	 return frameVal;
+	 }
+	 */
 
 	phys->dynamicsWorld->stepSimulation(1.0f / 12.0f, 50);
 
@@ -370,12 +392,22 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		go->animate(evt);
 
 	}
-
 	camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;
 	rightMouseRelease = false;
 	return frameVal;
+}
+
+bool Game::frameEnded(const FrameEvent &evt) {
+	bool res = OgreBites::ApplicationContext::frameEnded(evt);
+	frameTime = SDL_GetTicks() - frameStart;
+	if(frameDelay > frameTime) {
+		SDL_Delay(frameDelay - frameTime);
+	}
+	frameCount++;
+	this->gameState->frameCount = this->frameCount;
+	return res;
 }
 
 //! [main]

@@ -32,6 +32,9 @@ public:
 	bool showMultiplaySelect();
 	void showWaitingOnPlayers();
 	void showSingleSelect();
+
+	void showFrameCount();
+	void showCamPos();
 };
 
 

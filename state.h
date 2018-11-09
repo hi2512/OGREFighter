@@ -1,6 +1,7 @@
 #ifndef _STATE_H_
 #define _STATE_H_
 
+#include <Ogre.h>
 #include <SDL2/SDL.h>
 #include <LinearMath/btVector3.h>
 
@@ -27,6 +28,9 @@ public:
 	bool waitingOnPlayers = false;
 	bool multiplayer = false;
 	bool showSingleSelect = false;
+
+	Uint32 frameCount = 0;
+	Ogre::Vector3 camPos = Ogre::Vector3(0, 0, 0);
 
 
 	GameState(void) {
