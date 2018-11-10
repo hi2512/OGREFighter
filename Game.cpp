@@ -77,8 +77,8 @@ private:
 	bool debug = false;
 
 	//key and frame
-	std::vector<tuple<int, Uint32>> inputBuffer;
-	std::vector<tuple<int, Uint32>> releaseBuffer;
+	std::deque<tuple<int, Uint32>> inputBuffer;
+	std::deque<tuple<int, Uint32>> releaseBuffer;
 
 };
 
@@ -100,7 +100,11 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	 return true;
 	 }
 	 */
-	this->inputBuffer.push_back(tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+	if (inputBuffer.size() > 200) {
+		inputBuffer.pop_front();
+	}
+	this->inputBuffer.push_back(
+			tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_ESCAPE:
 		gameState->shouldExit = true;
@@ -161,7 +165,11 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	 return true;
 	 }
 	 */
-	this->releaseBuffer.push_back(tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+	if (releaseBuffer.size() > 200) {
+		releaseBuffer.pop_front();
+	}
+	this->releaseBuffer.push_back(
+			tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_UP:
 	case OgreBites::SDLK_DOWN:
@@ -342,7 +350,7 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	Ogre::ImguiManager::getSingleton().newFrame(evt.timeSinceLastFrame,
 			Ogre::Rect(0, 0, getRenderWindow()->getWidth(),
 					getRenderWindow()->getHeight()));
-	if(debug) {
+	if (debug) {
 		gameGui->showFrameCount();
 		gameState->camPos = Vector3(camNode->getPosition());
 		gameGui->showCamPos();
@@ -411,7 +419,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 bool Game::frameEnded(const FrameEvent &evt) {
 	bool res = OgreBites::ApplicationContext::frameEnded(evt);
 	frameTime = SDL_GetTicks() - frameStart;
-	if(frameDelay > frameTime) {
+	if (frameDelay > frameTime) {
 		SDL_Delay(frameDelay - frameTime);
 	}
 	frameCount++;
