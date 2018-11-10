@@ -29,6 +29,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "/usr/local/include/OGRE/Volume"
   )
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/steve/Downloads/GTechFinal/Actor.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Actor.cpp.o"
   "/home/steve/Downloads/GTechFinal/DebugDraw.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/DebugDraw.cpp.o"
   "/home/steve/Downloads/GTechFinal/DynamicLineDrawer.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o"
   "/home/steve/Downloads/GTechFinal/Game.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Game.cpp.o"

@@ -1,9 +1,10 @@
 #include "gui.h"
 #include <ImguiManager.h>
 
+using namespace std;
 void GameGui::showFrameCount() {
 	ImGui::Begin("Scoreboard", NULL,
-				ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Frame Number: %d", this->state->frameCount);
 	ImGui::SetNextWindowPos(ImVec2(250, 50));
 	ImGui::End();
@@ -11,7 +12,7 @@ void GameGui::showFrameCount() {
 
 void GameGui::showCamPos() {
 	ImGui::Begin("CamPos", NULL,
-					ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Camera X Position: %f", state->camPos.x);
 	ImGui::Text("Camera Y Position: %f", state->camPos.y);
 	ImGui::Text("Camera Z Position: %f", state->camPos.z);
@@ -20,7 +21,41 @@ void GameGui::showCamPos() {
 
 	ImGui::Text("Window X Position: %f", windowPos.x);
 	ImGui::Text("Window Y Position: %f", windowPos.y);
-	ImGui::SetNextWindowPos(ImVec2(250, 0));
+	//ImGui::SetNextWindowPos(ImVec2(250, 200));
+	ImGui::End();
+
+}
+
+void GameGui::showInputBuffer() {
+	ImGui::Begin("InputBuffer", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	auto buf = state->inputBuffer;
+
+	for (int i = 0; i < 20 && ((int) buf->size() - (1 + i) >= 0); i++) {
+		auto ax = buf->at(buf->size() - (1 + i));
+		int input = get<0>(ax);
+		Uint32 frame = get<1>(ax);
+		if(input > 127) {
+			//handle non keyboard characters
+			switch(input) {
+			case OgreBites::SDLK_LEFT:
+				ImGui::Text("Input: <-, Frame Inputed: %d", frame);
+				break;
+			case OgreBites::SDLK_UP:
+				ImGui::Text("Input: ^, Frame Inputed: %d", frame);
+				break;
+			case OgreBites::SDLK_RIGHT:
+				ImGui::Text("Input: ->, Frame Inputed: %d", frame);
+				break;
+			case OgreBites::SDLK_DOWN:
+				ImGui::Text("Input: V, Frame Inputed: %d", frame);
+				break;
+
+			}
+		} else {
+			ImGui::Text("Input: %c, Frame Inputed: %d", input, frame);
+		}
+	}
 	ImGui::End();
 
 }

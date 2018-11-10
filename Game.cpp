@@ -76,12 +76,18 @@ private:
 
 	bool debug = false;
 
+	//key and frame
+	std::vector<tuple<int, Uint32>> inputBuffer;
+	std::vector<tuple<int, Uint32>> releaseBuffer;
+
 };
 
 //! [constructor]
 Game::Game() :
 		OgreBites::ApplicationContext("GameTechFinal") {
 	gameState = new GameState();
+	gameState->inputBuffer = &inputBuffer;
+	gameState->releaseBuffer = &releaseBuffer;
 	gameGui = new GameGui(gameState);
 }
 //! [constructor]
@@ -94,6 +100,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	 return true;
 	 }
 	 */
+	this->inputBuffer.push_back(tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_ESCAPE:
 		gameState->shouldExit = true;
@@ -154,6 +161,7 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	 return true;
 	 }
 	 */
+	this->releaseBuffer.push_back(tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_UP:
 	case OgreBites::SDLK_DOWN:
@@ -338,6 +346,7 @@ bool Game::frameStarted(const FrameEvent &evt) {
 		gameGui->showFrameCount();
 		gameState->camPos = Vector3(camNode->getPosition());
 		gameGui->showCamPos();
+		gameGui->showInputBuffer();
 	}
 	/*
 	 if (gameState->shouldExit) {

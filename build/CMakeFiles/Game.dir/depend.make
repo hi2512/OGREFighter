@@ -4,6 +4,8 @@
 CMakeFiles/Game.dir/audio.c.o: ../audio.c
 CMakeFiles/Game.dir/audio.c.o: ../audio.h
 
+CMakeFiles/Game.dir/Actor.cpp.o: ../Actor.cpp
+
 CMakeFiles/Game.dir/DebugDraw.cpp.o: ../DebugDraw.cpp
 CMakeFiles/Game.dir/DebugDraw.cpp.o: ../DebugDraw.h
 CMakeFiles/Game.dir/DebugDraw.cpp.o: ../DynamicLineDrawer.h

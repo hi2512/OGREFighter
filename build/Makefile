@@ -149,6 +149,33 @@ Game/fast:
 	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/build
 .PHONY : Game/fast
 
+Actor.o: Actor.cpp.o
+
+.PHONY : Actor.o
+
+# target to build an object file
+Actor.cpp.o:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.o
+.PHONY : Actor.cpp.o
+
+Actor.i: Actor.cpp.i
+
+.PHONY : Actor.i
+
+# target to preprocess a source file
+Actor.cpp.i:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.i
+.PHONY : Actor.cpp.i
+
+Actor.s: Actor.cpp.s
+
+.PHONY : Actor.s
+
+# target to generate assembly for a file
+Actor.cpp.s:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.s
+.PHONY : Actor.cpp.s
+
 DebugDraw.o: DebugDraw.cpp.o
 
 .PHONY : DebugDraw.o
@@ -511,6 +538,9 @@ help:
 	@echo "... OgreImgui"
 	@echo "... edit_cache"
 	@echo "... Game"
+	@echo "... Actor.o"
+	@echo "... Actor.i"
+	@echo "... Actor.s"
 	@echo "... DebugDraw.o"
 	@echo "... DebugDraw.i"
 	@echo "... DebugDraw.s"

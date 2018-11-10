@@ -9,6 +9,8 @@
 
 class NetBase;
 
+using namespace std;
+
 class GameState {
 public:
 
@@ -31,6 +33,9 @@ public:
 
 	Uint32 frameCount = 0;
 	Ogre::Vector3 camPos = Ogre::Vector3(0, 0, 0);
+
+	std::vector<tuple<int, Uint32>> * inputBuffer = 0;
+	std::vector<tuple<int, Uint32>> * releaseBuffer = 0;
 
 
 	GameState(void) {

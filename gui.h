@@ -35,6 +35,7 @@ public:
 
 	void showFrameCount();
 	void showCamPos();
+	void showInputBuffer();
 };
 
 

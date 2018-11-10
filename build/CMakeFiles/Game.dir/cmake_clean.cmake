@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Game.dir/Actor.cpp.o"
   "CMakeFiles/Game.dir/DebugDraw.cpp.o"
   "CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o"
   "CMakeFiles/Game.dir/Game.cpp.o"
