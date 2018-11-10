@@ -14,7 +14,7 @@ set(CMAKE_MODULE_PATH "/lusr/opt/bullet-2.86;${CMAKE_MODULE_PATH}")
 set(OGRE_DIR /lusr/opt/ogre-1.11/lib/OGRE/cmake)
 set(BULLET_DIR /lusr/opt/bullet-2.86/lib/cmake/bullet)
 
-project(gametechp2)
+project(Game)
 
 ## [discover_ogre]
 # specify which version and components you need
@@ -22,8 +22,7 @@ find_package(Freetype)
 find_package(OGRE 1.11 REQUIRED COMPONENTS Bites RTShaderSystem)
 find_package(Bullet 2.86)
 
-# copy resource.cfg next to our binaries where OGRE looks for it
-file(COPY ${OGRE_CONFIG_DIR}/resources.cfg DESTINATION "${CMAKE_BINARY_DIR}")
+
 ## [discover_ogre]
 
 include_directories(${BULLET_INCLUDE_DIR})
@@ -61,7 +60,10 @@ PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
 ## [link sdl for sound]
 
-target_link_libraries(${PROJECT_NAME} ${OGRE_LIBRARIES} ${BULLET_LIBRARIES} ${SDL2_LIBRARIES} OgreImgui)
+PKG_SEARCH_MODULE(SDLNET REQUIRED SDL_net)
+INCLUDE_DIRECTORIES(${SDLNET_INCLUDE_DIRS})
+
+target_link_libraries(${PROJECT_NAME} ${OGRE_LIBRARIES} ${BULLET_LIBRARIES} ${SDL2_LIBRARIES} ${SDLNET_LIBRARIES} OgreImgui)
 
 
 # found on stack overflow in order to add a simple "make run" command that builds and executes the project

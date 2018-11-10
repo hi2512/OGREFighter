@@ -127,12 +127,26 @@ Ground.h
 /home/steve/Downloads/GTechFinal/Ground.h
 Actor.h
 /home/steve/Downloads/GTechFinal/Actor.h
+Ninja.h
+/home/steve/Downloads/GTechFinal/Ninja.h
 
 /home/steve/Downloads/GTechFinal/Ground.h
 Ogre.h
 -
 physics.h
 /home/steve/Downloads/GTechFinal/physics.h
+
+/home/steve/Downloads/GTechFinal/Ninja.h
+Ogre.h
+-
+physics.h
+/home/steve/Downloads/GTechFinal/physics.h
+btBulletCollisionCommon.h
+-
+btBulletDynamicsCommon.h
+-
+Actor.h
+/home/steve/Downloads/GTechFinal/Actor.h
 
 /home/steve/Downloads/GTechFinal/audio.h
 SDL2/SDL.h

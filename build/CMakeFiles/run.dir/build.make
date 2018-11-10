@@ -53,8 +53,8 @@ CMAKE_BINARY_DIR = /home/steve/Downloads/GTechFinal/build
 # Include the progress variables for this target.
 include CMakeFiles/run.dir/progress.make
 
-CMakeFiles/run: Game
-	./Game
+CMakeFiles/run: gametechp2
+	./gametechp2
 
 run: CMakeFiles/run
 run: CMakeFiles/run.dir/build.make

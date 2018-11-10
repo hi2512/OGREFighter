@@ -25,6 +25,8 @@
 #include "physics.h"
 #include "Ground.h"
 //! [our file includes]
+#include "Actor.h"
+#include "Ninja.h"
 
 using namespace Ogre;
 using namespace std;
@@ -268,8 +270,8 @@ void Game::setup(void) {
 
 	// set up camera node's position
 	camNode = scnMgr->getRootSceneNode()->createChildSceneNode(
-			Vector3(0, 400, 1750));
-	camNode->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
+			Vector3(0, 500, 1750));
+	camNode->lookAt(Vector3(0, 50, -1), Node::TS_PARENT);
 
 	// create the camera and attach it to the node we just created
 	Camera* cam = scnMgr->createCamera("mainCamera");
@@ -293,7 +295,7 @@ void Game::setup(void) {
 
 	SceneNode* pointLightNode1 =
 			scnMgr->getRootSceneNode()->createChildSceneNode(
-					Vector3(-300, 500, -700));
+					Vector3(-300, 900, 700));
 	pointLightNode1->lookAt(Vector3(0, 0, 0), Node::TS_LOCAL);
 	pointLightNode1->attachObject(pointLight1);
 
@@ -312,6 +314,25 @@ void Game::setup(void) {
 
 	Ground * g = new Ground(scnMgr, groundNode, "GroundObject", entGround, phys,
 			groundShape, Vector3(0, 0, 0));
+
+	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
+	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode(
+			"P1Node");
+
+	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
+	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
+	Actor * p1 = new Ninja(scnMgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-200, 200, 0));
+
+	AnimationStateSet *mAnims = p1Entity->getAllAnimationStates();
+	AnimationStateIterator it = mAnims->getAnimationStateIterator();
+	while (it.hasMoreElements()) {
+		AnimationStateMap::mapped_type as = it.getNext();
+		LogManager::getSingleton().logMessage(as->getAnimationName());
+	}
+	//p1Node->attachObject(p1Entity);
+	//p1Entity->getAnimationState("Attack1")->setLoop(true);
+	//p1Entity->getAnimationState("Attack1")->setEnabled(true);
+
 }
 
 void Game::initPhys() {

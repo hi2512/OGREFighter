@@ -3,7 +3,7 @@
 
 using namespace std;
 void GameGui::showFrameCount() {
-	ImGui::Begin("Scoreboard", NULL,
+	ImGui::Begin("Frame Count", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Frame Number: %d", this->state->frameCount);
 	ImGui::SetNextWindowPos(ImVec2(250, 50));
@@ -11,7 +11,7 @@ void GameGui::showFrameCount() {
 }
 
 void GameGui::showCamPos() {
-	ImGui::Begin("CamPos", NULL,
+	ImGui::Begin("Camera Position", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Camera X Position: %f", state->camPos.x);
 	ImGui::Text("Camera Y Position: %f", state->camPos.y);

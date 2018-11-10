@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/steve/Downloads/GTechFinal/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -137,17 +137,17 @@ OgreImgui/fast:
 .PHONY : OgreImgui/fast
 
 #=============================================================================
-# Target rules for targets named Game
+# Target rules for targets named gametechp2
 
 # Build rule for target.
-Game: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Game
-.PHONY : Game
+gametechp2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 gametechp2
+.PHONY : gametechp2
 
 # fast build rule for target.
-Game/fast:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/build
-.PHONY : Game/fast
+gametechp2/fast:
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/build
+.PHONY : gametechp2/fast
 
 Actor.o: Actor.cpp.o
 
@@ -155,7 +155,7 @@ Actor.o: Actor.cpp.o
 
 # target to build an object file
 Actor.cpp.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Actor.cpp.o
 .PHONY : Actor.cpp.o
 
 Actor.i: Actor.cpp.i
@@ -164,7 +164,7 @@ Actor.i: Actor.cpp.i
 
 # target to preprocess a source file
 Actor.cpp.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Actor.cpp.i
 .PHONY : Actor.cpp.i
 
 Actor.s: Actor.cpp.s
@@ -173,7 +173,7 @@ Actor.s: Actor.cpp.s
 
 # target to generate assembly for a file
 Actor.cpp.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Actor.cpp.s
 .PHONY : Actor.cpp.s
 
 DebugDraw.o: DebugDraw.cpp.o
@@ -182,7 +182,7 @@ DebugDraw.o: DebugDraw.cpp.o
 
 # target to build an object file
 DebugDraw.cpp.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/DebugDraw.cpp.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/DebugDraw.cpp.o
 .PHONY : DebugDraw.cpp.o
 
 DebugDraw.i: DebugDraw.cpp.i
@@ -191,7 +191,7 @@ DebugDraw.i: DebugDraw.cpp.i
 
 # target to preprocess a source file
 DebugDraw.cpp.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/DebugDraw.cpp.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/DebugDraw.cpp.i
 .PHONY : DebugDraw.cpp.i
 
 DebugDraw.s: DebugDraw.cpp.s
@@ -200,7 +200,7 @@ DebugDraw.s: DebugDraw.cpp.s
 
 # target to generate assembly for a file
 DebugDraw.cpp.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/DebugDraw.cpp.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/DebugDraw.cpp.s
 .PHONY : DebugDraw.cpp.s
 
 DynamicLineDrawer.o: DynamicLineDrawer.cpp.o
@@ -209,7 +209,7 @@ DynamicLineDrawer.o: DynamicLineDrawer.cpp.o
 
 # target to build an object file
 DynamicLineDrawer.cpp.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o
 .PHONY : DynamicLineDrawer.cpp.o
 
 DynamicLineDrawer.i: DynamicLineDrawer.cpp.i
@@ -218,7 +218,7 @@ DynamicLineDrawer.i: DynamicLineDrawer.cpp.i
 
 # target to preprocess a source file
 DynamicLineDrawer.cpp.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/DynamicLineDrawer.cpp.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.i
 .PHONY : DynamicLineDrawer.cpp.i
 
 DynamicLineDrawer.s: DynamicLineDrawer.cpp.s
@@ -227,7 +227,7 @@ DynamicLineDrawer.s: DynamicLineDrawer.cpp.s
 
 # target to generate assembly for a file
 DynamicLineDrawer.cpp.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/DynamicLineDrawer.cpp.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.s
 .PHONY : DynamicLineDrawer.cpp.s
 
 Game.o: Game.cpp.o
@@ -236,7 +236,7 @@ Game.o: Game.cpp.o
 
 # target to build an object file
 Game.cpp.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Game.cpp.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Game.cpp.o
 .PHONY : Game.cpp.o
 
 Game.i: Game.cpp.i
@@ -245,7 +245,7 @@ Game.i: Game.cpp.i
 
 # target to preprocess a source file
 Game.cpp.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Game.cpp.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Game.cpp.i
 .PHONY : Game.cpp.i
 
 Game.s: Game.cpp.s
@@ -254,7 +254,7 @@ Game.s: Game.cpp.s
 
 # target to generate assembly for a file
 Game.cpp.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Game.cpp.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Game.cpp.s
 .PHONY : Game.cpp.s
 
 audio.o: audio.c.o
@@ -263,7 +263,7 @@ audio.o: audio.c.o
 
 # target to build an object file
 audio.c.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/audio.c.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/audio.c.o
 .PHONY : audio.c.o
 
 audio.i: audio.c.i
@@ -272,7 +272,7 @@ audio.i: audio.c.i
 
 # target to preprocess a source file
 audio.c.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/audio.c.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/audio.c.i
 .PHONY : audio.c.i
 
 audio.s: audio.c.s
@@ -281,7 +281,7 @@ audio.s: audio.c.s
 
 # target to generate assembly for a file
 audio.c.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/audio.c.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/audio.c.s
 .PHONY : audio.c.s
 
 gui.o: gui.cc.o
@@ -290,7 +290,7 @@ gui.o: gui.cc.o
 
 # target to build an object file
 gui.cc.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/gui.cc.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/gui.cc.o
 .PHONY : gui.cc.o
 
 gui.i: gui.cc.i
@@ -299,7 +299,7 @@ gui.i: gui.cc.i
 
 # target to preprocess a source file
 gui.cc.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/gui.cc.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/gui.cc.i
 .PHONY : gui.cc.i
 
 gui.s: gui.cc.s
@@ -308,7 +308,7 @@ gui.s: gui.cc.s
 
 # target to generate assembly for a file
 gui.cc.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/gui.cc.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/gui.cc.s
 .PHONY : gui.cc.s
 
 ogre-imgui/ImguiManager.o: ogre-imgui/ImguiManager.cpp.o
@@ -479,7 +479,7 @@ physics.o: physics.cpp.o
 
 # target to build an object file
 physics.cpp.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/physics.cpp.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/physics.cpp.o
 .PHONY : physics.cpp.o
 
 physics.i: physics.cpp.i
@@ -488,7 +488,7 @@ physics.i: physics.cpp.i
 
 # target to preprocess a source file
 physics.cpp.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/physics.cpp.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/physics.cpp.i
 .PHONY : physics.cpp.i
 
 physics.s: physics.cpp.s
@@ -497,7 +497,7 @@ physics.s: physics.cpp.s
 
 # target to generate assembly for a file
 physics.cpp.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/physics.cpp.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/physics.cpp.s
 .PHONY : physics.cpp.s
 
 state.o: state.cpp.o
@@ -506,7 +506,7 @@ state.o: state.cpp.o
 
 # target to build an object file
 state.cpp.o:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/state.cpp.o
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/state.cpp.o
 .PHONY : state.cpp.o
 
 state.i: state.cpp.i
@@ -515,7 +515,7 @@ state.i: state.cpp.i
 
 # target to preprocess a source file
 state.cpp.i:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/state.cpp.i
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/state.cpp.i
 .PHONY : state.cpp.i
 
 state.s: state.cpp.s
@@ -524,7 +524,7 @@ state.s: state.cpp.s
 
 # target to generate assembly for a file
 state.cpp.s:
-	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/state.cpp.s
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/state.cpp.s
 .PHONY : state.cpp.s
 
 # Help Target
@@ -533,11 +533,11 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
+	@echo "... edit_cache"
 	@echo "... run"
 	@echo "... OgreImgui"
-	@echo "... edit_cache"
-	@echo "... Game"
+	@echo "... rebuild_cache"
+	@echo "... gametechp2"
 	@echo "... Actor.o"
 	@echo "... Actor.i"
 	@echo "... Actor.s"

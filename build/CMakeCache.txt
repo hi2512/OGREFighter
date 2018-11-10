@@ -157,7 +157,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=Game
+CMAKE_PROJECT_NAME:STATIC=gametechp2
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -234,6 +234,12 @@ OgreImgui_LIB_DEPENDS:STATIC=general;OgreBites;general;OgreHLMS;general;OgreMesh
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
+
+//Value Computed by CMake
+gametechp2_BINARY_DIR:STATIC=/home/steve/Downloads/GTechFinal/build
+
+//Value Computed by CMake
+gametechp2_SOURCE_DIR:STATIC=/home/steve/Downloads/GTechFinal
 
 
 ########################
