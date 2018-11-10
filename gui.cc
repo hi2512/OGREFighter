@@ -27,7 +27,7 @@ void GameGui::showCamPos() {
 }
 
 void GameGui::showInputBuffer() {
-	ImGui::Begin("InputBuffer", NULL,
+	ImGui::Begin("Input Buffer", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	auto buf = state->inputBuffer;
 
@@ -35,9 +35,9 @@ void GameGui::showInputBuffer() {
 		auto ax = buf->at(buf->size() - (1 + i));
 		int input = get<0>(ax);
 		Uint32 frame = get<1>(ax);
-		if(input > 127) {
+		if (input > 127) {
 			//handle non keyboard characters
-			switch(input) {
+			switch (input) {
 			case OgreBites::SDLK_LEFT:
 				ImGui::Text("Input: <-, Frame Inputed: %d", frame);
 				break;
@@ -49,6 +49,9 @@ void GameGui::showInputBuffer() {
 				break;
 			case OgreBites::SDLK_DOWN:
 				ImGui::Text("Input: V, Frame Inputed: %d", frame);
+				break;
+			case OgreBites::SDLK_F1:
+				ImGui::Text("Input: F1, Frame Inputed: %d", frame);
 				break;
 
 			}

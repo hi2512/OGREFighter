@@ -46,6 +46,7 @@ public:
 	bool frameEnded(const Ogre::FrameEvent& evt);
 	Physics * phys;
 private:
+	bool inKeysHeld(const OgreBites::KeyboardEvent& evt);
 	void initPhys();
 	bool leftMouse = false;
 	bool leftMouseRelease = false;
@@ -81,6 +82,8 @@ private:
 	//key and frame
 	std::deque<tuple<int, Uint32>> inputBuffer;
 	std::deque<tuple<int, Uint32>> releaseBuffer;
+	//stores what key is held and the time it was pressed
+	std::vector<tuple<int, Uint32>> keysHeld;
 
 };
 
@@ -93,6 +96,16 @@ Game::Game() :
 	gameGui = new GameGui(gameState);
 }
 //! [constructor]
+
+bool Game::inKeysHeld(const OgreBites::KeyboardEvent& evt) {
+	//check if key was held
+	for (tuple<int, Uint32> t : keysHeld) {
+		if (evt.keysym.sym == get<0>(t)) {
+			return true;
+		}
+	}
+	return false;
+}
 
 //! [key_handler]
 bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
@@ -107,6 +120,12 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	}
 	this->inputBuffer.push_back(
 			tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+
+	if (!inKeysHeld(evt)) {
+		this->keysHeld.push_back(
+				tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+	}
+
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_ESCAPE:
 		gameState->shouldExit = true;
@@ -172,6 +191,18 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	}
 	this->releaseBuffer.push_back(
 			tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+
+	//remove from keys held
+	for (auto it = keysHeld.begin(); it != keysHeld.end(); it++) {
+		tuple<int, Uint32> t = *it;
+		if (evt.keysym.sym == get<0>(t)) {
+			keysHeld.erase(it);
+			break;
+		}
+	}
+
+	LogManager::getSingleton().logMessage("Num of keys held");
+	LogManager::getSingleton().logMessage(to_string(keysHeld.size()));
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_UP:
 	case OgreBites::SDLK_DOWN:
@@ -318,10 +349,20 @@ void Game::setup(void) {
 	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
 	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode(
 			"P1Node");
-
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
-	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
-	Actor * p1 = new Ninja(scnMgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-200, 200, 0));
+	btCollisionShape * p1Box = new btBoxShape(
+			btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
+	Actor * p1 = new Ninja(scnMgr, p1Node, "P1", p1Entity, phys, p1Box,
+			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707));
+
+	Entity * p2Entity = scnMgr->createEntity("ninja.mesh");
+	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode(
+			"P2Node");
+	auto p2OgreBox = p2Entity->getBoundingBox().getSize();
+	btCollisionShape * p2Box = new btBoxShape(
+			btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
+	Actor * p2 = new Ninja(scnMgr, p2Node, "P2", p2Entity, phys, p2Box,
+			Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707));
 
 	AnimationStateSet *mAnims = p1Entity->getAllAnimationStates();
 	AnimationStateIterator it = mAnims->getAnimationStateIterator();
