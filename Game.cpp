@@ -370,15 +370,7 @@ void Game::setup(void) {
 			Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707),
 			&inputBuffer2, &releaseBuffer2, &keysHeld2);
 
-	AnimationStateSet *mAnims = p1Entity->getAllAnimationStates();
-	AnimationStateIterator it = mAnims->getAnimationStateIterator();
-	while (it.hasMoreElements()) {
-		AnimationStateMap::mapped_type as = it.getNext();
-		LogManager::getSingleton().logMessage(as->getAnimationName());
-	}
-	//p1Node->attachObject(p1Entity);
-	//p1Entity->getAnimationState("Attack1")->setLoop(true);
-	//p1Entity->getAnimationState("Attack1")->setEnabled(true);
+
 
 }
 
