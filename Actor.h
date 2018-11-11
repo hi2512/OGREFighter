@@ -16,7 +16,12 @@ enum AttackType {
 };
 
 enum StateType {
-	STOP, FREE, ATTACK, BLOCK, AIR, DOWN, STUN
+	STOP, FREE, ATTACK, BLOCK, AIR, KNOCKDOWN, STUN
+
+};
+
+enum InputType {
+	UP, DOWN, LEFT, RIGHT, L, M, H, S
 
 };
 
@@ -24,7 +29,10 @@ enum StateType {
 class Actor: public GameObject {
 
 protected:
+	Actor * opponent = NULL;
 	StateType actorState = StateType::FREE;
+
+	std::map<int, InputType> keyBinding;
 
 	String playingAnimation;
 
@@ -45,17 +53,19 @@ public:
 			const Ogre::Vector3& origin, btQuaternion orientation,
 			std::deque<KeyInput> * inBuf,
 			std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf) :
+			std::vector<KeyInput> * kBuf, int left, int right) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true,
 					origin, orientation, 1.0, 0.0) {
 		inputBuffer = inBuf;
 		releaseBuffer = relBuf;
 		keysHeld = kBuf;
-
 		playingAnimation = "NOTSET";
 
-	}
+		keyBinding.insert(pair<int, InputType>(left, InputType::LEFT));
+		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
 
+	}
+	void setOpponent(Actor * opp) {opponent = opp;}
 	void setAnimation(String animationName);
 	void readInputs(std::deque<KeyInput>& buf,
 			std::deque<KeyInput>& rBuf);

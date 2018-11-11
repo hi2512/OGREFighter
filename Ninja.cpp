@@ -33,11 +33,15 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		Real move = walkSpeed * evt.timeSinceLastFrame;
 		Real moveX = 0;
 		for (KeyInput ki : *this->keysHeld) {
-			if (ki.key == 'a') {
+			//skip if key is not binded for this ninja
+			if(this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+				continue;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::LEFT) {
 				moveX -= move;
 				reverse = true;
 			}
-			if (ki.key == 'd') {
+			if (this->keyBinding.at(ki.key) == InputType::RIGHT) {
 				moveX += move;
 			}
 		}
@@ -50,7 +54,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		}
 		//pushback if walk into each other
 		if (context.hit) {
-			moveX = -moveX * 2.5;
+			moveX = -moveX * 3;
 		}
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
 		break;

@@ -22,9 +22,9 @@ public:
 			Entity * e, Physics * phys, btCollisionShape * shape,
 			const Ogre::Vector3& origin, btQuaternion orientation,
 			std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf) :
+			std::vector<KeyInput> * kBuf, int left, int right) :
 			Actor(sceneMgr, rootNode, name, e, phys, shape, origin, orientation,
-					inBuf, relBuf, kBuf) {
+					inBuf, relBuf, kBuf, left, right) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
 
 		ninOffsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
