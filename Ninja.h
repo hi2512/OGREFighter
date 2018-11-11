@@ -16,7 +16,6 @@ class Ninja: public Actor {
 private:
 	SceneNode * ninOffsetNode;
 	Real walkSpeed = 300.0;
-	String playingAnimation;
 
 public:
 	Ninja(SceneManager * sceneMgr, SceneNode * rootNode, String name,

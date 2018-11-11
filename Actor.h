@@ -26,6 +26,8 @@ class Actor: public GameObject {
 protected:
 	StateType actorState = StateType::FREE;
 
+	String playingAnimation;
+
 	std::deque<KeyInput> * inputBuffer;
 	std::deque<KeyInput> * releaseBuffer;
 	std::vector<KeyInput> * keysHeld;
@@ -50,8 +52,11 @@ public:
 		releaseBuffer = relBuf;
 		keysHeld = kBuf;
 
+		playingAnimation = "NOTSET";
+
 	}
 
+	void setAnimation(String animationName);
 	void readInputs(std::deque<KeyInput>& buf,
 			std::deque<KeyInput>& rBuf);
 	//void animate(const FrameEvent& evt);

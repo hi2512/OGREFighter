@@ -10,6 +10,10 @@ using namespace std;
 void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
+	CollisionContext context;
+	BulletContactCallback* thing = new BulletContactCallback(*body, context);
+	this->physics->getWorld()->contactTest(body, *thing);
+
 	bool reverse = false;
 
 	btTransform trans;
@@ -39,18 +43,14 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		}
 		//if walking
 		if (moveX) {
-			if (playingAnimation != "Walk") {
-				this->geom->getAnimationState(playingAnimation)->setEnabled(
-						false);
-				this->playingAnimation = "Walk";
-			}
+			this->setAnimation("Walk");
 		} else {
 			//not walking
-			if (playingAnimation != "Idle1") {
-				this->geom->getAnimationState(playingAnimation)->setEnabled(
-						false);
-				this->playingAnimation = "Idle1";
-			}
+			this->setAnimation("Idle1");
+		}
+		//pushback if walk into each other
+		if (context.hit) {
+			moveX = -moveX * 2.5;
 		}
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
 		break;
@@ -74,12 +74,24 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	//play animation
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-	if (!as->getEnabled()) {
-		as->setEnabled(true);
-	}
 
 	Real timeToAdd = reverse ? -evt.timeSinceLastFrame : evt.timeSinceLastFrame;
 	as->addTime(evt.timeSinceLastFrame);
+
+	//check after collision
+	thing = new BulletContactCallback(*body, context);
+	this->physics->getWorld()->contactTest(body, *thing);
+	if (context.hit && playingAnimation == "Walk") {
+		Vector3 afterOgrePos(
+				rootNode->convertLocalToWorldPosition(Vector3::ZERO));
+		Real afterX = reverse ? afterOgrePos.x + 20 : afterOgrePos.x - 20;
+		pos = btVector3(afterX, afterOgrePos.y, afterOgrePos.z);
+		trans.setOrigin(pos);
+		btpos = trans.getOrigin();
+		gloPos = Vector3(btpos.getX(), btpos.getY(), btpos.getZ());
+		this->rootNode->setPosition(gloPos);
+
+	}
 
 }
 

@@ -174,7 +174,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 			camNode->attachObject(sn->detachObject("mainCamera"));
 			break;
 		}
-		sn->setPosition(Vector3(1500, 200, 0));
+		sn->setPosition(Vector3(-1500, 200, 0));
 		sn->attachObject(camNode->detachObject("mainCamera"));
 
 		sn->lookAt(Vector3(0, 200, 0), Node::TS_WORLD);
