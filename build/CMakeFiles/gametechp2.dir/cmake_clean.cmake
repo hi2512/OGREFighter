@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/gametechp2.dir/DebugDraw.cpp.o"
   "CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o"
   "CMakeFiles/gametechp2.dir/Game.cpp.o"
+  "CMakeFiles/gametechp2.dir/Ninja.cpp.o"
   "CMakeFiles/gametechp2.dir/audio.c.o"
   "CMakeFiles/gametechp2.dir/gui.cc.o"
   "CMakeFiles/gametechp2.dir/physics.cpp.o"

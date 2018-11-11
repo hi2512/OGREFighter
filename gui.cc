@@ -33,8 +33,8 @@ void GameGui::showInputBuffer() {
 
 	for (int i = 0; i < 20 && ((int) buf->size() - (1 + i) >= 0); i++) {
 		auto ax = buf->at(buf->size() - (1 + i));
-		int input = get<0>(ax);
-		Uint32 frame = get<1>(ax);
+		int input = ax.key;
+		Uint32 frame = ax.frame;
 		if (input > 127) {
 			//handle non keyboard characters
 			switch (input) {

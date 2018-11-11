@@ -153,9 +153,33 @@ CMakeFiles/gametechp2.dir/Game.cpp.o.provides: CMakeFiles/gametechp2.dir/Game.cp
 CMakeFiles/gametechp2.dir/Game.cpp.o.provides.build: CMakeFiles/gametechp2.dir/Game.cpp.o
 
 
+CMakeFiles/gametechp2.dir/Ninja.cpp.o: CMakeFiles/gametechp2.dir/flags.make
+CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../Ninja.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/gametechp2.dir/Ninja.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gametechp2.dir/Ninja.cpp.o -c /home/steve/Downloads/GTechFinal/Ninja.cpp
+
+CMakeFiles/gametechp2.dir/Ninja.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gametechp2.dir/Ninja.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/steve/Downloads/GTechFinal/Ninja.cpp > CMakeFiles/gametechp2.dir/Ninja.cpp.i
+
+CMakeFiles/gametechp2.dir/Ninja.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gametechp2.dir/Ninja.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/steve/Downloads/GTechFinal/Ninja.cpp -o CMakeFiles/gametechp2.dir/Ninja.cpp.s
+
+CMakeFiles/gametechp2.dir/Ninja.cpp.o.requires:
+
+.PHONY : CMakeFiles/gametechp2.dir/Ninja.cpp.o.requires
+
+CMakeFiles/gametechp2.dir/Ninja.cpp.o.provides: CMakeFiles/gametechp2.dir/Ninja.cpp.o.requires
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Ninja.cpp.o.provides.build
+.PHONY : CMakeFiles/gametechp2.dir/Ninja.cpp.o.provides
+
+CMakeFiles/gametechp2.dir/Ninja.cpp.o.provides.build: CMakeFiles/gametechp2.dir/Ninja.cpp.o
+
+
 CMakeFiles/gametechp2.dir/audio.c.o: CMakeFiles/gametechp2.dir/flags.make
 CMakeFiles/gametechp2.dir/audio.c.o: ../audio.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/gametechp2.dir/audio.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/gametechp2.dir/audio.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/gametechp2.dir/audio.c.o   -c /home/steve/Downloads/GTechFinal/audio.c
 
 CMakeFiles/gametechp2.dir/audio.c.i: cmake_force
@@ -179,7 +203,7 @@ CMakeFiles/gametechp2.dir/audio.c.o.provides.build: CMakeFiles/gametechp2.dir/au
 
 CMakeFiles/gametechp2.dir/gui.cc.o: CMakeFiles/gametechp2.dir/flags.make
 CMakeFiles/gametechp2.dir/gui.cc.o: ../gui.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/gametechp2.dir/gui.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/gametechp2.dir/gui.cc.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gametechp2.dir/gui.cc.o -c /home/steve/Downloads/GTechFinal/gui.cc
 
 CMakeFiles/gametechp2.dir/gui.cc.i: cmake_force
@@ -203,7 +227,7 @@ CMakeFiles/gametechp2.dir/gui.cc.o.provides.build: CMakeFiles/gametechp2.dir/gui
 
 CMakeFiles/gametechp2.dir/physics.cpp.o: CMakeFiles/gametechp2.dir/flags.make
 CMakeFiles/gametechp2.dir/physics.cpp.o: ../physics.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/gametechp2.dir/physics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/gametechp2.dir/physics.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gametechp2.dir/physics.cpp.o -c /home/steve/Downloads/GTechFinal/physics.cpp
 
 CMakeFiles/gametechp2.dir/physics.cpp.i: cmake_force
@@ -227,7 +251,7 @@ CMakeFiles/gametechp2.dir/physics.cpp.o.provides.build: CMakeFiles/gametechp2.di
 
 CMakeFiles/gametechp2.dir/state.cpp.o: CMakeFiles/gametechp2.dir/flags.make
 CMakeFiles/gametechp2.dir/state.cpp.o: ../state.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/gametechp2.dir/state.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/gametechp2.dir/state.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gametechp2.dir/state.cpp.o -c /home/steve/Downloads/GTechFinal/state.cpp
 
 CMakeFiles/gametechp2.dir/state.cpp.i: cmake_force
@@ -255,6 +279,7 @@ gametechp2_OBJECTS = \
 "CMakeFiles/gametechp2.dir/DebugDraw.cpp.o" \
 "CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o" \
 "CMakeFiles/gametechp2.dir/Game.cpp.o" \
+"CMakeFiles/gametechp2.dir/Ninja.cpp.o" \
 "CMakeFiles/gametechp2.dir/audio.c.o" \
 "CMakeFiles/gametechp2.dir/gui.cc.o" \
 "CMakeFiles/gametechp2.dir/physics.cpp.o" \
@@ -267,6 +292,7 @@ gametechp2: CMakeFiles/gametechp2.dir/Actor.cpp.o
 gametechp2: CMakeFiles/gametechp2.dir/DebugDraw.cpp.o
 gametechp2: CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o
 gametechp2: CMakeFiles/gametechp2.dir/Game.cpp.o
+gametechp2: CMakeFiles/gametechp2.dir/Ninja.cpp.o
 gametechp2: CMakeFiles/gametechp2.dir/audio.c.o
 gametechp2: CMakeFiles/gametechp2.dir/gui.cc.o
 gametechp2: CMakeFiles/gametechp2.dir/physics.cpp.o
@@ -289,7 +315,7 @@ gametechp2: /usr/local/lib/libOgreVolume.so.1.11.2
 gametechp2: /usr/local/lib/libOgreMain.so.1.11.2
 gametechp2: /usr/local/lib/libfreetype.so
 gametechp2: CMakeFiles/gametechp2.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable gametechp2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable gametechp2"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gametechp2.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -301,6 +327,7 @@ CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/Actor.cpp.o.requir
 CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/DebugDraw.cpp.o.requires
 CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o.requires
 CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/Game.cpp.o.requires
+CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/Ninja.cpp.o.requires
 CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/audio.c.o.requires
 CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/gui.cc.o.requires
 CMakeFiles/gametechp2.dir/requires: CMakeFiles/gametechp2.dir/physics.cpp.o.requires

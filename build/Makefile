@@ -257,6 +257,33 @@ Game.cpp.s:
 	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Game.cpp.s
 .PHONY : Game.cpp.s
 
+Ninja.o: Ninja.cpp.o
+
+.PHONY : Ninja.o
+
+# target to build an object file
+Ninja.cpp.o:
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Ninja.cpp.o
+.PHONY : Ninja.cpp.o
+
+Ninja.i: Ninja.cpp.i
+
+.PHONY : Ninja.i
+
+# target to preprocess a source file
+Ninja.cpp.i:
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Ninja.cpp.i
+.PHONY : Ninja.cpp.i
+
+Ninja.s: Ninja.cpp.s
+
+.PHONY : Ninja.s
+
+# target to generate assembly for a file
+Ninja.cpp.s:
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Ninja.cpp.s
+.PHONY : Ninja.cpp.s
+
 audio.o: audio.c.o
 
 .PHONY : audio.o
@@ -550,6 +577,9 @@ help:
 	@echo "... Game.o"
 	@echo "... Game.i"
 	@echo "... Game.s"
+	@echo "... Ninja.o"
+	@echo "... Ninja.i"
+	@echo "... Ninja.s"
 	@echo "... audio.o"
 	@echo "... audio.i"
 	@echo "... audio.s"

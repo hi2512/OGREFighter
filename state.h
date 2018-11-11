@@ -6,6 +6,7 @@
 #include <LinearMath/btVector3.h>
 
 #include "audio.h"
+#include "InputContainer.h"
 
 class NetBase;
 
@@ -34,8 +35,8 @@ public:
 	Uint32 frameCount = 0;
 	Ogre::Vector3 camPos = Ogre::Vector3(0, 0, 0);
 
-	std::deque<tuple<int, Uint32>> * inputBuffer = 0;
-	std::deque<tuple<int, Uint32>> * releaseBuffer = 0;
+	std::deque<KeyInput> * inputBuffer = 0;
+	std::deque<KeyInput> * releaseBuffer = 0;
 
 
 	GameState(void) {

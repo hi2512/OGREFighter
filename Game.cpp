@@ -27,6 +27,7 @@
 //! [our file includes]
 #include "Actor.h"
 #include "Ninja.h"
+#include "InputContainer.h"
 
 using namespace Ogre;
 using namespace std;
@@ -80,10 +81,14 @@ private:
 	bool debug = false;
 
 	//key and frame
-	std::deque<tuple<int, Uint32>> inputBuffer;
-	std::deque<tuple<int, Uint32>> releaseBuffer;
+	std::deque<KeyInput> inputBuffer;
+	std::deque<KeyInput> releaseBuffer;
 	//stores what key is held and the time it was pressed
-	std::vector<tuple<int, Uint32>> keysHeld;
+	std::vector<KeyInput> keysHeld;
+
+	std::deque<KeyInput> inputBuffer2;
+	std::deque<KeyInput> releaseBuffer2;
+	std::vector<KeyInput> keysHeld2;
 
 };
 
@@ -99,8 +104,8 @@ Game::Game() :
 
 bool Game::inKeysHeld(const OgreBites::KeyboardEvent& evt) {
 	//check if key was held
-	for (tuple<int, Uint32> t : keysHeld) {
-		if (evt.keysym.sym == get<0>(t)) {
+	for (KeyInput t : keysHeld) {
+		if (evt.keysym.sym == t.key) {
 			return true;
 		}
 	}
@@ -118,12 +123,11 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	if (inputBuffer.size() > 200) {
 		inputBuffer.pop_front();
 	}
-	this->inputBuffer.push_back(
-			tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+
+	this->inputBuffer.push_back(KeyInput{evt.keysym.sym, this->frameCount});
 
 	if (!inKeysHeld(evt)) {
-		this->keysHeld.push_back(
-				tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+		this->keysHeld.push_back(KeyInput{evt.keysym.sym, this->frameCount});
 	}
 
 	switch (evt.keysym.sym) {
@@ -189,13 +193,12 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	if (releaseBuffer.size() > 200) {
 		releaseBuffer.pop_front();
 	}
-	this->releaseBuffer.push_back(
-			tuple<int, Uint32>(evt.keysym.sym, this->frameCount));
+	this->releaseBuffer.push_back(KeyInput{evt.keysym.sym, this->frameCount});
 
 	//remove from keys held
 	for (auto it = keysHeld.begin(); it != keysHeld.end(); it++) {
-		tuple<int, Uint32> t = *it;
-		if (evt.keysym.sym == get<0>(t)) {
+		KeyInput t = *it;
+		if (evt.keysym.sym == t.key) {
 			keysHeld.erase(it);
 			break;
 		}
@@ -353,7 +356,9 @@ void Game::setup(void) {
 	btCollisionShape * p1Box = new btBoxShape(
 			btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
 	Actor * p1 = new Ninja(scnMgr, p1Node, "P1", p1Entity, phys, p1Box,
-			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707));
+			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707),
+			&inputBuffer, &releaseBuffer, &keysHeld);
+
 
 	Entity * p2Entity = scnMgr->createEntity("ninja.mesh");
 	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode(
@@ -362,7 +367,8 @@ void Game::setup(void) {
 	btCollisionShape * p2Box = new btBoxShape(
 			btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
 	Actor * p2 = new Ninja(scnMgr, p2Node, "P2", p2Entity, phys, p2Box,
-			Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707));
+			Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707),
+			&inputBuffer2, &releaseBuffer2, &keysHeld2);
 
 	AnimationStateSet *mAnims = p1Entity->getAllAnimationStates();
 	AnimationStateIterator it = mAnims->getAnimationStateIterator();
