@@ -65,6 +65,8 @@ public:
 		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
 
 	}
+	void setP1Orientation();
+	void setP2Orientation();
 	void setOpponent(Actor * opp) {opponent = opp;}
 	void setAnimation(String animationName);
 	void readInputs(std::deque<KeyInput>& buf,

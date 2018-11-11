@@ -91,6 +91,9 @@ private:
 	std::deque<KeyInput> releaseBuffer2;
 	std::vector<KeyInput> keysHeld2;
 
+	Actor * player1;
+	Actor * player2;
+
 };
 
 //! [constructor]
@@ -164,6 +167,12 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 		camDir.x = 1000;
 		break;
 	case OgreBites::SDLK_SPACE:
+		break;
+	case OgreBites::SDLK_F1:
+		//player1->setP1Orientation();
+		break;
+	case OgreBites::SDLK_F2:
+		//player1->setP2Orientation();
 		break;
 	case 'r':
 		debug = !debug;
@@ -397,6 +406,10 @@ void Game::setup(void) {
 	Actor * p2 = new Ninja(scnMgr, p2Node, "P2", p2Entity, phys, p2Box,
 			Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707),
 			&inputBuffer2, &releaseBuffer2, &keysHeld2, 'j', 'l');
+	p1->setOpponent(p2);
+	p2->setOpponent(p1);
+	player1 = p1;
+	player2 = p2;
 
 }
 
@@ -495,6 +508,19 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		go->animate(evt);
 
 	}
+	//check which side players should be facing
+	Real p1X = player1->getRootNode()->convertLocalToWorldPosition(
+			Vector3::ZERO).x;
+	Real p2X = player2->getRootNode()->convertLocalToWorldPosition(
+			Vector3::ZERO).x;
+	if (p1X < p2X) {
+		player1->setP1Orientation();
+		player2->setP2Orientation();
+	} else {
+		player1->setP2Orientation();
+		player2->setP1Orientation();
+	}
+
 	camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;
