@@ -53,7 +53,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		}
 		//pushback if walk into each other
 		if (context.hit) {
-			moveX = -moveX * -3;
+			moveX = -moveX * -2;
 		}
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
 		break;
@@ -86,9 +86,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
 	if (context.hit && playingAnimation == "Walk") {
+		Real pushbackVal = 25;
 		Vector3 afterOgrePos(
 				rootNode->convertLocalToWorldPosition(Vector3::ZERO));
-		Real afterX = reverse ? afterOgrePos.x + 20 : afterOgrePos.x - 20;
+		Real afterX = reverse ? afterOgrePos.x + pushbackVal : afterOgrePos.x - pushbackVal;
 		pos = btVector3(afterX, afterOgrePos.y, afterOgrePos.z);
 		trans.setOrigin(pos);
 		btpos = trans.getOrigin();
