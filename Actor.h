@@ -5,6 +5,7 @@
 #include "physics.h"
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <SDL2/SDL.h>
 #include "InputContainer.h"
 
@@ -47,7 +48,7 @@ protected:
 	std::deque<KeyInput> * releaseBuffer;
 	std::vector<KeyInput> * keysHeld;
 
-	std::vector<btRigidBody> hitboxes;
+	std::map<AttackType, btGhostObject *> hitboxes;
 	virtual void createLightBox() {}
 	virtual void createMediumBox() {}
 	virtual void createHeavyBox() {}

@@ -1,6 +1,9 @@
 #include <Ogre.h>
 #include "physics.h"
 #include <OgreApplicationContext.h>
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "Ninja.h"
 #include "audio.h"
 
@@ -12,6 +15,22 @@ void Ninja::createLightBox() {
 }
 
 void Ninja::createHeavyBox() {
+
+	/*
+	btCollisionObject * hbox  = new btGhostObject();
+	hbox->setCollisionShape(new btBoxShape(btVector3(10, 10, 10)));
+	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 pos(curPos.x, curPos.y + 50, curPos.z);
+	btTransform trans;
+	trans.setIdentity();
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+	int collidesWith = this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
+	physics->getWorld()->addCollisionObject(hbox);
+	//this->hitboxes.insert(pair<AttackType, btGhostObject *>(AttackType::HEAVY, hbox));
+	 */
+
 
 }
 

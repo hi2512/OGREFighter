@@ -5,6 +5,7 @@
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <vector>
 #include <map>
 
@@ -18,7 +19,7 @@ struct BulletContactCallback;
 struct CollisionContext;
 
 enum CollisionType {
-	COL_NOTHING = 0, COLLISIONBOX = 1, HITBOX = 2, HURTBOX = 4, WALL = 8, PLAYER_2 = 16
+	COL_NOTHING = 0, COLLISIONBOX = 1, HITBOX = 2, HURTBOX_P1 = 4, HURTBOX_P2 = 8, WALL = 16
 };
 
 class Physics {
@@ -30,6 +31,8 @@ public:
 	btDiscreteDynamicsWorld* dynamicsWorld;
 	std::vector<btCollisionShape *> collisionShapes;
 	std::map<std::string, btRigidBody *> physicsAccessors;
+
+	btPairCachingGhostObject* pairCachingGhostObject = NULL;
 
 	CDebugDraw * dbd;
 

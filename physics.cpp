@@ -12,6 +12,12 @@ void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
 
 	for (int i = 0; i < world->getNumCollisionObjects(); i++) {
 		btCollisionObject * obj = world->getCollisionObjectArray()[i];
+		if (obj->getCollisionFlags()
+				== btCollisionObject::CF_NO_CONTACT_RESPONSE) {
+			LogManager::getSingleton().logMessage("ISGHOST");
+			continue;
+		}
+
 		if (!obj->isKinematicObject()) {
 			GameObject * go = (GameObject *) obj->getUserPointer();
 			btVector3 velocity = go->getRigidBody()->getLinearVelocity();
@@ -28,28 +34,32 @@ void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
 void Physics::initObjects() {
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration);
-	//overlappingPairCache = new btDbvtBroadphase();
-	btVector3 worldMin(-1000, -1000, -1000);
-	btVector3 worldMax(1000, 1000, 1000);
-	overlappingPairCache = new btAxisSweep3(worldMin, worldMax);
+	overlappingPairCache = new btDbvtBroadphase();
+	//btVector3 worldMin(-1000, -1000, -1000);
+	//btVector3 worldMax(1000, 1000, 1000);
+	//overlappingPairCache = new btAxisSweep3(worldMin, worldMax);
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,
 			overlappingPairCache, solver, collisionConfiguration);
 	dynamicsWorld->setInternalTickCallback(myTickCallback);
+
+	dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(
+			new btGhostPairCallback());
+
 }
 
 int Physics::addObject(GameObject* obj) {
 	dynamicsWorld->addRigidBody(obj->getRigidBody());
-	// should ideally return the index of this object in the dynamics world
+// should ideally return the index of this object in the dynamics world
 	return 0;
 }
 
 void Physics::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps,
 		const Ogre::Real fixedTimestep) {
-	//    for (int i = 0; i != objList.size(); i++) idList[i] = 0;
-	// dynamicsWorld->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
-	// for (unsigned int i = 0; i < objList.size(); i++)
-	// 	if (objList[i].gObject->doUpdates()) objList[i].gObject->update(elapsedTime);
+//    for (int i = 0; i != objList.size(); i++) idList[i] = 0;
+// dynamicsWorld->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
+// for (unsigned int i = 0; i < objList.size(); i++)
+// 	if (objList[i].gObject->doUpdates()) objList[i].gObject->update(elapsedTime);
 }
 
 void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
@@ -179,7 +189,7 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	btVector3 localInertia(0, 0, 0);
 	startTransform.setRotation(orientation);
 	rootNode->setPosition(origin);
-	//Vector3 ogreOri = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+//Vector3 ogreOri = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Vector3 ogreOri = rootNode->getPosition();
 	btVector3 ori(ogreOri.x, ogreOri.y, ogreOri.z);
 
@@ -220,7 +230,7 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	this->shape = btShape;
 	this->physics = phys;
 	this->kinematic = isKinematic;
-	//rootNode->setPosition(origin);
+//rootNode->setPosition(origin);
 
 	btTransform startTransform;
 	startTransform.setIdentity();
@@ -229,12 +239,12 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	btVector3 localInertia(0, 0, 0);
 	startTransform.setRotation(orientation);
 
-	//Vector3 ogreOri = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	//Vector3 ogreOri = rootNode->getPosition();
-	//btVector3 ori(ogreOri.x, ogreOri.y, ogreOri.z);
+//Vector3 ogreOri = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+//Vector3 ogreOri = rootNode->getPosition();
+//btVector3 ori(ogreOri.x, ogreOri.y, ogreOri.z);
 	btVector3 ori(origin.x, origin.y, origin.z);
 
-	//if (mass != 0.0f)
+//if (mass != 0.0f)
 	shape->calculateLocalInertia(mass, localInertia);
 	startTransform.setOrigin(ori);
 
@@ -264,9 +274,9 @@ void GameObject::updateTransform() {
 }
 
 void GameObject::addToSimulator() {
-	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	updateTransform();
-	//rigidbody is dynamic if and only if mass is non zero, otherwise static
+//rigidbody is dynamic if and only if mass is non zero, otherwise static
 	if (mass != 0.0f)
 		shape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,

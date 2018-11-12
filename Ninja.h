@@ -47,13 +47,15 @@ public:
 		AnimationStateIterator it = mAnims->getAnimationStateIterator();
 		while (it.hasMoreElements()) {
 			AnimationStateMap::mapped_type as = it.getNext();
-			LogManager::getSingleton().logMessage(as->getAnimationName());
+			//LogManager::getSingleton().logMessage(as->getAnimationName());
 			as->setLoop(true);
 		}
 		this->lAttackFrames = 20;
 		this->mAttackFrames = 25;
 		this->hAttackFrames = 40;
 		this->sAttackFrames = 50;
+
+		this->createHeavyBox();
 
 	}
 
