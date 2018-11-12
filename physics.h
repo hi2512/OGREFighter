@@ -18,7 +18,7 @@ struct BulletContactCallback;
 struct CollisionContext;
 
 enum CollisionType {
-	COL_NOTHING = 0, COLLISIONBOX = 1, HITBOX = 2, HURTBOX = 4, WALL = 8
+	COL_NOTHING = 0, COLLISIONBOX = 1, HITBOX = 2, HURTBOX = 4, WALL = 8, PLAYER_2 = 16
 };
 
 class Physics {

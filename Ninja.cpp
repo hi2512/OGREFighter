@@ -7,6 +7,20 @@
 using namespace Ogre;
 using namespace std;
 
+void Ninja::createLightBox() {
+
+}
+
+void Ninja::createHeavyBox() {
+
+}
+
+void Ninja::heavyAnimation() {
+	this->setAnimation("Attack3");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->addTime(0.012);
+}
+
 void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
@@ -26,8 +40,47 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	 LogManager::getSingleton().logMessage(to_string(ogrePos.z));
 	 */
 
-	btVector3 pos;
+	btVector3 pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
 	switch (this->actorState) {
+	case StateType::ATTACK:
+		if (this->attackFrameCount == 0) {
+			//reset animation
+			AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+			as->setTimePosition(0.0);
+			this->attackFrameCount = -1;
+			this->currentAttack = AttackType::NONE;
+			this->actorState = StateType::FREE;
+			break;
+		}
+		if (this->attackFrameCount == -1) {
+			switch (this->currentAttack) {
+			case AttackType::LIGHT:
+				this->attackFrameCount = this->lAttackFrames;
+				break;
+			case AttackType::MEDIUM:
+				this->attackFrameCount = this->mAttackFrames;
+				break;
+			case AttackType::HEAVY:
+				this->attackFrameCount = this->hAttackFrames;
+				break;
+			case AttackType::SPECIAL:
+				this->attackFrameCount = this->sAttackFrames;
+				break;
+			}
+		}
+		switch (this->currentAttack) {
+		case AttackType::LIGHT:
+
+			break;
+		case AttackType::MEDIUM:
+
+			break;
+		case AttackType::HEAVY:
+			this->heavyAnimation();
+			break;
+		}
+		this->attackFrameCount -= 1;
+		break;
 	case StateType::FREE:
 		Real move = walkSpeed * evt.timeSinceLastFrame;
 		Real moveX = 0;
@@ -43,6 +96,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			if (this->keyBinding.at(ki.key) == InputType::RIGHT) {
 				moveX += move;
 			}
+			if (this->keyBinding.at(ki.key) == InputType::H) {
+				this->actorState = StateType::ATTACK;
+				this->currentAttack = AttackType::HEAVY;
+			}
 		}
 		//if walking
 		if (moveX) {
@@ -53,9 +110,18 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		}
 		//pushback if walk into each other
 		if (context.hit) {
-			moveX = -moveX * 2;
+			moveX = -moveX * 3;
 		}
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
+
+		//play animation
+		AnimationState * as = this->geom->getAnimationState(
+				this->playingAnimation);
+
+		Real timeToAdd =
+				reverse ? -evt.timeSinceLastFrame : evt.timeSinceLastFrame;
+
+		as->addTime(evt.timeSinceLastFrame);
 		break;
 	}
 
@@ -76,12 +142,6 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	this->rootNode->setOrientation(ori);
 
-	//play animation
-	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-
-	Real timeToAdd = reverse ? -evt.timeSinceLastFrame : evt.timeSinceLastFrame;
-	as->addTime(evt.timeSinceLastFrame);
-
 	//check after collision
 	thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
@@ -91,7 +151,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		Real pushbackVal = 2;
 		Vector3 afterOgrePos(
 				rootNode->convertLocalToWorldPosition(Vector3::ZERO));
-		Real afterX = reverse ? afterOgrePos.x + pushbackVal : afterOgrePos.x - pushbackVal;
+		Real afterX =
+				reverse ?
+						afterOgrePos.x + pushbackVal :
+						afterOgrePos.x - pushbackVal;
 		pos = btVector3(afterX, afterOgrePos.y, afterOgrePos.z);
 		trans.setOrigin(pos);
 		this->body->getMotionState()->setWorldTransform(trans);
@@ -99,14 +162,13 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		gloPos = Vector3(btpos.getX(), btpos.getY(), btpos.getZ());
 		this->rootNode->setPosition(gloPos);
 
-		if(this->opponent != NULL) {
-			Real oppPushbackVal = 5;
+		if (this->opponent != NULL) {
+			Real oppPushbackVal = 8;
 			Real opp = reverse ? -oppPushbackVal : oppPushbackVal;
 			this->opponent->pushBack(opp);
 		}
 
 	}
-
 
 }
 

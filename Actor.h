@@ -12,7 +12,7 @@ using namespace Ogre;
 using namespace std;
 
 enum AttackType {
-	LIGHT, MEDIUM, HEAVY, SPECIAL
+	NONE, LIGHT, MEDIUM, HEAVY, SPECIAL
 };
 
 enum StateType {
@@ -29,8 +29,15 @@ enum InputType {
 class Actor: public GameObject {
 
 protected:
+	bool isPlayer2;
 	Actor * opponent = NULL;
 	StateType actorState = StateType::FREE;
+
+	int stopFrameCount = -1;
+	StateType beforeStopState = StateType::FREE;
+
+	int attackFrameCount = -1;
+	AttackType currentAttack = AttackType::NONE;
 
 	std::map<int, InputType> keyBinding;
 
@@ -41,21 +48,28 @@ protected:
 	std::vector<KeyInput> * keysHeld;
 
 	std::vector<btRigidBody> hitboxes;
-	void createLightBox(Real x, Real y, Real z);
-	void createMediumBox(Real x, Real y, Real z);
-	void createHeavyBox(Real x, Real y, Real z);
-	void createSpecialBox(Real x, Real y, Real z);
+	virtual void createLightBox() {}
+	virtual void createMediumBox() {}
+	virtual void createHeavyBox() {}
+	virtual void createSpecialBox() {}
+	int lAttackFrames = -1;
+	int mAttackFrames = -1;
+	int hAttackFrames = -1;
+	int sAttackFrames = -1;
+	virtual void lightAnimation() {}
+	virtual void mediumAnimation() {}
+	virtual void heavyAnimation() {}
 
 public:
 
-	Actor(SceneManager * sceneMgr, SceneNode * rootNode, String name,
+	Actor(bool player2, SceneManager * sceneMgr, SceneNode * rootNode, String name,
 			Entity * e, Physics * phys, btCollisionShape * shape,
 			const Ogre::Vector3& origin, btQuaternion orientation,
 			std::deque<KeyInput> * inBuf,
 			std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right) :
+			std::vector<KeyInput> * kBuf, int left, int right, int heavy) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true,
-					origin, orientation, 1.0, 0.0) {
+					origin, orientation, 1.0, 0.0), isPlayer2(player2) {
 		inputBuffer = inBuf;
 		releaseBuffer = relBuf;
 		keysHeld = kBuf;
@@ -63,6 +77,7 @@ public:
 
 		keyBinding.insert(pair<int, InputType>(left, InputType::LEFT));
 		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
+		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
 
 	}
 	void pushBack(Real dist);

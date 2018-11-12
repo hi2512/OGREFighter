@@ -17,14 +17,23 @@ private:
 	SceneNode * ninOffsetNode;
 	Real walkSpeed = 300.0;
 
+protected:
+	void createLightBox();
+	void createMediumBox(){}
+	void createHeavyBox();
+	void createSpecialBox(){}
+	void lightAnimation(){}
+	void mediumAnimation(){}
+	void heavyAnimation();
+
 public:
-	Ninja(SceneManager * sceneMgr, SceneNode * rootNode, String name,
-			Entity * e, Physics * phys, btCollisionShape * shape,
+	Ninja(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode,
+			String name, Entity * e, Physics * phys, btCollisionShape * shape,
 			const Ogre::Vector3& origin, btQuaternion orientation,
 			std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right) :
-			Actor(sceneMgr, rootNode, name, e, phys, shape, origin, orientation,
-					inBuf, relBuf, kBuf, left, right) {
+			std::vector<KeyInput> * kBuf, int left, int right, int heavy) :
+			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin,
+					orientation, inBuf, relBuf, kBuf, left, right, heavy) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
 
 		ninOffsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
@@ -41,6 +50,10 @@ public:
 			LogManager::getSingleton().logMessage(as->getAnimationName());
 			as->setLoop(true);
 		}
+		this->lAttackFrames = 20;
+		this->mAttackFrames = 25;
+		this->hAttackFrames = 40;
+		this->sAttackFrames = 50;
 
 	}
 
