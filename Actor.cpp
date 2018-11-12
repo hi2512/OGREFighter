@@ -1,5 +1,15 @@
 #include "Actor.h"
 
+void Actor::pushBack(Real dist) {
+	btTransform trans;
+	this->body->getMotionState()->getWorldTransform(trans);
+	btVector3 newPos(trans.getOrigin().getX() + dist, trans.getOrigin().getY(), trans.getOrigin().getZ());
+	trans.setOrigin(newPos);
+	this->body->getMotionState()->setWorldTransform(trans);
+	Vector3 ogrePos(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
+	this->rootNode->setPosition(ogrePos);
+}
+
 void Actor::setAnimation(String animation) {
 	if (playingAnimation != animation) {
 		this->geom->getAnimationState(playingAnimation)->setEnabled(false);

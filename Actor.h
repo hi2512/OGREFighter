@@ -65,6 +65,7 @@ public:
 		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
 
 	}
+	void pushBack(Real dist);
 	void setP1Orientation();
 	void setP2Orientation();
 	void setOpponent(Actor * opp) {opponent = opp;}

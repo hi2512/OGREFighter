@@ -88,7 +88,9 @@ void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
 	body->setRestitution(restitution);
 	this->friction = friction;
 	body->setUserPointer(this);
-	phys->dynamicsWorld->addRigidBody(body);
+	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
+	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
+			collidesWith);
 }
 
 //use this and initphys to get ogre object before phys is created
@@ -128,7 +130,9 @@ void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
 	this->friction = friction;
 	body->setFriction(friction);
 	body->setUserPointer(rootNode);
-	phys->dynamicsWorld->addRigidBody(body);
+	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
+	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
+			collidesWith);
 }
 
 void GameObject::animate(const FrameEvent &evt) {
@@ -196,7 +200,10 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	this->friction = friction;
 	body->setFriction(friction);
 	body->setUserPointer(this);
-	phys->dynamicsWorld->addRigidBody(body);
+	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
+	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
+			collidesWith);
+
 }
 
 GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
@@ -247,7 +254,9 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	this->friction = friction;
 	body->setFriction(friction);
 	body->setUserPointer(this);
-	phys->dynamicsWorld->addRigidBody(body);
+	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
+	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
+			collidesWith);
 }
 
 void GameObject::updateTransform() {

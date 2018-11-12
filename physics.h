@@ -17,6 +17,10 @@ class GameObject;
 struct BulletContactCallback;
 struct CollisionContext;
 
+enum CollisionType {
+	COL_NOTHING = 0, COLLISIONBOX = 1, HITBOX = 2, HURTBOX = 4, WALL = 8
+};
+
 class Physics {
 public:
 	btDefaultCollisionConfiguration* collisionConfiguration;
