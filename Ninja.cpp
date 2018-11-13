@@ -17,18 +17,18 @@ void Ninja::createLightBox() {
 void Ninja::createHeavyBox() {
 
 	/*
-	btCollisionObject * hbox  = new btGhostObject();
-	hbox->setCollisionShape(new btBoxShape(btVector3(10, 10, 10)));
-	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	btVector3 pos(curPos.x, curPos.y + 50, curPos.z);
-	btTransform trans;
-	trans.setIdentity();
-	trans.setOrigin(pos);
-	hbox->setWorldTransform(trans);
-	int collidesWith = this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
-	physics->getWorld()->addCollisionObject(hbox);
-	//this->hitboxes.insert(pair<AttackType, btGhostObject *>(AttackType::HEAVY, hbox));
+	 btCollisionObject * hbox  = new btGhostObject();
+	 hbox->setCollisionShape(new btBoxShape(btVector3(10, 10, 10)));
+	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	 Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	 btVector3 pos(curPos.x, curPos.y + 50, curPos.z);
+	 btTransform trans;
+	 trans.setIdentity();
+	 trans.setOrigin(pos);
+	 hbox->setWorldTransform(trans);
+	 int collidesWith = this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
+	 physics->getWorld()->addCollisionObject(hbox);
+	 //this->hitboxes.insert(pair<AttackType, btGhostObject *>(AttackType::HEAVY, hbox));
 	 */
 	btCollisionObject * hbox = new btGhostObject();
 	hbox->setCollisionShape(new btBoxShape(btVector3(50, 50, 50)));
@@ -41,8 +41,8 @@ void Ninja::createHeavyBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(CollisionType::HITBOX);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	this->hitboxes.insert(pair<AttackType, btCollisionObject *>(AttackType::HEAVY, hbox));
-
+	this->hitboxes.insert(
+			pair<AttackType, btCollisionObject *>(AttackType::HEAVY, hbox));
 
 }
 
@@ -57,8 +57,35 @@ void Ninja::heavyAnimation() {
 	auto tv = trans.getOrigin();
 	printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	btVector3 pos(curPos.x + 200, curPos.y + 80, curPos.z);
+	Real xPos = curPos.x + 200;
 
+	Real yPos = curPos.y + 80;
+	std::vector<btVector3> hitFrames;
+	if (this->onP1Side()) {
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+	} else {
+		xPos = curPos.x - 200;
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+	}
+
+	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+
+	int frameTime = -this->attackFrameCount + 20;
+	if (frameTime >= 0 && frameTime <= 6) {
+		pos = hitFrames.at(frameTime);
+	}
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
 }
@@ -87,11 +114,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	case StateType::ATTACK:
 		if (this->attackFrameCount == 0) {
 			//reset animation
-			AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-			as->setTimePosition(0.0);
-			this->attackFrameCount = -1;
-			this->currentAttack = AttackType::NONE;
-			this->actorState = StateType::FREE;
+			this->clearAttack();
 			break;
 		}
 		if (this->attackFrameCount == -1) {
@@ -151,12 +174,15 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			this->setAnimation("Idle1");
 		}
 		//pushback if walk into each other
-		if (context.hit && context.body->getCollisionFlags() == CollisionType::COLLISIONBOX) {
+		if (context.hit
+				&& context.body->getCollisionFlags()
+						== CollisionType::COLLISIONBOX) {
 			printf("col flags 0x%x", context.body->getCollisionFlags());
 			moveX = -moveX * 3;
 		}
 
-		if(context.hit && context.body->getCollisionFlags() == CollisionType::HITBOX) {
+		if (context.hit
+				&& context.body->getCollisionFlags() == CollisionType::HITBOX) {
 			printf("COllision box collided with hitbox\n");
 		}
 
@@ -194,7 +220,9 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
 
-	if (context.hit && context.body->getCollisionFlags() == CollisionType::COLLISIONBOX && playingAnimation == "Walk") {
+	if (context.hit
+			&& context.body->getCollisionFlags() == CollisionType::COLLISIONBOX
+			&& playingAnimation == "Walk") {
 		this->body->getMotionState()->getWorldTransform(trans);
 		Real pushbackVal = 2;
 		Vector3 afterOgrePos(

@@ -1,12 +1,30 @@
 #include "Actor.h"
 
+bool Actor::onP1Side() {
+	return !this->onPlayer2Side;
+}
+
+bool Actor::onP2Side() {
+	return this->onPlayer2Side;
+}
+
+void Actor::clearAttack() {
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setTimePosition(0.0);
+	this->attackFrameCount = -1;
+	this->currentAttack = AttackType::NONE;
+	this->actorState = StateType::FREE;
+}
+
 void Actor::pushBack(Real dist) {
 	btTransform trans;
 	this->body->getMotionState()->getWorldTransform(trans);
-	btVector3 newPos(trans.getOrigin().getX() + dist, trans.getOrigin().getY(), trans.getOrigin().getZ());
+	btVector3 newPos(trans.getOrigin().getX() + dist, trans.getOrigin().getY(),
+			trans.getOrigin().getZ());
 	trans.setOrigin(newPos);
 	this->body->getMotionState()->setWorldTransform(trans);
-	Vector3 ogrePos(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
+	Vector3 ogrePos(trans.getOrigin().getX(), trans.getOrigin().getY(),
+			trans.getOrigin().getZ());
 	this->rootNode->setPosition(ogrePos);
 }
 
@@ -35,6 +53,8 @@ void Actor::setP1Orientation() {
 
 	this->rootNode->setOrientation(ori);
 
+	this->onPlayer2Side = false;
+
 }
 
 void Actor::setP2Orientation() {
@@ -49,6 +69,8 @@ void Actor::setP2Orientation() {
 	Quaternion ori(btori.w(), btori.x(), btori.y(), btori.z());
 
 	this->rootNode->setOrientation(ori);
+
+	this->onPlayer2Side = true;
 
 }
 

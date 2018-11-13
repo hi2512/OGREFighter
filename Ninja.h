@@ -15,7 +15,7 @@ class Ninja: public Actor {
 
 private:
 	SceneNode * ninOffsetNode;
-	Real walkSpeed = 300.0;
+	Real walkSpeed = 350.0;
 
 protected:
 	void createLightBox();

@@ -30,6 +30,7 @@ enum InputType {
 class Actor: public GameObject {
 
 protected:
+	bool onPlayer2Side;
 	bool isPlayer2;
 	Actor * opponent = NULL;
 	StateType actorState = StateType::FREE;
@@ -61,6 +62,8 @@ protected:
 	virtual void mediumAnimation() {}
 	virtual void heavyAnimation() {}
 
+	void clearAttack();
+
 public:
 
 	Actor(bool player2, SceneManager * sceneMgr, SceneNode * rootNode, String name,
@@ -70,7 +73,7 @@ public:
 			std::deque<KeyInput> * relBuf,
 			std::vector<KeyInput> * kBuf, int left, int right, int heavy) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true,
-					origin, orientation, 1.0, 0.0), isPlayer2(player2) {
+					origin, orientation, 1.0, 0.0), isPlayer2(player2), onPlayer2Side(player2) {
 		inputBuffer = inBuf;
 		releaseBuffer = relBuf;
 		keysHeld = kBuf;
@@ -84,6 +87,8 @@ public:
 	void pushBack(Real dist);
 	void setP1Orientation();
 	void setP2Orientation();
+	bool onP1Side();
+	bool onP2Side();
 	void setOpponent(Actor * opp) {opponent = opp;}
 	void setAnimation(String animationName);
 	void readInputs(std::deque<KeyInput>& buf,
