@@ -41,8 +41,9 @@ void Ninja::createMediumBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(CollisionType::HITBOX);
 	physics->dynamicsWorld->addCollisionObject(hbox);
+	HitboxData hbd { hbox, 30, 25, 10, 10, 8.0, 5.0 };
 	this->hitboxes.insert(
-			pair<AttackType, btCollisionObject *>(AttackType::MEDIUM, hbox));
+			pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 
 }
 
@@ -58,8 +59,9 @@ void Ninja::createHeavyBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(CollisionType::HITBOX);
 	physics->dynamicsWorld->addCollisionObject(hbox);
+	HitboxData hbd { hbox, 50, 10, 10, 10, 8.0, 5.0 };
 	this->hitboxes.insert(
-			pair<AttackType, btCollisionObject *>(AttackType::HEAVY, hbox));
+			pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 }
 
 void Ninja::heavyAnimation() {
@@ -69,7 +71,7 @@ void Ninja::heavyAnimation() {
 	as->addTime(0.011);
 
 	btTransform trans;
-	btCollisionObject * hbox = this->hitboxes.at(currentAttack);
+	btCollisionObject * hbox = this->hitboxes.at(currentAttack).hitbox;
 	trans = hbox->getWorldTransform();
 	auto tv = trans.getOrigin();
 	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
@@ -119,7 +121,7 @@ void Ninja::mediumAnimation() {
 	as->addTime(0.012);
 
 	btTransform trans;
-	btCollisionObject * hbox = this->hitboxes.at(currentAttack);
+	btCollisionObject * hbox = this->hitboxes.at(currentAttack).hitbox;
 	trans = hbox->getWorldTransform();
 	auto tv = trans.getOrigin();
 	printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());

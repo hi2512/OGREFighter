@@ -26,6 +26,16 @@ enum InputType {
 
 };
 
+struct HitboxData {
+	btCollisionObject * hitbox;
+	int hitstun;
+	int blockstun;
+	int hitstop;
+	int blockstop;
+	Real hitPushback;
+	Real blockPushback;
+};
+
 
 class Actor: public GameObject {
 
@@ -49,7 +59,7 @@ protected:
 	std::deque<KeyInput> * releaseBuffer;
 	std::vector<KeyInput> * keysHeld;
 
-	std::map<AttackType, btCollisionObject *> hitboxes;
+	std::map<AttackType, HitboxData> hitboxes;
 	virtual void createLightBox() {}
 	virtual void createMediumBox() {}
 	virtual void createHeavyBox() {}
