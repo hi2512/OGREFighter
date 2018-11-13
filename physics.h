@@ -19,7 +19,7 @@ struct BulletContactCallback;
 struct CollisionContext;
 
 enum CollisionType {
-	COL_NOTHING = 0, COLLISIONBOX = 1, HITBOX = 2, HURTBOX_P1 = 4, HURTBOX_P2 = 8, WALL = 16
+	COLLISIONBOX = 2, HITBOX = 8, HURTBOX_P1 = 32, HURTBOX_P2 = 64, WALL = 1
 };
 
 class Physics {
@@ -208,6 +208,67 @@ struct BulletContactCallback: public btCollisionWorld::ContactResultCallback {
 
 		return 0;
 	}
+};
+
+class myCollisionDispatcher: public btCollisionDispatcher {
+public:
+	myCollisionDispatcher(btCollisionConfiguration *collisionConfiguration) :
+			btCollisionDispatcher(collisionConfiguration) {
+	}
+	~myCollisionDispatcher() {
+	}
+
+	bool needsCollision(const btCollisionObject *body0,
+			const btCollisionObject *body1) {
+		//printf("col flags 0x%x", body0->getCollisionFlags());
+		//printf("  col flags 0x%x", body1->getCollisionFlags());
+		/*
+		 if (body0->getCollisionFlags() == CollisionType::HITBOX
+		 || body1->getCollisionFlags() == CollisionType::COLLISIONBOX) {
+		 LogManager::getSingleton().logMessage("Col1");
+		 return false;
+		 }
+		 if (body0->getCollisionFlags() == CollisionType::COLLISIONBOX
+		 || body1->getCollisionFlags() == CollisionType::HITBOX) {
+		 LogManager::getSingleton().logMessage("Col2");
+		 return false;
+		 }
+		 */
+		if (!btCollisionDispatcher::needsCollision(body0, body1)) {
+			return false;
+		}
+
+		//GameObject *phyBody1 = (GameObject*) body0->getUserPointer();
+		//GameObject *phyBody2 = (GameObject*) body1->getUserPointer();
+
+		return true;
+	}
+	bool needsResponse(const btCollisionObject *body0,
+			const btCollisionObject *body1) {
+		//printf("res flags 0x%x", body0->getCollisionFlags());
+		//printf("  res flags 0x%x", body1->getCollisionFlags());
+		/*
+		if (body0->getCollisionFlags() == CollisionType::HITBOX
+				|| body1->getCollisionFlags() == CollisionType::COLLISIONBOX) {
+			LogManager::getSingleton().logMessage("Resp1");
+			return false;
+		}
+		if (body0->getCollisionFlags() == CollisionType::COLLISIONBOX
+				|| body0->getCollisionFlags() == CollisionType::HITBOX) {
+			LogManager::getSingleton().logMessage("Resp2");
+			return false;
+		}
+	*/
+		if (!btCollisionDispatcher::needsResponse(body0, body1)) {
+			return false;
+		}
+
+		//GameObject *phyBody1 = (GameObject*) body0->getUserPointer();
+		//GameObject *phyBody2 = (GameObject*) body1->getUserPointer();
+
+		return true;
+	}
+
 };
 
 #endif

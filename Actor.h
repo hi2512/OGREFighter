@@ -48,7 +48,7 @@ protected:
 	std::deque<KeyInput> * releaseBuffer;
 	std::vector<KeyInput> * keysHeld;
 
-	std::map<AttackType, btGhostObject *> hitboxes;
+	std::map<AttackType, btCollisionObject *> hitboxes;
 	virtual void createLightBox() {}
 	virtual void createMediumBox() {}
 	virtual void createHeavyBox() {}

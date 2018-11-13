@@ -30,6 +30,18 @@ void Ninja::createHeavyBox() {
 	physics->getWorld()->addCollisionObject(hbox);
 	//this->hitboxes.insert(pair<AttackType, btGhostObject *>(AttackType::HEAVY, hbox));
 	 */
+	btCollisionObject * hbox = new btGhostObject();
+	hbox->setCollisionShape(new btBoxShape(btVector3(50, 50, 50)));
+
+	btTransform trans;
+	trans.setIdentity();
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+	hbox->setCollisionFlags(CollisionType::HITBOX);
+	physics->dynamicsWorld->addCollisionObject(hbox);
+	this->hitboxes.insert(pair<AttackType, btCollisionObject *>(AttackType::HEAVY, hbox));
 
 
 }
@@ -38,6 +50,17 @@ void Ninja::heavyAnimation() {
 	this->setAnimation("Attack3");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->addTime(0.012);
+
+	btTransform trans;
+	btCollisionObject * hbox = this->hitboxes.at(currentAttack);
+	trans = hbox->getWorldTransform();
+	auto tv = trans.getOrigin();
+	printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 pos(curPos.x + 200, curPos.y + 80, curPos.z);
+
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
 }
 
 void Ninja::animate(const Ogre::FrameEvent& evt) {
@@ -128,9 +151,15 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			this->setAnimation("Idle1");
 		}
 		//pushback if walk into each other
-		if (context.hit) {
+		if (context.hit && context.body->getCollisionFlags() == CollisionType::COLLISIONBOX) {
+			printf("col flags 0x%x", context.body->getCollisionFlags());
 			moveX = -moveX * 3;
 		}
+
+		if(context.hit && context.body->getCollisionFlags() == CollisionType::HITBOX) {
+			printf("COllision box collided with hitbox\n");
+		}
+
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
 
 		//play animation
@@ -165,7 +194,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
 
-	if (context.hit && playingAnimation == "Walk") {
+	if (context.hit && context.body->getCollisionFlags() == CollisionType::COLLISIONBOX && playingAnimation == "Walk") {
 		this->body->getMotionState()->getWorldTransform(trans);
 		Real pushbackVal = 2;
 		Vector3 afterOgrePos(

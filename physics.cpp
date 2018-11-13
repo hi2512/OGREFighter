@@ -13,8 +13,8 @@ void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
 	for (int i = 0; i < world->getNumCollisionObjects(); i++) {
 		btCollisionObject * obj = world->getCollisionObjectArray()[i];
 		if (obj->getCollisionFlags()
-				== btCollisionObject::CF_NO_CONTACT_RESPONSE) {
-			LogManager::getSingleton().logMessage("ISGHOST");
+				== CollisionType::HITBOX) {
+			//LogManager::getSingleton().logMessage("ISGHOST");
 			continue;
 		}
 
@@ -31,9 +31,12 @@ void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
 
 }
 
+
+
 void Physics::initObjects() {
 	collisionConfiguration = new btDefaultCollisionConfiguration();
-	dispatcher = new btCollisionDispatcher(collisionConfiguration);
+	//dispatcher = new btCollisionDispatcher(collisionConfiguration);
+	dispatcher = new myCollisionDispatcher(collisionConfiguration);
 	overlappingPairCache = new btDbvtBroadphase();
 	//btVector3 worldMin(-1000, -1000, -1000);
 	//btVector3 worldMax(1000, 1000, 1000);
@@ -211,6 +214,7 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	body->setFriction(friction);
 	body->setUserPointer(this);
 	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
+	collidesWith = 0 - 1;
 	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
 			collidesWith);
 
@@ -265,6 +269,7 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	body->setFriction(friction);
 	body->setUserPointer(this);
 	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
+	collidesWith = 0 - 1;
 	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
 			collidesWith);
 }

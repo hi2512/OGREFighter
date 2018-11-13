@@ -411,15 +411,6 @@ void Game::setup(void) {
 	player1 = p1;
 	player2 = p2;
 
-	btCollisionObject * hbox = new btGhostObject();
-	hbox->setCollisionShape(new btBoxShape(btVector3(100, 100, 100)));
-
-	btTransform trans;
-	trans.setIdentity();
-	trans.setOrigin(btVector3(0, 200, -100));
-	hbox->setWorldTransform(trans);
-	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	phys->dynamicsWorld->addCollisionObject(hbox);
 
 	/*
 	 phys->pairCachingGhostObject = new btPairCachingGhostObject();
@@ -512,7 +503,6 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 }
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 12.0f, 50);
-	LogManager::getSingleton().logMessage("OGREPOS");
 
 	phys->dbd->Update();
 
@@ -520,8 +510,8 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		btCollisionObject* obj =
 				phys->dynamicsWorld->getCollisionObjectArray()[i];
 		if (obj->getCollisionFlags()
-				== btCollisionObject::CF_NO_CONTACT_RESPONSE) {
-			LogManager::getSingleton().logMessage("ISGHOST");
+				== CollisionType::HITBOX) {
+			//LogManager::getSingleton().logMessage("ISGHOST");
 			continue;
 		}
 		btRigidBody* body = btRigidBody::upcast(obj);
