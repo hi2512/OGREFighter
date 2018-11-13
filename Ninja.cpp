@@ -14,7 +14,7 @@ void Ninja::createLightBox() {
 
 }
 
-void Ninja::createHeavyBox() {
+void Ninja::createMediumBox() {
 
 	/*
 	 btCollisionObject * hbox  = new btGhostObject();
@@ -42,13 +42,80 @@ void Ninja::createHeavyBox() {
 	hbox->setCollisionFlags(CollisionType::HITBOX);
 	physics->dynamicsWorld->addCollisionObject(hbox);
 	this->hitboxes.insert(
-			pair<AttackType, btCollisionObject *>(AttackType::HEAVY, hbox));
+			pair<AttackType, btCollisionObject *>(AttackType::MEDIUM, hbox));
 
 }
 
+void Ninja::createHeavyBox() {
+	btCollisionObject * hbox = new btGhostObject();
+	hbox->setCollisionShape(new btBoxShape(btVector3(100, 50, 50)));
+
+	btTransform trans;
+	trans.setIdentity();
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+	hbox->setCollisionFlags(CollisionType::HITBOX);
+	physics->dynamicsWorld->addCollisionObject(hbox);
+	this->hitboxes.insert(
+			pair<AttackType, btCollisionObject *>(AttackType::HEAVY, hbox));
+}
+
 void Ninja::heavyAnimation() {
+	this->setAnimation("Kick");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.011);
+
+	btTransform trans;
+	btCollisionObject * hbox = this->hitboxes.at(currentAttack);
+	trans = hbox->getWorldTransform();
+	auto tv = trans.getOrigin();
+	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Real xPos = curPos.x + 400;
+
+	Real yPos = curPos.y + 10;
+	std::vector<btVector3> hitFrames;
+	if (this->onP1Side()) {
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+	} else {
+		xPos = curPos.x - 400;
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+	}
+
+	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+
+	int frameTime = -this->attackFrameCount + 50;
+	//printf("frametime: %d\n", frameTime);
+	if (frameTime >= 0 && frameTime <= 8) {
+		pos = hitFrames.at(frameTime);
+	}
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+}
+
+void Ninja::mediumAnimation() {
 	this->setAnimation("Attack3");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
 	as->addTime(0.012);
 
 	btTransform trans;
@@ -83,6 +150,7 @@ void Ninja::heavyAnimation() {
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
 
 	int frameTime = -this->attackFrameCount + 20;
+	//printf("frametime: %d\n", frameTime);
 	if (frameTime >= 0 && frameTime <= 6) {
 		pos = hitFrames.at(frameTime);
 	}
@@ -138,7 +206,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 			break;
 		case AttackType::MEDIUM:
-
+			this->mediumAnimation();
 			break;
 		case AttackType::HEAVY:
 			this->heavyAnimation();
@@ -160,6 +228,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			}
 			if (this->keyBinding.at(ki.key) == InputType::RIGHT) {
 				moveX += move;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::M) {
+				this->actorState = StateType::ATTACK;
+				this->currentAttack = AttackType::MEDIUM;
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->actorState = StateType::ATTACK;

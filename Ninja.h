@@ -19,11 +19,11 @@ private:
 
 protected:
 	void createLightBox();
-	void createMediumBox(){}
+	void createMediumBox();
 	void createHeavyBox();
 	void createSpecialBox(){}
 	void lightAnimation(){}
-	void mediumAnimation(){}
+	void mediumAnimation();
 	void heavyAnimation();
 
 public:
@@ -31,9 +31,9 @@ public:
 			String name, Entity * e, Physics * phys, btCollisionShape * shape,
 			const Ogre::Vector3& origin, btQuaternion orientation,
 			std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int medium, int heavy) :
 			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin,
-					orientation, inBuf, relBuf, kBuf, left, right, heavy) {
+					orientation, inBuf, relBuf, kBuf, left, right, medium, heavy) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
 
 		ninOffsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
@@ -51,11 +51,14 @@ public:
 			as->setLoop(true);
 		}
 		this->lAttackFrames = 20;
-		this->mAttackFrames = 25;
-		this->hAttackFrames = 40;
+		this->mAttackFrames = 40;
+		this->hAttackFrames = 90;
 		this->sAttackFrames = 50;
 
+		this->createLightBox();
+		this->createMediumBox();
 		this->createHeavyBox();
+		this->createSpecialBox();
 
 	}
 

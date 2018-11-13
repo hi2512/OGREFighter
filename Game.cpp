@@ -395,7 +395,7 @@ void Game::setup(void) {
 			btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
 	Actor * p1 = new Ninja(false, scnMgr, p1Node, "P1", p1Entity, phys, p1Box,
 			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707),
-			&inputBuffer, &releaseBuffer, &keysHeld, 'a', 'd', 'v');
+			&inputBuffer, &releaseBuffer, &keysHeld, 'a', 'd', 'c', 'v');
 
 	Entity * p2Entity = scnMgr->createEntity("ninja.mesh");
 	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode(
@@ -405,7 +405,7 @@ void Game::setup(void) {
 			btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
 	Actor * p2 = new Ninja(true, scnMgr, p2Node, "P2", p2Entity, phys, p2Box,
 			Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707),
-			&inputBuffer2, &releaseBuffer2, &keysHeld2, 'j', 'l', 'b');
+			&inputBuffer2, &releaseBuffer2, &keysHeld2, 'j', 'l', 'b', 'n');
 	p1->setOpponent(p2);
 	p2->setOpponent(p1);
 	player1 = p1;

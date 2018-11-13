@@ -1,0 +1,14 @@
+This will be a fighting game built in OGRE.
+The game will be a 2D fighter using an anime/chain combo system,
+but no air dashes and only predetermined jump arcs.
+The game will use four primary attack buttons.
+There will probably be at least two stages to select.
+Hopefully there will be enough time to implement two fighters,
+but it will at least one fighter will full features.
+The game will definitely support two players locally and will
+most likely have networked play with two players.
+AI will be upgraded with actual interesting behavior
+compared to the AI in the pong game.
+The architecture will have to be mostly rewritten to support
+a different type of game with Bullet being used to handle
+collisions. I am working alone and will do all the work myself.

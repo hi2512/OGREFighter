@@ -71,7 +71,7 @@ public:
 			const Ogre::Vector3& origin, btQuaternion orientation,
 			std::deque<KeyInput> * inBuf,
 			std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int medium, int heavy) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true,
 					origin, orientation, 1.0, 0.0), isPlayer2(player2), onPlayer2Side(player2) {
 		inputBuffer = inBuf;
@@ -81,6 +81,7 @@ public:
 
 		keyBinding.insert(pair<int, InputType>(left, InputType::LEFT));
 		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
+		keyBinding.insert(pair<int, InputType>(medium, InputType::M));
 		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
 
 	}
