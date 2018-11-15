@@ -413,6 +413,20 @@ void Game::setup(void) {
 
 
 	/*
+	btCollisionObject * kickCollision = new btGhostObject();
+	kickCollision->getCollisionShape()->
+	kickCollision->setCollisionShape(new btBoxShape(btVector3(50, 100, 0)));
+	kickCollision->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	kickCollision->setActivationState(DISABLE_DEACTIVATION);
+	btTransform trans;
+	trans.setIdentity();
+	trans.setOrigin(btVector3(0, 100, 0));
+	kickCollision->setWorldTransform(trans);
+	phys->dynamicsWorld->addCollisionObject(kickCollision);
+	*/
+
+
+	/*
 	 phys->pairCachingGhostObject = new btPairCachingGhostObject();
 	 btCollisionShape * shape = new btBoxShape(btVector3(100, 100, 100));
 	 phys->collisionShapes.push_back(shape);
@@ -509,8 +523,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj =
 				phys->dynamicsWorld->getCollisionObjectArray()[i];
-		if (obj->getCollisionFlags()
-				== CollisionType::HITBOX) {
+		if (obj->getCollisionFlags() == CollisionType::HITBOX) {
 			//LogManager::getSingleton().logMessage("ISGHOST");
 			continue;
 		}

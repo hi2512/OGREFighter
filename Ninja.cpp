@@ -110,6 +110,11 @@ void Ninja::heavyAnimation() {
 	if (frameTime >= 0 && frameTime <= 8) {
 		pos = hitFrames.at(frameTime);
 	}
+	if(frameTime >=-40 && frameTime <= 30) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 3));
+	} else {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+	}
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
 }
@@ -124,7 +129,7 @@ void Ninja::mediumAnimation() {
 	btCollisionObject * hbox = this->hitboxes.at(currentAttack).hitbox;
 	trans = hbox->getWorldTransform();
 	auto tv = trans.getOrigin();
-	printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
+	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real xPos = curPos.x + 200;
 
@@ -163,9 +168,11 @@ void Ninja::mediumAnimation() {
 void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
+
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
+
 
 	bool reverse = false;
 
@@ -247,6 +254,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			//not walking
 			this->setAnimation("Idle1");
 		}
+		/*
 		//pushback if walk into each other
 		if (context.hit
 				&& context.body->getCollisionFlags()
@@ -254,21 +262,17 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			printf("col flags 0x%x", context.body->getCollisionFlags());
 			moveX = -moveX * 3;
 		}
-
+		*/
 		if (context.hit
 				&& context.body->getCollisionFlags() == CollisionType::HITBOX) {
 			printf("COllision box collided with hitbox\n");
 		}
-
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
-
 		//play animation
 		AnimationState * as = this->geom->getAnimationState(
 				this->playingAnimation);
-
 		Real timeToAdd =
 				reverse ? -evt.timeSinceLastFrame : evt.timeSinceLastFrame;
-
 		as->addTime(evt.timeSinceLastFrame);
 		break;
 	}
@@ -290,35 +294,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	this->rootNode->setOrientation(ori);
 
-	//check after collision
-	thing = new BulletContactCallback(*body, context);
-	this->physics->getWorld()->contactTest(body, *thing);
-
-	if (context.hit
-			&& context.body->getCollisionFlags() == CollisionType::COLLISIONBOX
-			&& playingAnimation == "Walk") {
-		this->body->getMotionState()->getWorldTransform(trans);
-		Real pushbackVal = 2;
-		Vector3 afterOgrePos(
-				rootNode->convertLocalToWorldPosition(Vector3::ZERO));
-		Real afterX =
-				reverse ?
-						afterOgrePos.x + pushbackVal :
-						afterOgrePos.x - pushbackVal;
-		pos = btVector3(afterX, afterOgrePos.y, afterOgrePos.z);
-		trans.setOrigin(pos);
-		this->body->getMotionState()->setWorldTransform(trans);
-		btpos = trans.getOrigin();
-		gloPos = Vector3(btpos.getX(), btpos.getY(), btpos.getZ());
-		this->rootNode->setPosition(gloPos);
-
-		if (this->opponent != NULL) {
-			Real oppPushbackVal = 8;
-			Real opp = reverse ? -oppPushbackVal : oppPushbackVal;
-			this->opponent->pushBack(opp);
-		}
-
-	}
+	this->doCollision(evt);
 
 }
 

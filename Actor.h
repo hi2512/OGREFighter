@@ -105,6 +105,7 @@ public:
 	void readInputs(std::deque<KeyInput>& buf,
 			std::deque<KeyInput>& rBuf);
 	//void animate(const FrameEvent& evt);
+	void doCollision(const FrameEvent& evt);
 
 };
 

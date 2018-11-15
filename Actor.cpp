@@ -1,5 +1,16 @@
 #include "Actor.h"
 
+void Actor::doCollision(const FrameEvent& evt) {
+	CollisionContext context;
+	BulletContactCallback* thing = new BulletContactCallback(*body, context);
+	this->physics->getWorld()->contactTest(body, *thing);
+	if (context.hit
+			&& context.body->getCollisionFlags() == CollisionType::COLLISIONBOX) {
+		this->opponent->pushBack(6.0);
+	}
+
+}
+
 bool Actor::onP1Side() {
 	return !this->onPlayer2Side;
 }
@@ -17,6 +28,7 @@ void Actor::clearAttack() {
 }
 
 void Actor::pushBack(Real dist) {
+	dist = this->onPlayer2Side ? dist : -dist;
 	btTransform trans;
 	this->body->getMotionState()->getWorldTransform(trans);
 	btVector3 newPos(trans.getOrigin().getX() + dist, trans.getOrigin().getY(),

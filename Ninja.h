@@ -16,6 +16,7 @@ class Ninja: public Actor {
 private:
 	SceneNode * ninOffsetNode;
 	Real walkSpeed = 350.0;
+	//btCollisionObject * kickCollision;
 
 protected:
 	void createLightBox();
@@ -59,6 +60,9 @@ public:
 		this->createMediumBox();
 		this->createHeavyBox();
 		this->createSpecialBox();
+
+
+
 
 	}
 
