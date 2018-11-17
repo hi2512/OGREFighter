@@ -1,12 +1,17 @@
 #include "Actor.h"
 
+
 void Actor::doCollision(const FrameEvent& evt) {
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
-	if (context.hit
-			&& context.body->getCollisionFlags() == CollisionType::COLLISIONBOX) {
-		this->opponent->pushBack(6.0);
+	if (context.hit) {
+		if(context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
+			this->opponent->pushBack(12.0);
+		}
+		if(context.body->getUserIndex() == this->oppHurtType()) {
+			this->moveLock = true;
+		}
 	}
 
 }
@@ -35,8 +40,7 @@ void Actor::pushBack(Real dist) {
 			trans.getOrigin().getZ());
 	trans.setOrigin(newPos);
 	this->body->getMotionState()->setWorldTransform(trans);
-	Vector3 ogrePos(trans.getOrigin().getX(), trans.getOrigin().getY(),
-			trans.getOrigin().getZ());
+	Vector3 ogrePos(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
 	this->rootNode->setPosition(ogrePos);
 }
 

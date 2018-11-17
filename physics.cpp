@@ -12,8 +12,7 @@ void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
 
 	for (int i = 0; i < world->getNumCollisionObjects(); i++) {
 		btCollisionObject * obj = world->getCollisionObjectArray()[i];
-		if (obj->getCollisionFlags()
-				== CollisionType::HITBOX) {
+		if (obj->getCollisionFlags() == btCollisionObject::CF_NO_CONTACT_RESPONSE) {
 			//LogManager::getSingleton().logMessage("ISGHOST");
 			continue;
 		}
@@ -31,19 +30,17 @@ void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
 
 }
 
-
-
 void Physics::initObjects() {
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	//dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	dispatcher = new myCollisionDispatcher(collisionConfiguration);
 	overlappingPairCache = new btDbvtBroadphase();
-	//btVector3 worldMin(-1000, -1000, -1000);
-	//btVector3 worldMax(1000, 1000, 1000);
+	//btVector3 worldMin(-3000, -3000, -3000);
+	//btVector3 worldMax(3000, 3000, 3000);
 	//overlappingPairCache = new btAxisSweep3(worldMin, worldMax);
 	solver = new btSequentialImpulseConstraintSolver();
-	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,
-			overlappingPairCache, solver, collisionConfiguration);
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver,
+			collisionConfiguration);
 	dynamicsWorld->setInternalTickCallback(myTickCallback);
 
 	dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(
@@ -65,9 +62,8 @@ void Physics::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps,
 // 	if (objList[i].gObject->doUpdates()) objList[i].gObject->update(elapsedTime);
 }
 
-void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
-		btScalar mass, bool isKinematic, const Vector3& origin,
-		const btQuaternion& orientation, const btVector3& linearVelocity,
+void GameObject::initPhys(Physics * phys, btCollisionShape * shape, btScalar mass, bool isKinematic,
+		const Vector3& origin, const btQuaternion& orientation, const btVector3& linearVelocity,
 		const btVector3& angularVelocity, Real restitution, Real friction) {
 	this->shape = shape;
 	this->physics = phys;
@@ -88,8 +84,7 @@ void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
 	startTransform.setOrigin(ori);
 
 	motionState = new btDefaultMotionState(startTransform);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,
-			localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
 	body = new btRigidBody(rbInfo);
 	if (isKinematic) {
 		body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -102,15 +97,13 @@ void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
 	this->friction = friction;
 	body->setUserPointer(this);
 	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
-	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
-			collidesWith);
+	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX, collidesWith);
 }
 
 //use this and initphys to get ogre object before phys is created
 
-void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
-		btScalar mass, bool isKinematic, const Vector3& origin,
-		const btQuaternion& orientation, Real restitution, Real friction) {
+void GameObject::initPhys(Physics * phys, btCollisionShape * shape, btScalar mass, bool isKinematic,
+		const Vector3& origin, const btQuaternion& orientation, Real restitution, Real friction) {
 	this->shape = shape;
 	this->physics = phys;
 	this->kinematic = isKinematic;
@@ -131,8 +124,7 @@ void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
 	startTransform.setOrigin(ori);
 
 	motionState = new btDefaultMotionState(startTransform);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,
-			localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
 	body = new btRigidBody(rbInfo);
 	if (isKinematic) {
 		body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -144,8 +136,7 @@ void GameObject::initPhys(Physics * phys, btCollisionShape * shape,
 	body->setFriction(friction);
 	body->setUserPointer(rootNode);
 	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
-	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
-			collidesWith);
+	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX, collidesWith);
 }
 
 void GameObject::animate(const FrameEvent &evt) {
@@ -158,12 +149,11 @@ void GameObject::animate(const FrameEvent &evt) {
 			Ogre::Vector3(trans.getOrigin().getX(), trans.getOrigin().getY(),
 					trans.getOrigin().getZ()));
 	rootNode->setOrientation(
-			Ogre::Quaternion(orientation.getW(), orientation.getX(),
-					orientation.getY(), orientation.getZ()));
+			Ogre::Quaternion(orientation.getW(), orientation.getX(), orientation.getY(),
+					orientation.getZ()));
 }
 
-GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
-		Entity * e) {
+GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name, Entity * e) {
 	this->sceneMgr = mgr;
 	this->name = name;
 	this->rootNode = rootNode;
@@ -171,10 +161,10 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	rootNode->attachObject(e);
 }
 
-GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
-		Entity * e, Physics * phys, btCollisionShape * btShape, btScalar mass,
-		bool isKinematic, const Ogre::Vector3& origin,
-		const btQuaternion& orientation, Real restitution, Real friction) {
+GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name, Entity * e,
+		Physics * phys, btCollisionShape * btShape, btScalar mass, bool isKinematic,
+		const Ogre::Vector3& origin, const btQuaternion& orientation, Real restitution,
+		Real friction) {
 
 	this->sceneMgr = mgr;
 	this->name = name;
@@ -201,8 +191,7 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	startTransform.setOrigin(ori);
 
 	motionState = new btDefaultMotionState(startTransform);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,
-			localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
 	body = new btRigidBody(rbInfo);
 	if (isKinematic) {
 		body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -214,17 +203,18 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	body->setFriction(friction);
 	body->setUserPointer(this);
 	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
-	collidesWith = 0 - 1;
-	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
-			collidesWith);
+	//collidesWith = 0 - 1;
+	//phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX, collidesWith);
+	phys->dynamicsWorld->addRigidBody(body);
+	body->setUserIndex(CollisionType::COLLISIONBOX);
 
 }
 
-GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
-		Entity * e, Physics * phys, btCollisionShape * btShape, btScalar mass,
-		bool isKinematic, const Ogre::Vector3& origin,
-		const btQuaternion& orientation, const btVector3& linearVelocity,
-		const btVector3& angularVelocity, Real restitution, Real friction) {
+GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name, Entity * e,
+		Physics * phys, btCollisionShape * btShape, btScalar mass, bool isKinematic,
+		const Ogre::Vector3& origin, const btQuaternion& orientation,
+		const btVector3& linearVelocity, const btVector3& angularVelocity, Real restitution,
+		Real friction) {
 
 	this->sceneMgr = mgr;
 	this->name = name;
@@ -253,8 +243,7 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	startTransform.setOrigin(ori);
 
 	motionState = new btDefaultMotionState(startTransform);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,
-			localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, localInertia);
 	body = new btRigidBody(rbInfo);
 	if (isKinematic) {
 		body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -269,9 +258,10 @@ GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name,
 	body->setFriction(friction);
 	body->setUserPointer(this);
 	int collidesWith = CollisionType::COLLISIONBOX | CollisionType::WALL;
-	collidesWith = 0 - 1;
-	phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX,
-			collidesWith);
+	//collidesWith = 0 - 1;
+	//phys->dynamicsWorld->addRigidBody(body, CollisionType::COLLISIONBOX, collidesWith);
+	phys->dynamicsWorld->addRigidBody(body);
+	body->setUserIndex(CollisionType::COLLISIONBOX);
 }
 
 void GameObject::updateTransform() {
@@ -284,16 +274,13 @@ void GameObject::addToSimulator() {
 //rigidbody is dynamic if and only if mass is non zero, otherwise static
 	if (mass != 0.0f)
 		shape->calculateLocalInertia(mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,
-			inertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, inertia);
 	rbInfo.m_restitution = restitution;
 	rbInfo.m_friction = friction;
 	body = new btRigidBody(rbInfo);
 	body->setUserPointer(this);
 	if (kinematic) {
-		body->setCollisionFlags(
-				body->getCollisionFlags()
-						| btCollisionObject::CF_KINEMATIC_OBJECT);
+		body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 		body->setActivationState(DISABLE_DEACTIVATION);
 	}
 	int simID = physics->addObject(this);

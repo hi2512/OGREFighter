@@ -36,10 +36,11 @@ struct HitboxData {
 	Real blockPushback;
 };
 
-
 class Actor: public GameObject {
 
 protected:
+	SceneNode * hurtboxNode;
+
 	bool onPlayer2Side;
 	bool isPlayer2;
 	Actor * opponent = NULL;
@@ -60,30 +61,51 @@ protected:
 	std::vector<KeyInput> * keysHeld;
 
 	std::map<AttackType, HitboxData> hitboxes;
-	virtual void createLightBox() {}
-	virtual void createMediumBox() {}
-	virtual void createHeavyBox() {}
-	virtual void createSpecialBox() {}
+	std::map<AttackType, btCollisionObject *> hurtboxes;
+	virtual void createLightBox() {
+	}
+	virtual void createMediumBox() {
+	}
+	virtual void createHeavyBox() {
+	}
+	virtual void createSpecialBox() {
+	}
 	int lAttackFrames = -1;
 	int mAttackFrames = -1;
 	int hAttackFrames = -1;
 	int sAttackFrames = -1;
-	virtual void lightAnimation() {}
-	virtual void mediumAnimation() {}
-	virtual void heavyAnimation() {}
+	virtual void lightAnimation() {
+	}
+	virtual void mediumAnimation() {
+	}
+	virtual void heavyAnimation() {
+	}
+	CollisionType myHitType() {
+		return this->isPlayer2 ? CollisionType::HITBOX_P2 : CollisionType::HITBOX_P1;
+	}
+	CollisionType oppHitType() {
+		return this->isPlayer2 ? CollisionType::HITBOX_P1 : CollisionType::HITBOX_P2;
+	}
+	CollisionType myHurtType() {
+		return this->isPlayer2 ? CollisionType::HURTBOX_P2 : CollisionType::HURTBOX_P1;
+	}
+	CollisionType oppHurtType() {
+		return this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
+	}
+	bool moveLock = false;
 
 	void clearAttack();
 
+
 public:
 
-	Actor(bool player2, SceneManager * sceneMgr, SceneNode * rootNode, String name,
-			Entity * e, Physics * phys, btCollisionShape * shape,
-			const Ogre::Vector3& origin, btQuaternion orientation,
-			std::deque<KeyInput> * inBuf,
-			std::deque<KeyInput> * relBuf,
+	Actor(bool player2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
+			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
+			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
 			std::vector<KeyInput> * kBuf, int left, int right, int medium, int heavy) :
-			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true,
-					origin, orientation, 1.0, 0.0), isPlayer2(player2), onPlayer2Side(player2) {
+			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true, origin, orientation, 1.0,
+					0.0), isPlayer2(player2), onPlayer2Side(player2), hurtboxNode(
+					rootNode->createChildSceneNode(name + "hurtnode")) {
 		inputBuffer = inBuf;
 		releaseBuffer = relBuf;
 		keysHeld = kBuf;
@@ -100,10 +122,11 @@ public:
 	void setP2Orientation();
 	bool onP1Side();
 	bool onP2Side();
-	void setOpponent(Actor * opp) {opponent = opp;}
+	void setOpponent(Actor * opp) {
+		opponent = opp;
+	}
 	void setAnimation(String animationName);
-	void readInputs(std::deque<KeyInput>& buf,
-			std::deque<KeyInput>& rBuf);
+	void readInputs(std::deque<KeyInput>& buf, std::deque<KeyInput>& rBuf);
 	//void animate(const FrameEvent& evt);
 	void doCollision(const FrameEvent& evt);
 

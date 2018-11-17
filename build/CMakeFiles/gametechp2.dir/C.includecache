@@ -6,19 +6,3 @@
 
 #IncludeRegexTransform: 
 
-/home/steve/Downloads/GTechFinal/audio.c
-stdint.h
--
-stdio.h
--
-stdlib.h
--
-SDL2/SDL.h
--
-audio.h
-/home/steve/Downloads/GTechFinal/audio.h
-
-/home/steve/Downloads/GTechFinal/audio.h
-SDL2/SDL.h
--
-

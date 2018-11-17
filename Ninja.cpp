@@ -15,22 +15,7 @@ void Ninja::createLightBox() {
 }
 
 void Ninja::createMediumBox() {
-
-	/*
-	 btCollisionObject * hbox  = new btGhostObject();
-	 hbox->setCollisionShape(new btBoxShape(btVector3(10, 10, 10)));
-	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	 Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	 btVector3 pos(curPos.x, curPos.y + 50, curPos.z);
-	 btTransform trans;
-	 trans.setIdentity();
-	 trans.setOrigin(pos);
-	 hbox->setWorldTransform(trans);
-	 int collidesWith = this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
-	 physics->getWorld()->addCollisionObject(hbox);
-	 //this->hitboxes.insert(pair<AttackType, btGhostObject *>(AttackType::HEAVY, hbox));
-	 */
-	btCollisionObject * hbox = new btGhostObject();
+	btCollisionObject * hbox = new btPairCachingGhostObject();
 	hbox->setCollisionShape(new btBoxShape(btVector3(50, 50, 50)));
 
 	btTransform trans;
@@ -39,16 +24,31 @@ void Ninja::createMediumBox() {
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
-	hbox->setCollisionFlags(CollisionType::HITBOX);
+	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
 	HitboxData hbd { hbox, 30, 25, 10, 10, 8.0, 5.0 };
-	this->hitboxes.insert(
-			pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
+	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
+	hbox->setUserPointer(&hbd);
+	hbox->setUserIndex(this->myHitType());
+
+	//SET HURTBOX
+	btCollisionObject * htbox = new btPairCachingGhostObject();
+	htbox->setCollisionShape(new btBoxShape(btVector3(75, 75, 75)));
+
+	btTransform trans2;
+	trans2.setIdentity();
+	btVector3 pos2(curPos.x, curPos.y - 500, curPos.z);
+	trans2.setOrigin(pos2);
+	htbox->setWorldTransform(trans2);
+	htbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	physics->dynamicsWorld->addCollisionObject(htbox);
+	this->hurtboxes.insert(pair<AttackType, btCollisionObject *>(AttackType::MEDIUM, htbox));
+	htbox->setUserIndex(this->myHurtType());
 
 }
 
 void Ninja::createHeavyBox() {
-	btCollisionObject * hbox = new btGhostObject();
+	btCollisionObject * hbox = new btPairCachingGhostObject();
 	hbox->setCollisionShape(new btBoxShape(btVector3(100, 50, 50)));
 
 	btTransform trans;
@@ -57,11 +57,26 @@ void Ninja::createHeavyBox() {
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
-	hbox->setCollisionFlags(CollisionType::HITBOX);
+	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
 	HitboxData hbd { hbox, 50, 10, 10, 10, 8.0, 5.0 };
-	this->hitboxes.insert(
-			pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
+	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
+	hbox->setUserPointer(&hbd);
+	hbox->setUserIndex(this->myHitType());
+
+	//SET HURTBOX
+	btCollisionObject * htbox = new btPairCachingGhostObject();
+	htbox->setCollisionShape(new btBoxShape(btVector3(150, 75, 75)));
+
+	btTransform trans2;
+	trans2.setIdentity();
+	btVector3 pos2(curPos.x, curPos.y - 500, curPos.z);
+	trans2.setOrigin(pos2);
+	htbox->setWorldTransform(trans2);
+	htbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	physics->dynamicsWorld->addCollisionObject(htbox);
+	this->hurtboxes.insert(pair<AttackType, btCollisionObject *>(AttackType::HEAVY, htbox));
+	htbox->setUserIndex(this->myHurtType());
 }
 
 void Ninja::heavyAnimation() {
@@ -75,6 +90,10 @@ void Ninja::heavyAnimation() {
 	trans = hbox->getWorldTransform();
 	auto tv = trans.getOrigin();
 	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
+	btTransform trans2;
+	btCollisionObject * htbox = this->hurtboxes.at(currentAttack);
+	trans2 = htbox->getWorldTransform();
+
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real xPos = curPos.x + 400;
 
@@ -104,19 +123,28 @@ void Ninja::heavyAnimation() {
 	}
 
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+	btVector3 hurtpos(curPos.x, curPos.y - 500, curPos.z);
 
 	int frameTime = -this->attackFrameCount + 50;
 	//printf("frametime: %d\n", frameTime);
 	if (frameTime >= 0 && frameTime <= 8) {
 		pos = hitFrames.at(frameTime);
 	}
-	if(frameTime >=-40 && frameTime <= 30) {
+	if (frameTime >= -40 && frameTime <= 12) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 3));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
+	//hurtbox timing
+	if (frameTime >= -20 && frameTime <= 12) {
+		hurtpos = btVector3(xPos, yPos, curPos.z);
+	}
+
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
+
+	trans2.setOrigin(hurtpos);
+	htbox->setWorldTransform(trans2);
 }
 
 void Ninja::mediumAnimation() {
@@ -128,8 +156,11 @@ void Ninja::mediumAnimation() {
 	btTransform trans;
 	btCollisionObject * hbox = this->hitboxes.at(currentAttack).hitbox;
 	trans = hbox->getWorldTransform();
-	auto tv = trans.getOrigin();
-	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
+
+	btTransform trans2;
+	btCollisionObject * htbox = this->hurtboxes.at(currentAttack);
+	trans2 = htbox->getWorldTransform();
+
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real xPos = curPos.x + 200;
 
@@ -155,24 +186,29 @@ void Ninja::mediumAnimation() {
 	}
 
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+	btVector3 hurtpos(curPos.x, curPos.y - 500, curPos.z);
 
 	int frameTime = -this->attackFrameCount + 20;
 	//printf("frametime: %d\n", frameTime);
 	if (frameTime >= 0 && frameTime <= 6) {
 		pos = hitFrames.at(frameTime);
 	}
+	if (frameTime >= -10 && frameTime <= 10) {
+		hurtpos = btVector3(xPos, yPos, curPos.z);
+	}
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
+
+	trans2.setOrigin(hurtpos);
+	htbox->setWorldTransform(trans2);
 }
 
 void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
-
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
-
 
 	bool reverse = false;
 
@@ -247,6 +283,11 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->currentAttack = AttackType::HEAVY;
 			}
 		}
+		//check if movement locked
+		if(moveLock) {
+			printf("MOVE LOCKED\n");
+			moveX = 0;
+		}
 		//if walking
 		if (moveX) {
 			this->setAnimation("Walk");
@@ -255,27 +296,25 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			this->setAnimation("Idle1");
 		}
 		/*
-		//pushback if walk into each other
-		if (context.hit
-				&& context.body->getCollisionFlags()
-						== CollisionType::COLLISIONBOX) {
-			printf("col flags 0x%x", context.body->getCollisionFlags());
-			moveX = -moveX * 3;
-		}
-		*/
-		if (context.hit
-				&& context.body->getCollisionFlags() == CollisionType::HITBOX) {
+		 //pushback if walk into each other
+		 if (context.hit
+		 && context.body->getCollisionFlags()
+		 == CollisionType::COLLISIONBOX) {
+		 printf("col flags 0x%x", context.body->getCollisionFlags());
+		 moveX = -moveX * 3;
+		 }
+		 */
+		if (context.hit && context.body->getCollisionFlags() == CollisionType::HITBOX_P1) {
 			printf("COllision box collided with hitbox\n");
 		}
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
 		//play animation
-		AnimationState * as = this->geom->getAnimationState(
-				this->playingAnimation);
-		Real timeToAdd =
-				reverse ? -evt.timeSinceLastFrame : evt.timeSinceLastFrame;
+		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+		Real timeToAdd = reverse ? -evt.timeSinceLastFrame : evt.timeSinceLastFrame;
 		as->addTime(evt.timeSinceLastFrame);
 		break;
 	}
+	//Actor::moveHurtBox();
 
 	//keep orientation
 	btQuaternion rot = trans.getRotation();
@@ -294,7 +333,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	this->rootNode->setOrientation(ori);
 
+	this->moveLock = false;
 	this->doCollision(evt);
-
 }
 

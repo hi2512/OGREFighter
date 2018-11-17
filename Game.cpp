@@ -32,8 +32,7 @@
 using namespace Ogre;
 using namespace std;
 
-class Game: public OgreBites::ApplicationContext,
-		public OgreBites::InputListener {
+class Game: public OgreBites::ApplicationContext, public OgreBites::InputListener {
 public:
 	Game();
 	void setup();
@@ -47,8 +46,7 @@ public:
 	bool frameEnded(const Ogre::FrameEvent& evt);
 	Physics * phys;
 private:
-	bool inKeysHeld(const OgreBites::KeyboardEvent& evt,
-			std::vector<KeyInput> kh);
+	bool inKeysHeld(const OgreBites::KeyboardEvent& evt, std::vector<KeyInput> kh);
 	void initPhys();
 	bool leftMouse = false;
 	bool leftMouseRelease = false;
@@ -106,8 +104,7 @@ Game::Game() :
 }
 //! [constructor]
 
-bool Game::inKeysHeld(const OgreBites::KeyboardEvent& evt,
-		std::vector<KeyInput> kh) {
+bool Game::inKeysHeld(const OgreBites::KeyboardEvent& evt, std::vector<KeyInput> kh) {
 	//check if key was held
 	for (KeyInput t : kh) {
 		if (evt.keysym.sym == t.key) {
@@ -142,8 +139,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	this->inputBuffer2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 
 	if (!inKeysHeld(evt, keysHeld2)) {
-		this->keysHeld2.push_back(
-				KeyInput { evt.keysym.sym, this->frameCount });
+		this->keysHeld2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 	}
 
 	switch (evt.keysym.sym) {
@@ -215,8 +211,7 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	if (releaseBuffer.size() > 200) {
 		releaseBuffer.pop_front();
 	}
-	this->releaseBuffer.push_back(
-			KeyInput { evt.keysym.sym, this->frameCount });
+	this->releaseBuffer.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 
 	//remove from keys held
 	for (auto it = keysHeld.begin(); it != keysHeld.end(); it++) {
@@ -230,8 +225,7 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	if (releaseBuffer2.size() > 200) {
 		releaseBuffer2.pop_front();
 	}
-	this->releaseBuffer2.push_back(
-			KeyInput { evt.keysym.sym, this->frameCount });
+	this->releaseBuffer2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 
 	//remove from keys held
 	for (auto it = keysHeld2.begin(); it != keysHeld2.end(); it++) {
@@ -336,13 +330,11 @@ void Game::setup(void) {
 
 	// register scene with the shader
 
-	RTShader::ShaderGenerator* shaderGen =
-			RTShader::ShaderGenerator::getSingletonPtr();
+	RTShader::ShaderGenerator* shaderGen = RTShader::ShaderGenerator::getSingletonPtr();
 	shaderGen->addSceneManager(scnMgr);
 
 	// set up camera node's position
-	camNode = scnMgr->getRootSceneNode()->createChildSceneNode(
-			Vector3(0, 500, 1750));
+	camNode = scnMgr->getRootSceneNode()->createChildSceneNode(Vector3(0, 500, 1750));
 	camNode->lookAt(Vector3(0, 50, -1), Node::TS_PARENT);
 
 	// create the camera and attach it to the node we just created
@@ -355,8 +347,8 @@ void Game::setup(void) {
 	// tell the camera to render to the main window
 	getRenderWindow()->addViewport(cam);
 
-	SceneNode * sideNode = scnMgr->getRootSceneNode()->createChildSceneNode(
-			"SideNode", Vector3(800, 200, 0));
+	SceneNode * sideNode = scnMgr->getRootSceneNode()->createChildSceneNode("SideNode",
+			Vector3(800, 200, 0));
 
 	// render the light at the top of the room
 	Light* pointLight1 = scnMgr->createLight("pointLight1");
@@ -365,66 +357,58 @@ void Game::setup(void) {
 	pointLight1->setSpecularColour(1, 1, 1);
 	pointLight1->setDiffuseColour(1, 1, 1);
 
-	SceneNode* pointLightNode1 =
-			scnMgr->getRootSceneNode()->createChildSceneNode(
-					Vector3(-300, 900, 700));
+	SceneNode* pointLightNode1 = scnMgr->getRootSceneNode()->createChildSceneNode(
+			Vector3(-300, 900, 700));
 	pointLightNode1->lookAt(Vector3(0, 0, 0), Node::TS_LOCAL);
 	pointLightNode1->attachObject(pointLight1);
 
 	initPhys();
 
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
-	Ogre::MeshPtr planePtr = Ogre::MeshManager::getSingleton().createPlane(
-			"ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-			plane, 3000, 2500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+	Ogre::MeshPtr planePtr = Ogre::MeshManager::getSingleton().createPlane("ground",
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 3000, 2500, 20, 20,
+			true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
 
 	Ogre::Entity *entGround = scnMgr->createEntity("GroundEntity", "ground");
-	Ogre::SceneNode *groundNode =
-			scnMgr->getRootSceneNode()->createChildSceneNode("GroundNode");
+	Ogre::SceneNode *groundNode = scnMgr->getRootSceneNode()->createChildSceneNode("GroundNode");
 	btCollisionShape *groundShape = new btBoxShape(
 			btVector3(btScalar(1500.), btScalar(0), btScalar(1250.)));
 
-	Ground * g = new Ground(scnMgr, groundNode, "GroundObject", entGround, phys,
-			groundShape, Vector3(0, 0, 0));
+	Ground * g = new Ground(scnMgr, groundNode, "GroundObject", entGround, phys, groundShape,
+			Vector3(0, 0, 0));
 
 	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
-	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode(
-			"P1Node");
+	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode("P1Node");
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
-	btCollisionShape * p1Box = new btBoxShape(
-			btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
+	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
 	Actor * p1 = new Ninja(false, scnMgr, p1Node, "P1", p1Entity, phys, p1Box,
-			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707),
-			&inputBuffer, &releaseBuffer, &keysHeld, 'a', 'd', 'c', 'v');
+			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), &inputBuffer,
+			&releaseBuffer, &keysHeld, 'a', 'd', 'c', 'v');
 
 	Entity * p2Entity = scnMgr->createEntity("ninja.mesh");
-	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode(
-			"P2Node");
+	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode("P2Node");
 	auto p2OgreBox = p2Entity->getBoundingBox().getSize();
-	btCollisionShape * p2Box = new btBoxShape(
-			btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
-	Actor * p2 = new Ninja(true, scnMgr, p2Node, "P2", p2Entity, phys, p2Box,
-			Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707),
-			&inputBuffer2, &releaseBuffer2, &keysHeld2, 'j', 'l', 'b', 'n');
+	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
+	Actor * p2 = new Ninja(true, scnMgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
+			btQuaternion(0.0, -0.707, 0.0, -0.707), &inputBuffer2, &releaseBuffer2, &keysHeld2, 'j',
+			'l', 'b', 'n');
 	p1->setOpponent(p2);
 	p2->setOpponent(p1);
 	player1 = p1;
 	player2 = p2;
 
-
 	/*
-	btCollisionObject * kickCollision = new btGhostObject();
-	kickCollision->getCollisionShape()->
-	kickCollision->setCollisionShape(new btBoxShape(btVector3(50, 100, 0)));
-	kickCollision->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	kickCollision->setActivationState(DISABLE_DEACTIVATION);
-	btTransform trans;
-	trans.setIdentity();
-	trans.setOrigin(btVector3(0, 100, 0));
-	kickCollision->setWorldTransform(trans);
-	phys->dynamicsWorld->addCollisionObject(kickCollision);
-	*/
-
+	 btCollisionObject * kickCollision = new btGhostObject();
+	 kickCollision->getCollisionShape()->
+	 kickCollision->setCollisionShape(new btBoxShape(btVector3(50, 100, 0)));
+	 kickCollision->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	 kickCollision->setActivationState(DISABLE_DEACTIVATION);
+	 btTransform trans;
+	 trans.setIdentity();
+	 trans.setOrigin(btVector3(0, 100, 0));
+	 kickCollision->setWorldTransform(trans);
+	 phys->dynamicsWorld->addCollisionObject(kickCollision);
+	 */
 
 	/*
 	 phys->pairCachingGhostObject = new btPairCachingGhostObject();
@@ -472,8 +456,7 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	OgreBites::ApplicationContext::frameStarted(evt);
 
 	Ogre::ImguiManager::getSingleton().newFrame(evt.timeSinceLastFrame,
-			Ogre::Rect(0, 0, getRenderWindow()->getWidth(),
-					getRenderWindow()->getHeight()));
+			Ogre::Rect(0, 0, getRenderWindow()->getWidth(), getRenderWindow()->getHeight()));
 	if (debug) {
 		gameGui->showFrameCount();
 		gameState->camPos = Vector3(camNode->getPosition());
@@ -521,9 +504,8 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
-		btCollisionObject* obj =
-				phys->dynamicsWorld->getCollisionObjectArray()[i];
-		if (obj->getCollisionFlags() == CollisionType::HITBOX) {
+		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];
+		if (obj->getCollisionFlags() == btCollisionObject::CF_NO_CONTACT_RESPONSE) {
 			//LogManager::getSingleton().logMessage("ISGHOST");
 			continue;
 		}
@@ -537,10 +519,8 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 
 	}
 	//check which side players should be facing
-	Real p1X = player1->getRootNode()->convertLocalToWorldPosition(
-			Vector3::ZERO).x;
-	Real p2X = player2->getRootNode()->convertLocalToWorldPosition(
-			Vector3::ZERO).x;
+	Real p1X = player1->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO).x;
+	Real p2X = player2->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO).x;
 	if (p1X < p2X) {
 		player1->setP1Orientation();
 		player2->setP2Orientation();
