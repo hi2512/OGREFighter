@@ -82,6 +82,12 @@ void Ninja::createHeavyBox() {
 	htbox->setUserIndex(this->myHurtType());
 }
 
+void Ninja::playHitAnimation() {
+	this->setAnimation("Death1");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->addTime(0.002);
+}
+
 void Ninja::heavyAnimation() {
 	this->setAnimation("Kick");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
@@ -229,6 +235,14 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	btVector3 pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
 	switch (this->actorState) {
+	case StateType::HITSTUN:
+		printf("hitstun frames: %d\n", this->hitstunFrames);
+		this->playHitAnimation();
+		if(this->hitstunFrames == 0) {
+			this->actorState = StateType::FREE;
+		}
+		this->hitstunFrames -= 1;
+		break;
 	case StateType::STOP:
 		printf("Stop frame count: %d\n", this->stopFrameCount);
 		if(this->stopFrameCount == 0) {

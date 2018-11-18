@@ -29,6 +29,8 @@ protected:
 	void mediumAnimation();
 	void heavyAnimation();
 
+	void playHitAnimation();
+
 
 public:
 	Ninja(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
@@ -50,7 +52,7 @@ public:
 		AnimationStateIterator it = mAnims->getAnimationStateIterator();
 		while (it.hasMoreElements()) {
 			AnimationStateMap::mapped_type as = it.getNext();
-			//LogManager::getSingleton().logMessage(as->getAnimationName());
+			LogManager::getSingleton().logMessage(as->getAnimationName());
 			as->setLoop(true);
 		}
 		this->lAttackFrames = 20;

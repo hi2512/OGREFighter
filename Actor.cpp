@@ -1,5 +1,12 @@
 #include "Actor.h"
 
+void Actor::setBox(btCollisionObject * box, const btVector3& targetPos) {
+	btTransform trans;
+	trans = box->getWorldTransform();
+	trans.setOrigin(targetPos);
+	box->setWorldTransform(trans);
+}
+
 void Actor::doCollision(const FrameEvent& evt) {
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
@@ -13,10 +20,12 @@ void Actor::doCollision(const FrameEvent& evt) {
 		}
 		//CHECK IF I WAS HIT
 		if (context.body->getUserIndex() == this->oppHitType()) {
-			printf("I am %s\n", this->name.c_str());
+			//CHECK FOR SIMULTANIOUS HIT
+
+			//printf("I am %s\n", this->name.c_str());
 			HitboxData * hbd = (HitboxData *) context.body->getUserPointer();
-			printf("hitbox data %f, %f\n", hbd->hitPushback, hbd->blockPushback);
-			printf("hitbox data cont %d, %d %d\n", hbd->hitstun, hbd->blockstun, hbd->active);
+			//printf("hitbox data %f, %f\n", hbd->hitPushback, hbd->blockPushback);
+			//printf("hitbox data cont %d, %d %d\n", hbd->hitstun, hbd->blockstun, hbd->active);
 			if (hbd->active) {
 				//do was hit
 				hbd->active = false;
@@ -31,6 +40,18 @@ void Actor::recieveHit(HitboxData * hbd) {
 
 	//this->beforeStopState = StateType::HITSTUN;
 
+	if (this->actorState == StateType::ATTACK) {
+		//reset hurtbox, hitbox, and collision
+		Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+		btVector3 targetPos(curPos.x, curPos.y - 500, curPos.z);
+		this->setBox(this->hurtboxes.at(currentAttack), targetPos);
+		this->setBox(this->hitboxes.at(currentAttack).hitbox, targetPos);
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+
+		this->clearAttack();
+	}
+	this->actorState = StateType::HITSTUN;
+	this->hitstunFrames = hbd->hitstun;
 	this->enterStopState(hbd->hitstop);
 	this->opponent->enterStopState(hbd->hitstop);
 
@@ -77,7 +98,9 @@ void Actor::pushBack(Real dist) {
 
 void Actor::setAnimation(String animation) {
 	if (playingAnimation != animation) {
-		this->geom->getAnimationState(playingAnimation)->setEnabled(false);
+		auto as = this->geom->getAnimationState(playingAnimation);
+		as->setEnabled(false);
+		as->setTimePosition(0);
 		this->playingAnimation = animation;
 	}
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);

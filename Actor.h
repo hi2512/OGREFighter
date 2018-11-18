@@ -17,7 +17,7 @@ enum AttackType {
 };
 
 enum StateType {
-	STOP, FREE, ATTACK, BLOCK, AIR, KNOCKDOWN, HITSTUN
+	STOP, FREE, ATTACK, BLOCK, AIR, KNOCKDOWN, HITSTUN, BLOCKSTUN
 
 };
 
@@ -54,6 +54,9 @@ protected:
 
 	int attackFrameCount = -1;
 	AttackType currentAttack = AttackType::NONE;
+
+	int hitstunFrames = -1;
+	int blockstunFrames = -1;
 
 	std::map<int, InputType> keyBinding;
 
@@ -95,7 +98,7 @@ protected:
 	CollisionType oppHurtType() {
 		return this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
 	}
-
+	void setBox(btCollisionObject * box, const btVector3& targetPos);
 	void clearAttack();
 	void recieveHit(HitboxData * hbd);
 	void enterStopState(int stopFrames);
