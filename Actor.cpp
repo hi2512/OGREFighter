@@ -11,6 +11,17 @@ void Actor::doCollision(const FrameEvent& evt) {
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
+
+
+	bool isAttacking = currentAttack != AttackType::NONE;
+	CollisionContext contextHurt;
+	if (isAttacking) {
+		//printf("check attack hurtbox1\n");
+		btCollisionObject * ht = this->hurtboxes.at(currentAttack);
+		BulletContactCallback* hurtThing = new BulletContactCallback(*ht, contextHurt);
+		this->physics->getWorld()->contactTest(ht, *hurtThing);
+	}
+
 	if (context.hit) {
 		if (context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
 			this->opponent->pushBack(12.0);
@@ -19,14 +30,24 @@ void Actor::doCollision(const FrameEvent& evt) {
 			this->moveLock = true;
 		}
 		//CHECK IF I WAS HIT
-		if (context.body->getUserIndex() == this->oppHitType()) {
-			//CHECK FOR SIMULTANIOUS HIT
-
+		bool wasHit = context.body->getUserIndex() == this->oppHitType();
+		bool hurtboxHit = false;
+		if(isAttacking) {
+			//printf("hurtbox collided with %d\n", contextHurt.body->getUserIndex());
+			hurtboxHit = contextHurt.body->getUserIndex() == this->oppHitType();
+		}
+		if (wasHit || hurtboxHit) {
 			//printf("I am %s\n", this->name.c_str());
-			HitboxData * hbd = (HitboxData *) context.body->getUserPointer();
+			HitboxData * hbd;
+			if (hurtboxHit) {
+				hbd = (HitboxData *) contextHurt.body->getUserPointer();
+			} else {
+				hbd = (HitboxData *) context.body->getUserPointer();
+			}
 			//printf("hitbox data %f, %f\n", hbd->hitPushback, hbd->blockPushback);
 			//printf("hitbox data cont %d, %d %d\n", hbd->hitstun, hbd->blockstun, hbd->active);
 			if (hbd->active) {
+
 				//do was hit
 				hbd->active = false;
 				this->recieveHit(hbd);

@@ -151,11 +151,11 @@ struct BulletContactCallback: public btCollisionWorld::ContactResultCallback {
 	// Constructor, pass whatever context you want to have available when processing contacts
 	/* You may also want to set m_collisionFilterGroup and m_collisionFilterMask
 	 *  (supplied by the superclass) for needsCollision() */
-	BulletContactCallback(btRigidBody& tgtBody, CollisionContext& context /*, ... */) :
+	BulletContactCallback(btCollisionObject& tgtBody, CollisionContext& context /*, ... */) :
 			btCollisionWorld::ContactResultCallback(), body(tgtBody), ctxt(context) {
 	}
 
-	btRigidBody& body; // The body the sensor is monitoring
+	btCollisionObject& body; // The body the sensor is monitoring
 	CollisionContext& ctxt; // External information for contact processing
 
 	virtual ~BulletContactCallback() {
@@ -192,7 +192,7 @@ struct BulletContactCallback: public btCollisionWorld::ContactResultCallback {
 		}
 		ctxt.theObject = static_cast<GameObject*>(ctxt.body->getUserPointer());
 		ctxt.normal = cp.m_normalWorldOnB;
-		ctxt.velocity = body.getLinearVelocity();
+		//ctxt.velocity = body.getLinearVelocity();
 		ctxt.velNorm = ctxt.normal.dot(ctxt.velocity);
 
 		return 0;
