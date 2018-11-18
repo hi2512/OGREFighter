@@ -17,7 +17,7 @@ enum AttackType {
 };
 
 enum StateType {
-	STOP, FREE, ATTACK, BLOCK, AIR, KNOCKDOWN, STUN
+	STOP, FREE, ATTACK, BLOCK, AIR, KNOCKDOWN, HITSTUN
 
 };
 
@@ -28,12 +28,13 @@ enum InputType {
 
 struct HitboxData {
 	btCollisionObject * hitbox;
+	Real hitPushback;
+	Real blockPushback;
 	int hitstun;
 	int blockstun;
 	int hitstop;
 	int blockstop;
-	Real hitPushback;
-	Real blockPushback;
+	bool active;
 };
 
 class Actor: public GameObject {
@@ -43,6 +44,8 @@ protected:
 
 	bool onPlayer2Side;
 	bool isPlayer2;
+	bool moveLock = false;
+
 	Actor * opponent = NULL;
 	StateType actorState = StateType::FREE;
 
@@ -92,9 +95,11 @@ protected:
 	CollisionType oppHurtType() {
 		return this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
 	}
-	bool moveLock = false;
 
 	void clearAttack();
+	void recieveHit(HitboxData * hbd);
+	void enterStopState(int stopFrames);
+	void exitStopState();
 
 
 public:

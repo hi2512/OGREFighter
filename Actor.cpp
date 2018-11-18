@@ -1,19 +1,49 @@
 #include "Actor.h"
 
-
 void Actor::doCollision(const FrameEvent& evt) {
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
 	if (context.hit) {
-		if(context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
+		if (context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
 			this->opponent->pushBack(12.0);
 		}
-		if(context.body->getUserIndex() == this->oppHurtType()) {
+		if (context.body->getUserIndex() == this->oppHurtType()) {
 			this->moveLock = true;
+		}
+		//CHECK IF I WAS HIT
+		if (context.body->getUserIndex() == this->oppHitType()) {
+			printf("I am %s\n", this->name.c_str());
+			HitboxData * hbd = (HitboxData *) context.body->getUserPointer();
+			printf("hitbox data %f, %f\n", hbd->hitPushback, hbd->blockPushback);
+			printf("hitbox data cont %d, %d %d\n", hbd->hitstun, hbd->blockstun, hbd->active);
+			if (hbd->active) {
+				//do was hit
+				hbd->active = false;
+				this->recieveHit(hbd);
+			}
 		}
 	}
 
+}
+
+void Actor::recieveHit(HitboxData * hbd) {
+
+	//this->beforeStopState = StateType::HITSTUN;
+
+	this->enterStopState(hbd->hitstop);
+	this->opponent->enterStopState(hbd->hitstop);
+
+}
+
+void Actor::enterStopState(int stopFrames) {
+	this->beforeStopState = this->actorState;
+	this->stopFrameCount = stopFrames;
+	this->actorState = StateType::STOP;
+}
+
+void Actor::exitStopState() {
+	this->actorState = this->beforeStopState;
 }
 
 bool Actor::onP1Side() {
@@ -27,6 +57,7 @@ bool Actor::onP2Side() {
 void Actor::clearAttack() {
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setTimePosition(0.0);
+	this->hitboxes.at(currentAttack).active = false;
 	this->attackFrameCount = -1;
 	this->currentAttack = AttackType::NONE;
 	this->actorState = StateType::FREE;

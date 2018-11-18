@@ -26,9 +26,9 @@ void Ninja::createMediumBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 30, 25, 10, 10, 8.0, 5.0 };
+	HitboxData hbd { hbox, 8.0, 5.0, 30, 25, 10, 10, false};
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
-	hbox->setUserPointer(&hbd);
+	hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
 	hbox->setUserIndex(this->myHitType());
 
 	//SET HURTBOX
@@ -59,9 +59,12 @@ void Ninja::createHeavyBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 50, 10, 10, 10, 8.0, 5.0 };
+	HitboxData hbd { hbox, 8.0, 5.0, 50, 10, 10, 10, false};
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
-	hbox->setUserPointer(&hbd);
+	auto re = &this->hitboxes.at(AttackType::HEAVY);
+	printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
+	printf("hitbox data %f, %f", hbd.hitPushback, hbd.blockPushback);
+	hbox->setUserPointer(&this->hitboxes.at(AttackType::HEAVY));
 	hbox->setUserIndex(this->myHitType());
 
 	//SET HURTBOX
@@ -206,9 +209,11 @@ void Ninja::mediumAnimation() {
 void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
+	/*
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
+	*/
 
 	bool reverse = false;
 
@@ -224,6 +229,13 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	btVector3 pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
 	switch (this->actorState) {
+	case StateType::STOP:
+		printf("Stop frame count: %d\n", this->stopFrameCount);
+		if(this->stopFrameCount == 0) {
+			this->exitStopState();
+		}
+		this->stopFrameCount -= 1;
+		break;
 	case StateType::ATTACK:
 		if (this->attackFrameCount == 0) {
 			//reset animation
@@ -277,16 +289,13 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			if (this->keyBinding.at(ki.key) == InputType::M) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::MEDIUM;
+				this->hitboxes.at(currentAttack).active = true;
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::HEAVY;
+				this->hitboxes.at(currentAttack).active = true;
 			}
-		}
-		//check if movement locked
-		if(moveLock) {
-			printf("MOVE LOCKED\n");
-			moveX = 0;
 		}
 		//if walking
 		if (moveX) {
@@ -295,17 +304,14 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			//not walking
 			this->setAnimation("Idle1");
 		}
-		/*
-		 //pushback if walk into each other
-		 if (context.hit
-		 && context.body->getCollisionFlags()
-		 == CollisionType::COLLISIONBOX) {
-		 printf("col flags 0x%x", context.body->getCollisionFlags());
-		 moveX = -moveX * 3;
-		 }
-		 */
-		if (context.hit && context.body->getCollisionFlags() == CollisionType::HITBOX_P1) {
-			printf("COllision box collided with hitbox\n");
+		//check if movement locked
+		if (moveLock) {
+			printf("MOVE LOCKED\n");
+			moveX = 0;
+			this->setAnimation("Block");
+			AnimationState * asb = this->geom->getAnimationState(this->playingAnimation);
+			asb->addTime(0.005);
+			break;
 		}
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
 		//play animation
@@ -314,7 +320,6 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		as->addTime(evt.timeSinceLastFrame);
 		break;
 	}
-	//Actor::moveHurtBox();
 
 	//keep orientation
 	btQuaternion rot = trans.getRotation();
