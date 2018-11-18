@@ -101,9 +101,14 @@ protected:
 	void setBox(btCollisionObject * box, const btVector3& targetPos);
 	void clearAttack();
 	void recieveHit(HitboxData * hbd);
+	void recieveBlock(HitboxData * hbd);
 	void enterStopState(int stopFrames);
 	void exitStopState();
 
+	virtual void playHitAnimation() {
+	}
+	virtual void playBlockAnimation() {
+	}
 
 public:
 
@@ -125,6 +130,7 @@ public:
 		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
 
 	}
+	bool isBlocking();
 	void pushBack(Real dist);
 	void setP1Orientation();
 	void setP2Orientation();

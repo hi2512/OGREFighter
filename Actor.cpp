@@ -1,4 +1,26 @@
 #include "Actor.h"
+#include <cassert>
+
+bool Actor::isBlocking() {
+	if (this->actorState != StateType::FREE) {
+		return false;
+	}
+	bool blocking = false;
+	InputType directionToBlock = this->onPlayer2Side ? InputType::RIGHT : InputType::LEFT;
+	InputType forwardDir = this->onPlayer2Side ? InputType::LEFT : InputType::RIGHT; //Can't block if holding forward
+	for (KeyInput ki : *this->keysHeld) {
+		if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+			continue;
+		}
+		if (this->keyBinding.at(ki.key) == directionToBlock) {
+			blocking = true;
+		}
+		if (this->keyBinding.at(ki.key) == forwardDir) {
+			return false;
+		}
+	}
+	return blocking;
+}
 
 void Actor::setBox(btCollisionObject * box, const btVector3& targetPos) {
 	btTransform trans;
@@ -11,7 +33,6 @@ void Actor::doCollision(const FrameEvent& evt) {
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
-
 
 	bool isAttacking = currentAttack != AttackType::NONE;
 	CollisionContext contextHurt;
@@ -32,28 +53,44 @@ void Actor::doCollision(const FrameEvent& evt) {
 		//CHECK IF I WAS HIT
 		bool wasHit = context.body->getUserIndex() == this->oppHitType();
 		bool hurtboxHit = false;
-		if(isAttacking) {
+		if (isAttacking) {
 			//printf("hurtbox collided with %d\n", contextHurt.body->getUserIndex());
 			hurtboxHit = contextHurt.body->getUserIndex() == this->oppHitType();
 		}
 		if (wasHit || hurtboxHit) {
 			//printf("I am %s\n", this->name.c_str());
-			HitboxData * hbd;
-			if (hurtboxHit) {
-				hbd = (HitboxData *) contextHurt.body->getUserPointer();
-			} else {
-				hbd = (HitboxData *) context.body->getUserPointer();
-			}
+			HitboxData * hbd =
+					hurtboxHit ?
+							(HitboxData *) contextHurt.body->getUserPointer() :
+							(HitboxData *) context.body->getUserPointer();
 			//printf("hitbox data %f, %f\n", hbd->hitPushback, hbd->blockPushback);
 			//printf("hitbox data cont %d, %d %d\n", hbd->hitstun, hbd->blockstun, hbd->active);
 			if (hbd->active) {
 
 				//do was hit
 				hbd->active = false;
-				this->recieveHit(hbd);
+
+				//AM I BLOCKING???
+				if (this->isBlocking()) {
+					this->recieveBlock(hbd);
+				} else {
+					this->recieveHit(hbd);
+				}
+
 			}
 		}
 	}
+
+}
+
+void Actor::recieveBlock(HitboxData * hbd) {
+	assert(this->actorState == StateType::FREE);
+	this->actorState = StateType::BLOCKSTUN;
+	this->blockstunFrames = hbd->blockstun;
+	this->enterStopState(hbd->blockstop);
+	this->opponent->enterStopState(hbd->blockstop);
+
+	this->pushBack(hbd->blockPushback);
 
 }
 
@@ -75,6 +112,8 @@ void Actor::recieveHit(HitboxData * hbd) {
 	this->hitstunFrames = hbd->hitstun;
 	this->enterStopState(hbd->hitstop);
 	this->opponent->enterStopState(hbd->hitstop);
+
+	this->pushBack(hbd->hitPushback);
 
 }
 

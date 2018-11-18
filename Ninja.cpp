@@ -26,7 +26,7 @@ void Ninja::createMediumBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 8.0, 5.0, 30, 25, 10, 10, false};
+	HitboxData hbd { hbox, 8.0, 5.0, 30, 25, 10, 10, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
 	hbox->setUserIndex(this->myHitType());
@@ -59,7 +59,7 @@ void Ninja::createHeavyBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 8.0, 5.0, 50, 10, 10, 10, false};
+	HitboxData hbd { hbox, 8.0, 5.0, 50, 10, 10, 10, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	auto re = &this->hitboxes.at(AttackType::HEAVY);
 	printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
@@ -86,6 +86,13 @@ void Ninja::playHitAnimation() {
 	this->setAnimation("Death1");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->addTime(0.002);
+}
+
+void Ninja::playBlockAnimation() {
+	this->setAnimation("Block");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.03);
 }
 
 void Ninja::heavyAnimation() {
@@ -216,10 +223,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
 	/*
-	CollisionContext context;
-	BulletContactCallback* thing = new BulletContactCallback(*body, context);
-	this->physics->getWorld()->contactTest(body, *thing);
-	*/
+	 CollisionContext context;
+	 BulletContactCallback* thing = new BulletContactCallback(*body, context);
+	 this->physics->getWorld()->contactTest(body, *thing);
+	 */
 
 	bool reverse = false;
 
@@ -235,17 +242,24 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	btVector3 pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
 	switch (this->actorState) {
+	case StateType::BLOCKSTUN:
+		this->playBlockAnimation();
+		if(this->blockstunFrames == 0) {
+			this->actorState = StateType::FREE;
+		}
+		this->blockstunFrames -= 1;
+		break;
 	case StateType::HITSTUN:
 		printf("hitstun frames: %d\n", this->hitstunFrames);
 		this->playHitAnimation();
-		if(this->hitstunFrames == 0) {
+		if (this->hitstunFrames == 0) {
 			this->actorState = StateType::FREE;
 		}
 		this->hitstunFrames -= 1;
 		break;
 	case StateType::STOP:
 		printf("Stop frame count: %d\n", this->stopFrameCount);
-		if(this->stopFrameCount == 0) {
+		if (this->stopFrameCount == 0) {
 			this->exitStopState();
 		}
 		this->stopFrameCount -= 1;

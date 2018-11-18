@@ -30,6 +30,7 @@ protected:
 	void heavyAnimation();
 
 	void playHitAnimation();
+	void playBlockAnimation();
 
 
 public:
