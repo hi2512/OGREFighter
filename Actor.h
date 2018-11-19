@@ -41,10 +41,11 @@ class Actor: public GameObject {
 
 protected:
 	SceneNode * hurtboxNode;
-
+	int comboCounter = 0;
 	bool onPlayer2Side;
 	bool isPlayer2;
 	bool moveLock = false;
+	bool newHit = false;
 
 	Actor * opponent = NULL;
 	StateType actorState = StateType::FREE;
@@ -67,7 +68,7 @@ protected:
 	std::vector<KeyInput> * keysHeld;
 
 	std::map<AttackType, HitboxData> hitboxes;
-	std::map<AttackType, btCollisionObject *> hurtboxes;
+
 	virtual void createLightBox() {
 	}
 	virtual void createMediumBox() {
@@ -129,6 +130,9 @@ public:
 		keyBinding.insert(pair<int, InputType>(medium, InputType::M));
 		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
 
+	}
+	int comboCount() {
+		return this->comboCounter;
 	}
 	bool isBlocking();
 	void pushBack(Real dist);

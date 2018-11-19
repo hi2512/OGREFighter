@@ -26,26 +26,10 @@ void Ninja::createMediumBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 8.0, 5.0, 30, 25, 10, 10, false };
+	HitboxData hbd { hbox, 8.0, 5.0, 44, 25, 10, 10, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
 	hbox->setUserIndex(this->myHitType());
-
-	/*
-	//SET HURTBOX
-	btCollisionObject * htbox = new btPairCachingGhostObject();
-	htbox->setCollisionShape(new btBoxShape(btVector3(125, 75, 75)));
-
-	btTransform trans2;
-	trans2.setIdentity();
-	btVector3 pos2(curPos.x, curPos.y - 500, curPos.z);
-	trans2.setOrigin(pos2);
-	htbox->setWorldTransform(trans2);
-	htbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	physics->dynamicsWorld->addCollisionObject(htbox);
-	this->hurtboxes.insert(pair<AttackType, btCollisionObject *>(AttackType::MEDIUM, htbox));
-	htbox->setUserIndex(this->myHurtType());
-	*/
 
 }
 
@@ -69,26 +53,15 @@ void Ninja::createHeavyBox() {
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::HEAVY));
 	hbox->setUserIndex(this->myHitType());
 
-	/*
-	//SET HURTBOX
-	btCollisionObject * htbox = new btPairCachingGhostObject();
-	htbox->setCollisionShape(new btBoxShape(btVector3(150, 75, 75)));
-
-	btTransform trans2;
-	trans2.setIdentity();
-	btVector3 pos2(curPos.x, curPos.y - 500, curPos.z);
-	trans2.setOrigin(pos2);
-	htbox->setWorldTransform(trans2);
-	htbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	physics->dynamicsWorld->addCollisionObject(htbox);
-	this->hurtboxes.insert(pair<AttackType, btCollisionObject *>(AttackType::HEAVY, htbox));
-	htbox->setUserIndex(this->myHurtType());
-	*/
 }
 
 void Ninja::playHitAnimation() {
 	this->setAnimation("Death1");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	if(newHit) {
+		as->setTimePosition(0);
+		newHit = false;
+	}
 	as->addTime(0.002);
 }
 
@@ -110,11 +83,6 @@ void Ninja::heavyAnimation() {
 	trans = hbox->getWorldTransform();
 	auto tv = trans.getOrigin();
 	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
-	/*
-	btTransform trans2;
-	btCollisionObject * htbox = this->hurtboxes.at(currentAttack);
-	trans2 = htbox->getWorldTransform();
-	*/
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real xPos = curPos.x + 400;
@@ -157,19 +125,9 @@ void Ninja::heavyAnimation() {
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
-	/*
-	//hurtbox timing
-	if (frameTime >= -20 && frameTime <= 12) {
-		hurtpos = btVector3(xPos, yPos, curPos.z);
-	}
-	*/
 
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
-	/*
-	trans2.setOrigin(hurtpos);
-	htbox->setWorldTransform(trans2);
-	*/
 }
 
 void Ninja::mediumAnimation() {
@@ -181,11 +139,6 @@ void Ninja::mediumAnimation() {
 	btTransform trans;
 	btCollisionObject * hbox = this->hitboxes.at(currentAttack).hitbox;
 	trans = hbox->getWorldTransform();
-	/*
-	btTransform trans2;
-	btCollisionObject * htbox = this->hurtboxes.at(currentAttack);
-	trans2 = htbox->getWorldTransform();
-	*/
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real xPos = curPos.x + 200;
@@ -224,27 +177,13 @@ void Ninja::mediumAnimation() {
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
-	/*
-	if (frameTime >= -15 && frameTime <= 15) {
-		hurtpos = btVector3(xPos, yPos, curPos.z);
-	}
-	*/
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
-	/*
-	trans2.setOrigin(hurtpos);
-	htbox->setWorldTransform(trans2);
-	*/
 }
 
 void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
-	/*
-	 CollisionContext context;
-	 BulletContactCallback* thing = new BulletContactCallback(*body, context);
-	 this->physics->getWorld()->contactTest(body, *thing);
-	 */
 
 	bool reverse = false;
 
@@ -272,6 +211,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		this->playHitAnimation();
 		if (this->hitstunFrames == 0) {
 			this->actorState = StateType::FREE;
+			this->comboCounter = 0;
 		}
 		this->hitstunFrames -= 1;
 		break;

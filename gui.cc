@@ -2,17 +2,33 @@
 #include <ImguiManager.h>
 
 using namespace std;
+void GameGui::showComboCounter1() {
+
+	ImGui::Begin("Player 1", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(100, 50));
+	ImGui::Text("%d Hits    ", this->state->p1->comboCount());
+	ImGui::End();
+}
+void GameGui::showComboCounter2() {
+
+	ImGui::Begin("Player 2", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(1100, 50));
+	ImGui::Text("%d Hits    ", this->state->p2->comboCount());
+	ImGui::End();
+}
+
 void GameGui::showFrameCount() {
 	ImGui::Begin("Frame Count", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Frame Number: %d", this->state->frameCount);
-	ImGui::SetNextWindowPos(ImVec2(250, 50));
+	//ImGui::SetNextWindowPos(ImVec2(250, 50));
 	ImGui::End();
 }
 
 void GameGui::showCamPos() {
 	ImGui::Begin("Camera Position", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(300, 50));
 	ImGui::Text("Camera X Position: %f", state->camPos.x);
 	ImGui::Text("Camera Y Position: %f", state->camPos.y);
 	ImGui::Text("Camera Z Position: %f", state->camPos.z);
@@ -29,8 +45,8 @@ void GameGui::showCamPos() {
 void GameGui::showInputBuffer() {
 	ImGui::Begin("Input Buffer", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(1200, 50));
 	auto buf = state->inputBuffer;
-
 	for (int i = 0; i < 20 && ((int) buf->size() - (1 + i) >= 0); i++) {
 		auto ax = buf->at(buf->size() - (1 + i));
 		int input = ax.key;
@@ -78,8 +94,7 @@ void GameGui::showScore() {
 
 bool GameGui::showGameStart() {
 	bool result = false;
-	ImGui::Begin("Game", NULL,
-			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	if (ImGui::Button("Single Player")) {
 		this->state->startGame();
 		result = true;
@@ -93,8 +108,7 @@ bool GameGui::showGameStart() {
 }
 
 void GameGui::showLoseScreen() {
-	ImGui::Begin("Game", NULL,
-			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("You lost :(");
 	if (ImGui::Button("Exit")) {
 		this->state->shouldExit = true;
@@ -103,8 +117,7 @@ void GameGui::showLoseScreen() {
 }
 
 void GameGui::showWinScreen() {
-	ImGui::Begin("Game", NULL,
-			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("You won!");
 	if (ImGui::Button("Exit")) {
 		this->state->shouldExit = true;
@@ -113,8 +126,7 @@ void GameGui::showWinScreen() {
 }
 
 void GameGui::showWaitingOnPlayers() {
-	ImGui::Begin("Game", NULL,
-			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Waiting on players...");
 	ImGui::End();
 }

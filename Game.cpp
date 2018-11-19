@@ -396,29 +396,8 @@ void Game::setup(void) {
 	p2->setOpponent(p1);
 	player1 = p1;
 	player2 = p2;
-
-	/*
-	 btCollisionObject * kickCollision = new btGhostObject();
-	 kickCollision->getCollisionShape()->
-	 kickCollision->setCollisionShape(new btBoxShape(btVector3(50, 100, 0)));
-	 kickCollision->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	 kickCollision->setActivationState(DISABLE_DEACTIVATION);
-	 btTransform trans;
-	 trans.setIdentity();
-	 trans.setOrigin(btVector3(0, 100, 0));
-	 kickCollision->setWorldTransform(trans);
-	 phys->dynamicsWorld->addCollisionObject(kickCollision);
-	 */
-
-	/*
-	 phys->pairCachingGhostObject = new btPairCachingGhostObject();
-	 btCollisionShape * shape = new btBoxShape(btVector3(100, 100, 100));
-	 phys->collisionShapes.push_back(shape);
-	 phys->pairCachingGhostObject->setCollisionShape(shape);
-	 phys->pairCachingGhostObject->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	 phys->dynamicsWorld->addCollisionObject(phys->pairCachingGhostObject,btBroadphaseProxy::SensorTrigger,btBroadphaseProxy::AllFilter & ~btBroadphaseProxy::SensorTrigger);
-	 phys->pairCachingGhostObject->setWorldTransform(btTransform(btQuaternion::getIdentity(),btVector3(0,5,15)));
-	 */
+	gameState->p1 = p1;
+	gameState->p2 = p2;
 
 }
 
@@ -462,6 +441,12 @@ bool Game::frameStarted(const FrameEvent &evt) {
 		gameState->camPos = Vector3(camNode->getPosition());
 		gameGui->showCamPos();
 		gameGui->showInputBuffer();
+	}
+	if(player1->comboCount()) {
+		gameGui->showComboCounter1();
+	}
+	if(player2->comboCount()) {
+		gameGui->showComboCounter2();
 	}
 	/*
 	 if (gameState->shouldExit) {

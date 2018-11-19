@@ -7,6 +7,7 @@
 
 #include "audio.h"
 #include "InputContainer.h"
+#include "Actor.h"
 
 class NetBase;
 
@@ -37,6 +38,9 @@ public:
 
 	std::deque<KeyInput> * inputBuffer = 0;
 	std::deque<KeyInput> * releaseBuffer = 0;
+
+	Actor * p1 = NULL;
+	Actor * p2 = NULL;
 
 
 	GameState(void) {

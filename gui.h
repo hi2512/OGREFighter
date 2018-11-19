@@ -36,6 +36,8 @@ public:
 	void showFrameCount();
 	void showCamPos();
 	void showInputBuffer();
+	void showComboCounter1();
+	void showComboCounter2();
 };
 
 
