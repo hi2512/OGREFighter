@@ -11,7 +11,21 @@ using namespace Ogre;
 using namespace std;
 
 void Ninja::createLightBox() {
+	btCollisionObject * hbox = new btPairCachingGhostObject();
+	hbox->setCollisionShape(new btBoxShape(btVector3(40, 40, 40)));
 
+	btTransform trans;
+	trans.setIdentity();
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	physics->dynamicsWorld->addCollisionObject(hbox);
+	HitboxData hbd { hbox, 4.0, 2.0, 35, 30, 6, 4, false };
+	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
+	hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
+	hbox->setUserIndex(this->myHitType());
 }
 
 void Ninja::createMediumBox() {
@@ -26,7 +40,7 @@ void Ninja::createMediumBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 8.0, 5.0, 44, 25, 10, 10, false };
+	HitboxData hbd { hbox, 8.0, 5.0, 44, 25, 8, 6, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
 	hbox->setUserIndex(this->myHitType());
@@ -45,7 +59,7 @@ void Ninja::createHeavyBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 8.0, 5.0, 50, 10, 10, 10, false };
+	HitboxData hbd { hbox, 8.0, 5.0, 50, 5, 10, 8, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	auto re = &this->hitboxes.at(AttackType::HEAVY);
 	printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
@@ -58,7 +72,7 @@ void Ninja::createHeavyBox() {
 void Ninja::playHitAnimation() {
 	this->setAnimation("Death1");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-	if(newHit) {
+	if (newHit) {
 		as->setTimePosition(0);
 		newHit = false;
 	}
@@ -120,12 +134,59 @@ void Ninja::heavyAnimation() {
 	if (frameTime >= 0 && frameTime <= 8) {
 		pos = hitFrames.at(frameTime);
 	}
-	if (frameTime >= -40 && frameTime <= 12) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 3));
+	if (frameTime >= -40 && frameTime <= 40) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 2.9));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
 
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+}
+
+void Ninja::lightAnimation() {
+	this->setAnimation("Attack1");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.02);
+
+	btTransform trans;
+	btCollisionObject * hbox = this->hitboxes.at(currentAttack).hitbox;
+	trans = hbox->getWorldTransform();
+
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Real xPos = curPos.x + 100;
+
+	Real yPos = curPos.y + 80;
+	std::vector<btVector3> hitFrames;
+	if (this->onP1Side()) {
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 60, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 60, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 60, yPos + 10, curPos.z));
+	} else {
+		xPos = curPos.x - 100;
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 60, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 60, yPos + 10, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 60, yPos + 10, curPos.z));
+	}
+
+	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+	btVector3 hurtpos(curPos.x, curPos.y - 500, curPos.z);
+
+	int frameTime = -this->attackFrameCount + 20;
+	//printf("frametime: %d\n", frameTime);
+	if (frameTime >= 0 && frameTime <= 4) {
+		pos = hitFrames.at(frameTime);
+	}
+	if (frameTime >= -5 && frameTime <= 6) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.1));
+	} else {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+	}
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
 }
@@ -173,7 +234,7 @@ void Ninja::mediumAnimation() {
 		pos = hitFrames.at(frameTime);
 	}
 	if (frameTime >= -15 && frameTime <= 12) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.5));
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.8));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
@@ -183,7 +244,6 @@ void Ninja::mediumAnimation() {
 
 void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
-
 
 	bool reverse = false;
 
@@ -246,7 +306,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		}
 		switch (this->currentAttack) {
 		case AttackType::LIGHT:
-
+			this->lightAnimation();
 			break;
 		case AttackType::MEDIUM:
 			this->mediumAnimation();
@@ -271,6 +331,11 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			}
 			if (this->keyBinding.at(ki.key) == InputType::RIGHT) {
 				moveX += move;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::L) {
+				this->actorState = StateType::ATTACK;
+				this->currentAttack = AttackType::LIGHT;
+				this->hitboxes.at(currentAttack).active = true;
 			}
 			if (this->keyBinding.at(ki.key) == InputType::M) {
 				this->actorState = StateType::ATTACK;

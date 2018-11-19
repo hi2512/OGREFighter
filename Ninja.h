@@ -24,8 +24,7 @@ protected:
 	void createHeavyBox();
 	void createSpecialBox() {
 	}
-	void lightAnimation() {
-	}
+	void lightAnimation();
 	void mediumAnimation();
 	void heavyAnimation();
 
@@ -37,9 +36,9 @@ public:
 	Ninja(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int medium, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int light, int medium, int heavy) :
 			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, inBuf,
-					relBuf, kBuf, left, right, medium, heavy) {
+					relBuf, kBuf, left, right, light, medium, heavy) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
 
 		ninOffsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
@@ -56,7 +55,7 @@ public:
 			LogManager::getSingleton().logMessage(as->getAnimationName());
 			as->setLoop(true);
 		}
-		this->lAttackFrames = 20;
+		this->lAttackFrames = 30;
 		this->mAttackFrames = 40;
 		this->hAttackFrames = 90;
 		this->sAttackFrames = 50;

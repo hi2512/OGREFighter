@@ -116,7 +116,7 @@ public:
 	Actor(bool player2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int medium, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int light, int medium, int heavy) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true, origin, orientation, 1.0,
 					0.0), isPlayer2(player2), onPlayer2Side(player2), hurtboxNode(
 					rootNode->createChildSceneNode(name + "hurtnode")) {
@@ -127,6 +127,7 @@ public:
 
 		keyBinding.insert(pair<int, InputType>(left, InputType::LEFT));
 		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
+		keyBinding.insert(pair<int, InputType>(light, InputType::L));
 		keyBinding.insert(pair<int, InputType>(medium, InputType::M));
 		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
 
