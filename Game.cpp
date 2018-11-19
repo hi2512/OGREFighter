@@ -499,7 +499,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 return frameVal;
 	 }
 	 */
-	phys->dynamicsWorld->stepSimulation(1.0f / 12.0f, 50);
+	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
 	phys->dbd->Update();
 
