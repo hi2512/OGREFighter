@@ -28,17 +28,24 @@ protected:
 	void mediumAnimation();
 	void heavyAnimation();
 
+	void createJumpUpArc();
+	void createJumpLeftArc();
+	void createJumpRightArc();
+	void playJumpAnimation(InputType jumpType);
+	//void clearJumpAnimation();
 	void playHitAnimation();
 	void playBlockAnimation();
+
+
 
 
 public:
 	Ninja(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int light, int medium, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int up, int light, int medium, int heavy) :
 			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, inBuf,
-					relBuf, kBuf, left, right, light, medium, heavy) {
+					relBuf, kBuf, left, right, up, light, medium, heavy) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
 
 		ninOffsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
@@ -64,7 +71,6 @@ public:
 		this->createMediumBox();
 		this->createHeavyBox();
 		this->createSpecialBox();
-
 
 	}
 

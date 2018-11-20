@@ -10,6 +10,115 @@
 using namespace Ogre;
 using namespace std;
 
+void Ninja::createJumpUpArc() {
+
+	if (this->sceneMgr->hasAnimation("JumpN" + name)) {
+		this->sceneMgr->destroyAnimation("JumpN" + name);
+	}
+	Ogre::Animation * animation = sceneMgr->createAnimation("JumpN" + name, 4.4);
+	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
+	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(0, this->rootNode);
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Quaternion curRot = this->rootNode->convertLocalToWorldOrientation(Quaternion::IDENTITY);
+
+	TransformKeyFrame * key;
+	key = track->createNodeKeyFrame(0.0f);
+	key->setTranslate((curPos + Vector3(0, 0, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(1.0);
+	key->setTranslate( (curPos + Vector3(0, 100, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(2.0);
+	key->setTranslate((curPos + Vector3(0, 200, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(3.0);
+	key->setTranslate((curPos + Vector3(0, 100, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(4.0);
+	key->setTranslate((curPos + Vector3(0, 0, 0)));
+	key->setRotation(curRot);
+
+	sceneMgr->createAnimationState("JumpN" + name);
+
+}
+
+void Ninja::createJumpLeftArc() {
+
+	if (this->sceneMgr->hasAnimation("JumpL" + name)) {
+		this->sceneMgr->destroyAnimation("JumpL" + name);
+	}
+	Ogre::Animation * animation = sceneMgr->createAnimation("JumpL" + name, 4.4);
+	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
+	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(1, this->rootNode);
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Quaternion curRot = this->rootNode->convertLocalToWorldOrientation(Quaternion::IDENTITY);
+
+	TransformKeyFrame * key;
+	key = track->createNodeKeyFrame(0.0f);
+	key->setTranslate((curPos + Vector3(0, 0, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(1.0);
+	key->setTranslate( (curPos + Vector3(-25, 100, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(2.0);
+	key->setTranslate((curPos + Vector3(-50, 200, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(3.0);
+	key->setTranslate((curPos + Vector3(-75, 100, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(4.0);
+	key->setTranslate((curPos + Vector3(-100, 0, 0)));
+	key->setRotation(curRot);
+
+	sceneMgr->createAnimationState("JumpL" + name);
+
+}
+
+void Ninja::createJumpRightArc() {
+
+	if (this->sceneMgr->hasAnimation("JumpR" + name)) {
+		this->sceneMgr->destroyAnimation("JumpR" + name);
+	}
+	Ogre::Animation * animation = sceneMgr->createAnimation("JumpR" + name, 4.4);
+	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
+	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(2, this->rootNode);
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Quaternion curRot = this->rootNode->convertLocalToWorldOrientation(Quaternion::IDENTITY);
+
+	TransformKeyFrame * key;
+	key = track->createNodeKeyFrame(0.0f);
+	key->setTranslate((curPos + Vector3(0, 0, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(1.0);
+	key->setTranslate( (curPos + Vector3(25, 100, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(2.0);
+	key->setTranslate((curPos + Vector3(50, 200, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(3.0);
+	key->setTranslate((curPos + Vector3(75, 100, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(4.0);
+	key->setTranslate((curPos + Vector3(100, 0, 0)));
+	key->setRotation(curRot);
+
+	sceneMgr->createAnimationState("JumpR" + name);
+
+}
+
+
 void Ninja::createLightBox() {
 	btCollisionObject * hbox = new btPairCachingGhostObject();
 	hbox->setCollisionShape(new btBoxShape(btVector3(40, 40, 40)));
@@ -62,10 +171,35 @@ void Ninja::createHeavyBox() {
 	HitboxData hbd { hbox, 8.0, 5.0, 50, 5, 10, 8, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	auto re = &this->hitboxes.at(AttackType::HEAVY);
-	printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
-	printf("hitbox data %f, %f", hbd.hitPushback, hbd.blockPushback);
+	//printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
+	//printf("hitbox data %f, %f", hbd.hitPushback, hbd.blockPushback);
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::HEAVY));
 	hbox->setUserIndex(this->myHitType());
+
+}
+
+void Ninja::playJumpAnimation(InputType jumpType) {
+	this->setAnimation("JumpNoHeight");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->addTime(0.005);
+	String animName;
+	if (jumpType == InputType::RIGHT) {
+		animName = "JumpR" + name;
+	} else if (jumpType == InputType::LEFT) {
+		animName = "JumpL" + name;
+	} else if (jumpType == InputType::UP) {
+		printf("jumpN called\n");
+		animName = "JumpN" + name;
+	}
+	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
+	jumpAnim->setLoop(false);
+	jumpAnim->setEnabled(true);
+	jumpAnim->addTime(0.1);
+	if (jumpAnim->hasEnded()) {
+		jumpAnim->setTimePosition(0);
+		jumpAnim->setEnabled(false);
+		this->actorState = StateType::FREE;
+	}
 
 }
 
@@ -246,10 +380,12 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	//Actor::animate(evt);
 
 	bool reverse = false;
+	bool startJump = false;
 
 	btTransform trans;
 	this->body->getMotionState()->getWorldTransform(trans);
 	Vector3 ogrePos(rootNode->convertLocalToWorldPosition(Vector3::ZERO));
+	//printf("OGREPOS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
 	/*
 	 LogManager::getSingleton().logMessage("OGREPOS");
 	 LogManager::getSingleton().logMessage(to_string(ogrePos.x));
@@ -259,6 +395,27 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	btVector3 pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
 	switch (this->actorState) {
+	case StateType::JUMPING:
+		/*
+		 {
+		 AnimationState * aState = this->sceneMgr->getAnimationState("JumpN" + name);
+		 aState->setLoop(false);
+		 aState->setEnabled(true);
+		 aState->addTime(evt.timeSinceLastFrame);
+		 auto aniPos = this->rootNode->getPosition();
+		 if (aState->hasEnded()) {
+		 aState->setTimePosition(0);
+		 aState->setEnabled(false);
+		 }
+		 ogrePos = aniPos;
+		 }
+		 */
+		//CHANGE STATE TYPE IN JUMP ANIMATION
+		this->playJumpAnimation(this->jumpType);
+		ogrePos = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+		printf("JUMP  OGREPOS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
+		pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
+		break;
 	case StateType::BLOCKSTUN:
 		this->playBlockAnimation();
 		if (this->blockstunFrames == 0) {
@@ -267,7 +424,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		this->blockstunFrames -= 1;
 		break;
 	case StateType::HITSTUN:
-		printf("hitstun frames: %d\n", this->hitstunFrames);
+		//printf("hitstun frames: %d\n", this->hitstunFrames);
 		this->playHitAnimation();
 		if (this->hitstunFrames == 0) {
 			this->actorState = StateType::FREE;
@@ -276,7 +433,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		this->hitstunFrames -= 1;
 		break;
 	case StateType::STOP:
-		printf("Stop frame count: %d\n", this->stopFrameCount);
+		//printf("Stop frame count: %d\n", this->stopFrameCount);
 		if (this->stopFrameCount == 0) {
 			this->exitStopState();
 		}
@@ -325,6 +482,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
 				continue;
 			}
+			if (this->keyBinding.at(ki.key) == InputType::UP) {
+				startJump = true;
+				this->actorState = StateType::JUMPING;
+			}
 			if (this->keyBinding.at(ki.key) == InputType::LEFT) {
 				moveX -= move;
 				reverse = true;
@@ -348,6 +509,22 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->hitboxes.at(currentAttack).active = true;
 			}
 		}
+		//set up jump
+
+		if (this->actorState == StateType::JUMPING) {
+			if (moveX > 0) {
+				this->jumpType = InputType::RIGHT;
+				this->createJumpRightArc();
+			} else if (moveX < 0) {
+				this->jumpType = InputType::LEFT;
+				this->createJumpLeftArc();
+			} else {
+				//equals 0
+				this->jumpType = InputType::UP;
+				this->createJumpUpArc();
+			}
+		}
+
 		//if walking
 		if (moveX) {
 			this->setAnimation("Walk");

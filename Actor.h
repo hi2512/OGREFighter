@@ -17,7 +17,7 @@ enum AttackType {
 };
 
 enum StateType {
-	STOP, FREE, ATTACK, BLOCK, AIR, KNOCKDOWN, HITSTUN, BLOCKSTUN
+	STOP, FREE, ATTACK, JUMPING, AIR, KNOCKDOWN, HITSTUN, BLOCKSTUN
 
 };
 
@@ -40,12 +40,16 @@ struct HitboxData {
 class Actor: public GameObject {
 
 protected:
-	SceneNode * hurtboxNode;
+	//SceneNode * jumpNode;
+	//SceneNode * jumpP2Node;
+
 	int comboCounter = 0;
 	bool onPlayer2Side;
 	bool isPlayer2;
 	bool moveLock = false;
 	bool newHit = false;
+	bool jumpAttack = false;
+	InputType jumpType = InputType::UP;
 
 	Actor * opponent = NULL;
 	StateType actorState = StateType::FREE;
@@ -105,6 +109,15 @@ protected:
 	void recieveBlock(HitboxData * hbd);
 	void enterStopState(int stopFrames);
 	void exitStopState();
+	virtual void createJumpUpArc() {
+	}
+	virtual void createJumpLeftArc() {
+	}
+	virtual void createJumpRightArc() {
+	}
+	virtual void playJumpAnimation(InputType jumpType) {
+	}
+	//virtual void clearJumpAnimation() {}
 
 	virtual void playHitAnimation() {
 	}
@@ -116,10 +129,10 @@ public:
 	Actor(bool player2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int light, int medium, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int up, int light, int medium,
+			int heavy) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true, origin, orientation, 1.0,
-					0.0), isPlayer2(player2), onPlayer2Side(player2), hurtboxNode(
-					rootNode->createChildSceneNode(name + "hurtnode")) {
+					0.0), isPlayer2(player2), onPlayer2Side(player2) {
 		inputBuffer = inBuf;
 		releaseBuffer = relBuf;
 		keysHeld = kBuf;
@@ -127,6 +140,7 @@ public:
 
 		keyBinding.insert(pair<int, InputType>(left, InputType::LEFT));
 		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
+		keyBinding.insert(pair<int, InputType>(up, InputType::UP));
 		keyBinding.insert(pair<int, InputType>(light, InputType::L));
 		keyBinding.insert(pair<int, InputType>(medium, InputType::M));
 		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
