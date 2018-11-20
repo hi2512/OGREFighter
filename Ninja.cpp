@@ -27,7 +27,7 @@ void Ninja::createJumpUpArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate( (curPos + Vector3(0, 100, 0)));
+	key->setTranslate((curPos + Vector3(0, 100, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(2.0);
@@ -63,7 +63,7 @@ void Ninja::createJumpLeftArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate( (curPos + Vector3(-25, 100, 0)));
+	key->setTranslate((curPos + Vector3(-25, 100, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(2.0);
@@ -99,7 +99,7 @@ void Ninja::createJumpRightArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate( (curPos + Vector3(25, 100, 0)));
+	key->setTranslate((curPos + Vector3(25, 100, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(2.0);
@@ -117,7 +117,6 @@ void Ninja::createJumpRightArc() {
 	sceneMgr->createAnimationState("JumpR" + name);
 
 }
-
 
 void Ninja::createLightBox() {
 	btCollisionObject * hbox = new btPairCachingGhostObject();
@@ -395,21 +394,12 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	btVector3 pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
 	switch (this->actorState) {
+	case StateType::FALLING:
+		this->doFall();
+		GameObject::animate(evt);
+		//printf("FALL POS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
+		break;
 	case StateType::JUMPING:
-		/*
-		 {
-		 AnimationState * aState = this->sceneMgr->getAnimationState("JumpN" + name);
-		 aState->setLoop(false);
-		 aState->setEnabled(true);
-		 aState->addTime(evt.timeSinceLastFrame);
-		 auto aniPos = this->rootNode->getPosition();
-		 if (aState->hasEnded()) {
-		 aState->setTimePosition(0);
-		 aState->setEnabled(false);
-		 }
-		 ogrePos = aniPos;
-		 }
-		 */
 		//CHANGE STATE TYPE IN JUMP ANIMATION
 		this->playJumpAnimation(this->jumpType);
 		ogrePos = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
@@ -475,6 +465,11 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		this->attackFrameCount -= 1;
 		break;
 	case StateType::FREE:
+		//check to see if still needs to fall
+		if (this->isAboveGround()) {
+			this->actorState = StateType::FALLING;
+			break;
+		}
 		Real move = walkSpeed * evt.timeSinceLastFrame;
 		Real moveX = 0;
 		for (KeyInput ki : *this->keysHeld) {
@@ -548,24 +543,27 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		as->addTime(evt.timeSinceLastFrame);
 		break;
 	}
+	if (this->actorState != StateType::FALLING) {
+		//keep orientation
+		btQuaternion rot = trans.getRotation();
 
-	//keep orientation
-	btQuaternion rot = trans.getRotation();
+		trans.setOrigin(pos);
+		trans.setRotation(rot);
+		this->body->getMotionState()->setWorldTransform(trans);
 
-	trans.setOrigin(pos);
-	trans.setRotation(rot);
-	this->body->getMotionState()->setWorldTransform(trans);
+		btVector3 btpos = trans.getOrigin();
+		Vector3 gloPos(btpos.getX(), btpos.getY(), btpos.getZ());
+		//auto relativePos = this->rootNode->convertWorldToLocalPosition(gloPos);
+		this->rootNode->setPosition(gloPos);
 
-	btVector3 btpos = trans.getOrigin();
-	Vector3 gloPos(btpos.getX(), btpos.getY(), btpos.getZ());
-	//auto relativePos = this->rootNode->convertWorldToLocalPosition(gloPos);
-	this->rootNode->setPosition(gloPos);
+		btQuaternion btori = trans.getRotation();
+		Quaternion ori(btori.w(), btori.x(), btori.y(), btori.z());
 
-	btQuaternion btori = trans.getRotation();
-	Quaternion ori(btori.w(), btori.x(), btori.y(), btori.z());
-
-	this->rootNode->setOrientation(ori);
-
+		this->rootNode->setOrientation(ori);
+	} else {
+		printf("FALL POS x: %f, y: %f, z: %f\n", trans.getOrigin().getX(), trans.getOrigin().getY(),
+				trans.getOrigin().getZ());
+	}
 	this->moveLock = false;
 	this->doCollision(evt);
 }

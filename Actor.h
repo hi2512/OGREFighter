@@ -17,7 +17,7 @@ enum AttackType {
 };
 
 enum StateType {
-	STOP, FREE, ATTACK, JUMPING, AIR, KNOCKDOWN, HITSTUN, BLOCKSTUN
+	STOP, FREE, ATTACK, JUMPING, AIRRECOVERY, FALLING, KNOCKDOWN, HITSTUN, BLOCKSTUN
 
 };
 
@@ -42,6 +42,7 @@ class Actor: public GameObject {
 protected:
 	//SceneNode * jumpNode;
 	//SceneNode * jumpP2Node;
+	Real groundHeight = 0;
 
 	int comboCounter = 0;
 	bool onPlayer2Side;
@@ -109,6 +110,8 @@ protected:
 	void recieveBlock(HitboxData * hbd);
 	void enterStopState(int stopFrames);
 	void exitStopState();
+	void doFall();
+	bool isAboveGround();
 	virtual void createJumpUpArc() {
 	}
 	virtual void createJumpLeftArc() {
@@ -118,7 +121,6 @@ protected:
 	virtual void playJumpAnimation(InputType jumpType) {
 	}
 	//virtual void clearJumpAnimation() {}
-
 	virtual void playHitAnimation() {
 	}
 	virtual void playBlockAnimation() {

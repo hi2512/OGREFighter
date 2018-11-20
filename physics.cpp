@@ -20,6 +20,7 @@ void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
 		if (!obj->isKinematicObject()) {
 			GameObject * go = (GameObject *) obj->getUserPointer();
 			btVector3 velocity = go->getRigidBody()->getLinearVelocity();
+			go->getRigidBody()->setLinearVelocity(btVector3(0 , -10 ,0));
 			btScalar speed = velocity.length();
 			if (speed > maxSpeed) {
 				velocity *= maxSpeed / speed;

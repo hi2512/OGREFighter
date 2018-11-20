@@ -62,6 +62,7 @@ public:
 			LogManager::getSingleton().logMessage(as->getAnimationName());
 			as->setLoop(true);
 		}
+		this->groundHeight = 200;
 		this->lAttackFrames = 30;
 		this->mAttackFrames = 40;
 		this->hAttackFrames = 90;

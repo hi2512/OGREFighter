@@ -1,6 +1,25 @@
 #include "Actor.h"
 #include <cassert>
 
+bool Actor::isAboveGround() {
+	/*
+	printf("my height %f, ground height %f\n",
+			this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y, this->groundHeight);
+			*/
+	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight + 0.01;
+}
+
+void Actor::doFall() {
+	if (isAboveGround()) {
+		this->body->setCollisionFlags(0);
+		this->body->setLinearVelocity(btVector3(0, -200, 0));
+	} else {
+		//stop falling
+		this->actorState = StateType::FREE;
+		this->body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+	}
+}
+
 bool Actor::isBlocking() {
 	if (this->actorState != StateType::FREE) {
 		return false;
