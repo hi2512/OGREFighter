@@ -32,6 +32,7 @@ protected:
 	void createJumpLeftArc();
 	void createJumpRightArc();
 	void playJumpAnimation(InputType jumpType);
+	void cancelJump();
 	//void clearJumpAnimation();
 	void playHitAnimation();
 	void playBlockAnimation();

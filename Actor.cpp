@@ -1,18 +1,19 @@
 #include "Actor.h"
 #include <cassert>
 
+
 bool Actor::isAboveGround() {
 	/*
 	printf("my height %f, ground height %f\n",
 			this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y, this->groundHeight);
 			*/
-	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight + 0.01;
+	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight + 0.1;
 }
 
 void Actor::doFall() {
 	if (isAboveGround()) {
 		this->body->setCollisionFlags(0);
-		this->body->setLinearVelocity(btVector3(0, -200, 0));
+		this->body->setLinearVelocity(btVector3(0, -300, 0));
 	} else {
 		//stop falling
 		this->actorState = StateType::FREE;
@@ -72,7 +73,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 				//AM I BLOCKING???
 				if (this->isBlocking()) {
 					this->recieveBlock(hbd);
-				} else {
+				} else if(this->actorState != StateType::FALLING) {
 					this->recieveHit(hbd);
 				}
 
@@ -106,6 +107,13 @@ void Actor::recieveHit(HitboxData * hbd) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 
 		this->clearAttack();
+	}
+	if(this->actorState == StateType::JUMPING) {
+		this->cancelJump();
+		this->setAnimation("Death1");
+		this->enterStopState(hbd->hitstop);
+		this->opponent->enterStopState(hbd->hitstop);
+		return;
 	}
 	this->actorState = StateType::HITSTUN;
 	this->hitstunFrames = hbd->hitstun;

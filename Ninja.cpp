@@ -27,15 +27,15 @@ void Ninja::createJumpUpArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate((curPos + Vector3(0, 100, 0)));
-	key->setRotation(curRot);
-
-	key = track->createNodeKeyFrame(2.0);
 	key->setTranslate((curPos + Vector3(0, 200, 0)));
 	key->setRotation(curRot);
 
+	key = track->createNodeKeyFrame(2.0);
+	key->setTranslate((curPos + Vector3(0, 400, 0)));
+	key->setRotation(curRot);
+
 	key = track->createNodeKeyFrame(3.0);
-	key->setTranslate((curPos + Vector3(0, 100, 0)));
+	key->setTranslate((curPos + Vector3(0, 200, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(4.0);
@@ -63,15 +63,15 @@ void Ninja::createJumpLeftArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate((curPos + Vector3(-25, 100, 0)));
+	key->setTranslate((curPos + Vector3(-25, 200, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(2.0);
-	key->setTranslate((curPos + Vector3(-50, 200, 0)));
+	key->setTranslate((curPos + Vector3(-50, 400, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(3.0);
-	key->setTranslate((curPos + Vector3(-75, 100, 0)));
+	key->setTranslate((curPos + Vector3(-75, 200, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(4.0);
@@ -99,15 +99,15 @@ void Ninja::createJumpRightArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate((curPos + Vector3(25, 100, 0)));
+	key->setTranslate((curPos + Vector3(25, 200, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(2.0);
-	key->setTranslate((curPos + Vector3(50, 200, 0)));
+	key->setTranslate((curPos + Vector3(50, 400, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(3.0);
-	key->setTranslate((curPos + Vector3(75, 100, 0)));
+	key->setTranslate((curPos + Vector3(75, 200, 0)));
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(4.0);
@@ -193,13 +193,30 @@ void Ninja::playJumpAnimation(InputType jumpType) {
 	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
 	jumpAnim->setLoop(false);
 	jumpAnim->setEnabled(true);
-	jumpAnim->addTime(0.1);
+	jumpAnim->addTime(0.05);
 	if (jumpAnim->hasEnded()) {
 		jumpAnim->setTimePosition(0);
 		jumpAnim->setEnabled(false);
 		this->actorState = StateType::FREE;
 	}
 
+}
+
+void Ninja::cancelJump() {
+	String animName;
+	if (jumpType == InputType::RIGHT) {
+		animName = "JumpR" + name;
+	} else if (jumpType == InputType::LEFT) {
+		animName = "JumpL" + name;
+	} else if (jumpType == InputType::UP) {
+		printf("jumpN called\n");
+		animName = "JumpN" + name;
+	}
+	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
+	jumpAnim->setLoop(false);
+	jumpAnim->setTimePosition(0);
+	jumpAnim->setEnabled(false);
+	this->actorState = StateType::FALLING;
 }
 
 void Ninja::playHitAnimation() {

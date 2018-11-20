@@ -112,6 +112,9 @@ protected:
 	void exitStopState();
 	void doFall();
 	bool isAboveGround();
+	virtual void cancelJump() {
+
+	}
 	virtual void createJumpUpArc() {
 	}
 	virtual void createJumpLeftArc() {
