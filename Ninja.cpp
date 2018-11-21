@@ -63,19 +63,19 @@ void Ninja::createJumpLeftArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate((curPos + Vector3(-25, 200, 0)));
-	key->setRotation(curRot);
-
-	key = track->createNodeKeyFrame(2.0);
-	key->setTranslate((curPos + Vector3(-50, 400, 0)));
-	key->setRotation(curRot);
-
-	key = track->createNodeKeyFrame(3.0);
 	key->setTranslate((curPos + Vector3(-75, 200, 0)));
 	key->setRotation(curRot);
 
+	key = track->createNodeKeyFrame(2.0);
+	key->setTranslate((curPos + Vector3(-150, 400, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(3.0);
+	key->setTranslate((curPos + Vector3(-250, 200, 0)));
+	key->setRotation(curRot);
+
 	key = track->createNodeKeyFrame(4.0);
-	key->setTranslate((curPos + Vector3(-100, 0, 0)));
+	key->setTranslate((curPos + Vector3(-350, 0, 0)));
 	key->setRotation(curRot);
 
 	sceneMgr->createAnimationState("JumpL" + name);
@@ -99,19 +99,19 @@ void Ninja::createJumpRightArc() {
 	key->setRotation(curRot);
 
 	key = track->createNodeKeyFrame(1.0);
-	key->setTranslate((curPos + Vector3(25, 200, 0)));
-	key->setRotation(curRot);
-
-	key = track->createNodeKeyFrame(2.0);
-	key->setTranslate((curPos + Vector3(50, 400, 0)));
-	key->setRotation(curRot);
-
-	key = track->createNodeKeyFrame(3.0);
 	key->setTranslate((curPos + Vector3(75, 200, 0)));
 	key->setRotation(curRot);
 
+	key = track->createNodeKeyFrame(2.0);
+	key->setTranslate((curPos + Vector3(150, 400, 0)));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(3.0);
+	key->setTranslate((curPos + Vector3(250, 200, 0)));
+	key->setRotation(curRot);
+
 	key = track->createNodeKeyFrame(4.0);
-	key->setTranslate((curPos + Vector3(100, 0, 0)));
+	key->setTranslate((curPos + Vector3(350, 0, 0)));
 	key->setRotation(curRot);
 
 	sceneMgr->createAnimationState("JumpR" + name);
@@ -130,7 +130,7 @@ void Ninja::createLightBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 4.0, 2.0, 35, 30, 6, 4, false };
+	HitboxData hbd { hbox, 6.0, 4.0, 35, 30, 6, 4, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
 	hbox->setUserIndex(this->myHitType());
@@ -148,7 +148,7 @@ void Ninja::createMediumBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 8.0, 5.0, 44, 25, 8, 6, false };
+	HitboxData hbd { hbox, 16.0, 10.0, 44, 25, 8, 6, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
 	hbox->setUserIndex(this->myHitType());
@@ -167,7 +167,7 @@ void Ninja::createHeavyBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 8.0, 5.0, 50, 5, 10, 8, false };
+	HitboxData hbd { hbox, 16.0, 5.0, 50, 5, 10, 8, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	auto re = &this->hitboxes.at(AttackType::HEAVY);
 	//printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
@@ -357,22 +357,22 @@ void Ninja::mediumAnimation() {
 	Real yPos = curPos.y + 80;
 	std::vector<btVector3> hitFrames;
 	if (this->onP1Side()) {
-		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
-		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 80, yPos + 10, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 80, yPos + 10, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 80, yPos + 10, curPos.z));
-		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
-		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
 	} else {
 		xPos = curPos.x - 200;
-		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
-		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 80, yPos + 10, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 80, yPos + 10, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 80, yPos + 10, curPos.z));
-		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
-		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 40, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 40, yPos + 30, curPos.z));
 	}
 
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
@@ -580,6 +580,8 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	} else {
 		printf("FALL POS x: %f, y: %f, z: %f\n", trans.getOrigin().getX(), trans.getOrigin().getY(),
 				trans.getOrigin().getZ());
+		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+		as->addTime(0.005);
 	}
 	this->moveLock = false;
 	this->doCollision(evt);
