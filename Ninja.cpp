@@ -296,10 +296,12 @@ void Ninja::jumpAttackAnimation() {
 		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
+		/*
 		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
 		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
 		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
 		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		*/
 	} else {
 		xPos = curPos.x - 300;
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
@@ -316,17 +318,19 @@ void Ninja::jumpAttackAnimation() {
 		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
+		/*
 		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		*/
 	}
 
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
 
 	int frameTime = -this->attackFrameCount + 30;
 	//printf("frametime: %d\n", frameTime);
-	if (frameTime >= 0 && frameTime <= 16) {
+	if (frameTime >= 0 && frameTime <= 12) {
 		pos = hitFrames.at(frameTime);
 	}
 	if (frameTime >= -30 && frameTime <= 25) {
@@ -436,7 +440,7 @@ void Ninja::lightAnimation() {
 		pos = hitFrames.at(frameTime);
 	}
 	if (frameTime >= -5 && frameTime <= 6) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.4));
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.2));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
