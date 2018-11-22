@@ -80,7 +80,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 					new Spark(this->sceneMgr,
 							this->sceneMgr->getRootSceneNode()->createChildSceneNode(),
 							this->name + to_string(this->inputBuffer->back().frame), this->physics,
-							Vector3(hitPoint.getX() / 3.0, hitPoint.getY() / 3.0, 50));
+							Vector3(hitPoint.getX() / 3.0, hitPoint.getY() / 3.0, 50)); //THE COORDINATES ARE AFFECTED BY THE SCALE OF THE NODE
 					this->recieveHit(hbd);
 				}
 

@@ -37,9 +37,9 @@ public:
 		//LogManager::getSingleton().logMessage("ANIMATING SPARK");
 		//printf("SPARK remaining time %f\n", this->timeOnScreen);
 		auto point = this->rootNode->getPosition();
-		printf("spark is at point x: %f, y: %f, z: %f\n", point.x, point.y, point.z);
+		//printf("spark is at point x: %f, y: %f, z: %f\n", point.x, point.y, point.z);
 		auto btPoint = this->body->getWorldTransform().getOrigin();
-		printf("spark is at BTpoint x: %f, y: %f, z: %f\n", btPoint.getX(), btPoint.getY(), btPoint.getZ());
+		//printf("spark is at BTpoint x: %f, y: %f, z: %f\n", btPoint.getX(), btPoint.getY(), btPoint.getZ());
 		this->timeOnScreen -= evt.timeSinceLastFrame;
 		if (timeOnScreen < 0.0) {
 			this->sceneMgr->destroyBillboardSet(bbSet);

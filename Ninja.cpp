@@ -223,9 +223,7 @@ void Ninja::playJumpAnimation(InputType jumpType) {
 		jumpAnim->setEnabled(false);
 		this->actorState = StateType::FREE;
 		this->jumpAttack = false;
-		if (jumpAttack) {
-			this->clearAttack();
-		}
+		this->clearAttack();
 	}
 
 }
@@ -523,8 +521,8 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//printf("FALL POS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
 		break;
 	case StateType::JUMPING:
-		printf("jump attack frame count %d\n", this->attackFrameCount);
-		printf("playing animation %s \n", this->playingAnimation.c_str());
+		//printf("jump attack frame count %d\n", this->attackFrameCount);
+		//printf("playing animation %s \n", this->playingAnimation.c_str());
 		if (this->attackFrameCount == 0) {
 			printf("finished jump attack\n");
 			this->cancelJump();
