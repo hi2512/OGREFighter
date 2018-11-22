@@ -130,7 +130,7 @@ void Ninja::createLightBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 6.0, 4.0, 35, 30, 6, 4, false };
+	HitboxData hbd { hbox, 22.0, 12.0, 35, 30, 4, 3, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
 	hbox->setUserIndex(this->myHitType());
@@ -148,7 +148,7 @@ void Ninja::createMediumBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 16.0, 10.0, 44, 25, 8, 6, false };
+	HitboxData hbd { hbox, 50.0, 30.0, 44, 25, 6, 4, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
 	hbox->setUserIndex(this->myHitType());
@@ -167,9 +167,9 @@ void Ninja::createHeavyBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 16.0, 5.0, 50, 5, 10, 8, false };
+	HitboxData hbd { hbox, 35.0, 5.0, 50, 5, 8, 6, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
-	auto re = &this->hitboxes.at(AttackType::HEAVY);
+	//auto re = &this->hitboxes.at(AttackType::HEAVY);
 	//printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
 	//printf("hitbox data %f, %f", hbd.hitPushback, hbd.blockPushback);
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::HEAVY));
@@ -177,17 +177,41 @@ void Ninja::createHeavyBox() {
 
 }
 
+void Ninja::createJumpAttackBox() {
+	btCollisionObject * hbox = new btPairCachingGhostObject();
+	hbox->setCollisionShape(new btBoxShape(btVector3(75, 75, 50)));
+
+	btTransform trans;
+	trans.setIdentity();
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	physics->dynamicsWorld->addCollisionObject(hbox);
+	HitboxData hbd { hbox, 35.0, 25.0, 60, 40, 8, 6, false };
+	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::AIRHEAVY, hbd));
+	//auto re = &this->hitboxes.at(AttackType::AIRHEAVY);
+	//printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
+	//printf("hitbox data %f, %f", hbd.hitPushback, hbd.blockPushback);
+	hbox->setUserPointer(&this->hitboxes.at(AttackType::AIRHEAVY));
+	hbox->setUserIndex(this->myHitType());
+}
+
 void Ninja::playJumpAnimation(InputType jumpType) {
-	this->setAnimation("JumpNoHeight");
-	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-	as->addTime(0.005);
+	if (!jumpAttack) {
+		this->setAnimation("JumpNoHeight");
+		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+		as->addTime(0.005);
+	}
+
 	String animName;
 	if (jumpType == InputType::RIGHT) {
 		animName = "JumpR" + name;
 	} else if (jumpType == InputType::LEFT) {
 		animName = "JumpL" + name;
 	} else if (jumpType == InputType::UP) {
-		printf("jumpN called\n");
+		//printf("jumpN called\n");
 		animName = "JumpN" + name;
 	}
 	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
@@ -198,6 +222,10 @@ void Ninja::playJumpAnimation(InputType jumpType) {
 		jumpAnim->setTimePosition(0);
 		jumpAnim->setEnabled(false);
 		this->actorState = StateType::FREE;
+		this->jumpAttack = false;
+		if (jumpAttack) {
+			this->clearAttack();
+		}
 	}
 
 }
@@ -216,7 +244,11 @@ void Ninja::cancelJump() {
 	jumpAnim->setLoop(false);
 	jumpAnim->setTimePosition(0);
 	jumpAnim->setEnabled(false);
+	this->jumpAttack = false;
 	this->actorState = StateType::FALLING;
+	if (this->currentAttack != AttackType::NONE) {
+		this->clearAttack();
+	}
 }
 
 void Ninja::playHitAnimation() {
@@ -236,6 +268,79 @@ void Ninja::playBlockAnimation() {
 	as->addTime(0.03);
 }
 
+void Ninja::jumpAttackAnimation() {
+	this->setAnimation("SideKick");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.01);
+
+	btTransform trans;
+	btCollisionObject * hbox = this->hitboxes.at(currentAttack).hitbox;
+	trans = hbox->getWorldTransform();
+
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Real xPos = curPos.x + 300;
+
+	Real yPos = curPos.y;
+	std::vector<btVector3> hitFrames;
+	if (this->onP1Side()) {
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 50, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 50, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+	} else {
+		xPos = curPos.x - 300;
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 50, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 50, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+	}
+
+	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
+
+	int frameTime = -this->attackFrameCount + 30;
+	//printf("frametime: %d\n", frameTime);
+	if (frameTime >= 0 && frameTime <= 16) {
+		pos = hitFrames.at(frameTime);
+	}
+	if (frameTime >= -30 && frameTime <= 25) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 2));
+	} else {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+	}
+
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+}
+
 void Ninja::heavyAnimation() {
 	this->setAnimation("Kick");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
@@ -249,7 +354,7 @@ void Ninja::heavyAnimation() {
 	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	Real xPos = curPos.x + 400;
+	Real xPos = curPos.x + 350;
 
 	Real yPos = curPos.y + 10;
 	std::vector<btVector3> hitFrames;
@@ -264,7 +369,7 @@ void Ninja::heavyAnimation() {
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
 	} else {
-		xPos = curPos.x - 400;
+		xPos = curPos.x - 350;
 		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 20, yPos + 10, curPos.z));
@@ -333,7 +438,7 @@ void Ninja::lightAnimation() {
 		pos = hitFrames.at(frameTime);
 	}
 	if (frameTime >= -5 && frameTime <= 6) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.1));
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.4));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
@@ -383,7 +488,7 @@ void Ninja::mediumAnimation() {
 	if (frameTime >= 0 && frameTime <= 6) {
 		pos = hitFrames.at(frameTime);
 	}
-	if (frameTime >= -15 && frameTime <= 12) {
+	if (frameTime >= -5 && frameTime <= 12) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.8));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
@@ -417,10 +522,39 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//printf("FALL POS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
 		break;
 	case StateType::JUMPING:
+		printf("jump attack frame count %d\n", this->attackFrameCount);
+		printf("playing animation %s \n", this->playingAnimation.c_str());
+		if (this->attackFrameCount == 0) {
+			printf("finished jump attack\n");
+			this->cancelJump();
+			this->clearAttack();
+			//this->actorState = StateType::FALLING;
+			break;
+		}
+		//read inputs for a jump attack
+		for (KeyInput ki : *this->keysHeld) {
+			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+				continue;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::H) {
+				//printf("got command for air heavy\n");
+				this->currentAttack = AttackType::AIRHEAVY;
+				if (!this->jumpAttack) {
+					this->hitboxes.at(currentAttack).active = true;
+					this->attackFrameCount = this->jhAttackFrames;
+					this->jumpAttack = true;
+				}
+			}
+		}
 		//CHANGE STATE TYPE IN JUMP ANIMATION
 		this->playJumpAnimation(this->jumpType);
+		if (jumpAttack) {
+			//printf("STARTING JUMP ATTACK\n");
+			this->jumpAttackAnimation();
+			this->attackFrameCount -= 1;
+		}
 		ogrePos = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-		printf("JUMP  OGREPOS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
+		//printf("JUMP  OGREPOS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
 		pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
 		break;
 	case StateType::BLOCKSTUN:
@@ -580,8 +714,8 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	} else {
 		printf("FALL POS x: %f, y: %f, z: %f\n", trans.getOrigin().getX(), trans.getOrigin().getY(),
 				trans.getOrigin().getZ());
-		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-		as->addTime(0.005);
+		//AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+		//as->addTime(0.005);
 	}
 	this->moveLock = false;
 	this->doCollision(evt);

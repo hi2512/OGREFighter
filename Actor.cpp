@@ -1,19 +1,18 @@
 #include "Actor.h"
 #include <cassert>
 
-
 bool Actor::isAboveGround() {
 	/*
-	printf("my height %f, ground height %f\n",
-			this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y, this->groundHeight);
-			*/
-	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight + 0.1;
+	 printf("my height %f, ground height %f\n",
+	 this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y, this->groundHeight);
+	*/
+	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight + 0.3;
 }
 
 void Actor::doFall() {
 	if (isAboveGround()) {
 		this->body->setCollisionFlags(0);
-		this->body->setLinearVelocity(btVector3(0, -300, 0));
+		this->body->setLinearVelocity(btVector3(0, -45, 0));
 	} else {
 		//stop falling
 		this->actorState = StateType::FREE;
@@ -73,7 +72,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 				//AM I BLOCKING???
 				if (this->isBlocking()) {
 					this->recieveBlock(hbd);
-				} else if(this->actorState != StateType::FALLING) {
+				} else if (this->actorState != StateType::FALLING) {
 					this->recieveHit(hbd);
 				}
 
@@ -100,15 +99,16 @@ void Actor::recieveHit(HitboxData * hbd) {
 
 	if (this->actorState == StateType::ATTACK) {
 		//reset hurtbox, hitbox, and collision
+		/*
 		Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 		btVector3 targetPos(curPos.x, curPos.y - 500, curPos.z);
 		//this->setBox(this->hurtboxes.at(currentAttack), targetPos);
 		this->setBox(this->hitboxes.at(currentAttack).hitbox, targetPos);
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
-
+	*/
 		this->clearAttack();
 	}
-	if(this->actorState == StateType::JUMPING) {
+	if (this->actorState == StateType::JUMPING) {
 		this->cancelJump();
 		this->setAnimation("Death1");
 		this->enterStopState(hbd->hitstop);
@@ -144,13 +144,22 @@ bool Actor::onP2Side() {
 	return this->onPlayer2Side;
 }
 
+
 void Actor::clearAttack() {
+	if (currentAttack == AttackType::NONE) {
+		return;
+	}
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 targetPos(curPos.x, curPos.y - 1500, curPos.z);
+	this->setBox(this->hitboxes.at(currentAttack).hitbox, targetPos);
+	this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setTimePosition(0.0);
 	this->hitboxes.at(currentAttack).active = false;
 	this->attackFrameCount = -1;
 	this->currentAttack = AttackType::NONE;
 	this->actorState = StateType::FREE;
+
 }
 
 void Actor::pushBack(Real dist) {

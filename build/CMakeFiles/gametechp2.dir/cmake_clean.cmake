@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/gametechp2.dir/Actor.cpp.o"
   "CMakeFiles/gametechp2.dir/DebugDraw.cpp.o"
+  "CMakeFiles/gametechp2.dir/Disc.cpp.o"
   "CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o"
   "CMakeFiles/gametechp2.dir/Game.cpp.o"
   "CMakeFiles/gametechp2.dir/Ninja.cpp.o"

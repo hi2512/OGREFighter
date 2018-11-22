@@ -30,6 +30,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/steve/Downloads/GTechFinal/Actor.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Actor.cpp.o"
   "/home/steve/Downloads/GTechFinal/DebugDraw.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/DebugDraw.cpp.o"
+  "/home/steve/Downloads/GTechFinal/Disc.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Disc.cpp.o"
   "/home/steve/Downloads/GTechFinal/DynamicLineDrawer.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o"
   "/home/steve/Downloads/GTechFinal/Game.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Game.cpp.o"
   "/home/steve/Downloads/GTechFinal/Ninja.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Ninja.cpp.o"

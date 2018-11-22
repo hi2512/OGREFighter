@@ -203,6 +203,33 @@ DebugDraw.cpp.s:
 	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/DebugDraw.cpp.s
 .PHONY : DebugDraw.cpp.s
 
+Disc.o: Disc.cpp.o
+
+.PHONY : Disc.o
+
+# target to build an object file
+Disc.cpp.o:
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Disc.cpp.o
+.PHONY : Disc.cpp.o
+
+Disc.i: Disc.cpp.i
+
+.PHONY : Disc.i
+
+# target to preprocess a source file
+Disc.cpp.i:
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Disc.cpp.i
+.PHONY : Disc.cpp.i
+
+Disc.s: Disc.cpp.s
+
+.PHONY : Disc.s
+
+# target to generate assembly for a file
+Disc.cpp.s:
+	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/Disc.cpp.s
+.PHONY : Disc.cpp.s
+
 DynamicLineDrawer.o: DynamicLineDrawer.cpp.o
 
 .PHONY : DynamicLineDrawer.o
@@ -571,6 +598,9 @@ help:
 	@echo "... DebugDraw.o"
 	@echo "... DebugDraw.i"
 	@echo "... DebugDraw.s"
+	@echo "... Disc.o"
+	@echo "... Disc.i"
+	@echo "... Disc.s"
 	@echo "... DynamicLineDrawer.o"
 	@echo "... DynamicLineDrawer.i"
 	@echo "... DynamicLineDrawer.s"

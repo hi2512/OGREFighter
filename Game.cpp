@@ -28,6 +28,9 @@
 #include "Actor.h"
 #include "Ninja.h"
 #include "InputContainer.h"
+#include "Disc.h"
+
+#include "ball.h"
 
 using namespace Ogre;
 using namespace std;
@@ -399,6 +402,26 @@ void Game::setup(void) {
 	gameState->p1 = p1;
 	gameState->p2 = p2;
 
+	SceneNode * dn = mgr->getRootSceneNode()->createChildSceneNode("disc");
+	Entity * di = mgr->createEntity("disc.mesh");
+	dn->setScale(Vector3(60, 60, 60));
+	auto diSize = di->getBoundingBox().getSize() * 35.0;
+	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
+	//btCollisionShape * diShape = new btSphereShape(diSize.x);
+	Disc * dObj = new Disc(scnMgr, dn, "Disc", di, phys, diShape, Vector3(0, 100, 0),
+			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
+			btVector3(0, 0, 0), btVector3(0, 0, 0));
+
+	Entity* blEnt = scnMgr->createEntity("sphere.mesh");
+	SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
+	bl2->setScale(0.2, 0.2, 0.2);
+	auto camPos2 = camNode->getPosition();
+	auto blPos = Vector3(camPos2.x + (rand() % 500 - 250), camPos2.y + (rand() % 500 - 350),
+			camPos2.z + (rand() % 500 - 2000));
+	Ball * bl = new Ball(scnMgr, bl2, "BallObject", blEnt, phys, blPos, /*btQuaternion(1.0f, -1.0f, 1.0f, 0.0f)*/
+	btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
+			btVector3(0, 0, 0));
+
 }
 
 void Game::initPhys() {
@@ -442,10 +465,10 @@ bool Game::frameStarted(const FrameEvent &evt) {
 		gameGui->showCamPos();
 		gameGui->showInputBuffer();
 	}
-	if(player1->comboCount()) {
+	if (player1->comboCount()) {
 		gameGui->showComboCounter1();
 	}
-	if(player2->comboCount()) {
+	if (player2->comboCount()) {
 		gameGui->showComboCounter2();
 	}
 	/*
@@ -491,14 +514,20 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];
 		if (obj->getCollisionFlags() == btCollisionObject::CF_NO_CONTACT_RESPONSE) {
-			//LogManager::getSingleton().logMessage("ISGHOST");
+			//LogManager::getSingleton().logMessage();
 			continue;
 		}
+
 		btRigidBody* body = btRigidBody::upcast(obj);
 
 		void *userPointer = body->getUserPointer();
 
 		GameObject * go = static_cast<GameObject *>(userPointer);
+		/*
+		if (obj->getCollisionFlags() == 1) {
+			printf("checking box %s \n", go->getName().c_str());
+		}
+		*/
 
 		go->animate(evt);
 

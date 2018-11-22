@@ -13,7 +13,7 @@ using namespace Ogre;
 using namespace std;
 
 enum AttackType {
-	NONE, LIGHT, MEDIUM, HEAVY, SPECIAL
+	NONE, LIGHT, MEDIUM, HEAVY, SPECIAL, AIRHEAVY
 };
 
 enum StateType {
@@ -82,15 +82,20 @@ protected:
 	}
 	virtual void createSpecialBox() {
 	}
+	virtual void createJumpAttackBox() {
+	}
 	int lAttackFrames = -1;
 	int mAttackFrames = -1;
 	int hAttackFrames = -1;
 	int sAttackFrames = -1;
+	int jhAttackFrames = -1;
 	virtual void lightAnimation() {
 	}
 	virtual void mediumAnimation() {
 	}
 	virtual void heavyAnimation() {
+	}
+	virtual void jumpAttackAnimation() {
 	}
 	CollisionType myHitType() {
 		return this->isPlayer2 ? CollisionType::HITBOX_P2 : CollisionType::HITBOX_P1;
