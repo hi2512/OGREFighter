@@ -8,6 +8,7 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <SDL2/SDL.h>
 #include "InputContainer.h"
+#include "Spark.h"
 
 using namespace Ogre;
 using namespace std;

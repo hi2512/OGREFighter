@@ -189,7 +189,7 @@ void Ninja::createJumpAttackBox() {
 	hbox->setWorldTransform(trans);
 	hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	physics->dynamicsWorld->addCollisionObject(hbox);
-	HitboxData hbd { hbox, 35.0, 25.0, 60, 40, 8, 6, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 52, 30, 8, 6, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::AIRHEAVY, hbd));
 	//auto re = &this->hitboxes.at(AttackType::AIRHEAVY);
 	//printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
@@ -332,7 +332,7 @@ void Ninja::jumpAttackAnimation() {
 		pos = hitFrames.at(frameTime);
 	}
 	if (frameTime >= -30 && frameTime <= 25) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 2));
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 2.2));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
@@ -481,18 +481,19 @@ void Ninja::mediumAnimation() {
 	}
 
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
-	btVector3 hurtpos(curPos.x, curPos.y - 500, curPos.z);
+	//btVector3 hurtpos(curPos.x, curPos.y - 500, curPos.z);
 
 	int frameTime = -this->attackFrameCount + 20;
 	//printf("frametime: %d\n", frameTime);
 	if (frameTime >= 0 && frameTime <= 6) {
 		pos = hitFrames.at(frameTime);
 	}
-	if (frameTime >= -5 && frameTime <= 12) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.8));
+	if (frameTime >= -10 && frameTime <= 12) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, .75, 1.8));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
+	//printf("in attack x: %f, y: %f, z %f\n", pos.getX(), pos.getY(), pos.getZ());
 	trans.setOrigin(pos);
 	hbox->setWorldTransform(trans);
 }

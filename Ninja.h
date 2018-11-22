@@ -70,7 +70,7 @@ public:
 		this->mAttackFrames = 40;
 		this->hAttackFrames = 90;
 		this->sAttackFrames = 50;
-		this->jhAttackFrames = 40;
+		this->jhAttackFrames = 60;
 
 		this->createLightBox();
 		this->createMediumBox();

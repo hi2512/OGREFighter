@@ -5,7 +5,7 @@ bool Actor::isAboveGround() {
 	/*
 	 printf("my height %f, ground height %f\n",
 	 this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y, this->groundHeight);
-	*/
+	 */
 	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight + 0.3;
 }
 
@@ -60,6 +60,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 		if (context.body->getUserIndex() == this->oppHurtType()) {
 			this->moveLock = true;
 		}
+		printf("check for hit context\n");
 		//CHECK IF I WAS HIT
 		if (context.body->getUserIndex() == this->oppHitType()) {
 			//printf("I am %s\n", this->name.c_str());
@@ -73,6 +74,13 @@ void Actor::doCollision(const FrameEvent& evt) {
 				if (this->isBlocking()) {
 					this->recieveBlock(hbd);
 				} else if (this->actorState != StateType::FALLING) {
+					auto hitPoint = context.body->getWorldTransform().getOrigin();
+					printf("SPARK POINT x: %f, y: %f, z %f\n", hitPoint.getX(), hitPoint.getY(),
+							hitPoint.getZ());
+					new Spark(this->sceneMgr,
+							this->sceneMgr->getRootSceneNode()->createChildSceneNode(),
+							this->name + to_string(this->inputBuffer->back().frame), this->physics,
+							Vector3(hitPoint.getX() / 3.0, hitPoint.getY() / 3.0, 50));
 					this->recieveHit(hbd);
 				}
 
@@ -100,12 +108,12 @@ void Actor::recieveHit(HitboxData * hbd) {
 	if (this->actorState == StateType::ATTACK) {
 		//reset hurtbox, hitbox, and collision
 		/*
-		Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-		btVector3 targetPos(curPos.x, curPos.y - 500, curPos.z);
-		//this->setBox(this->hurtboxes.at(currentAttack), targetPos);
-		this->setBox(this->hitboxes.at(currentAttack).hitbox, targetPos);
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
-	*/
+		 Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+		 btVector3 targetPos(curPos.x, curPos.y - 500, curPos.z);
+		 //this->setBox(this->hurtboxes.at(currentAttack), targetPos);
+		 this->setBox(this->hitboxes.at(currentAttack).hitbox, targetPos);
+		 this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+		 */
 		this->clearAttack();
 	}
 	if (this->actorState == StateType::JUMPING) {
@@ -143,7 +151,6 @@ bool Actor::onP1Side() {
 bool Actor::onP2Side() {
 	return this->onPlayer2Side;
 }
-
 
 void Actor::clearAttack() {
 	if (currentAttack == AttackType::NONE) {

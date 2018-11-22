@@ -10,6 +10,7 @@ CMakeFiles/gametechp2.dir/Actor.cpp.o
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
+ /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/physics.h
  /usr/local/include/OGRE/Ogre.h
  /usr/local/include/OGRE/OgreAlignedAllocator.h
@@ -1044,6 +1045,7 @@ CMakeFiles/gametechp2.dir/Game.cpp.o
  /home/steve/Downloads/GTechFinal/Ground.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
  /home/steve/Downloads/GTechFinal/Ninja.h
+ /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/audio.h
  /home/steve/Downloads/GTechFinal/ball.h
  /home/steve/Downloads/GTechFinal/gui.h
@@ -1366,6 +1368,7 @@ CMakeFiles/gametechp2.dir/Ninja.cpp.o
  /home/steve/Downloads/GTechFinal/InputContainer.h
  /home/steve/Downloads/GTechFinal/Ninja.cpp
  /home/steve/Downloads/GTechFinal/Ninja.h
+ /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/audio.h
  /home/steve/Downloads/GTechFinal/physics.h
  /usr/local/include/OGRE/Bites/OgreApplicationContext.h
@@ -1685,6 +1688,7 @@ CMakeFiles/gametechp2.dir/gui.cc.o
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
+ /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/audio.h
  /home/steve/Downloads/GTechFinal/gui.cc
  /home/steve/Downloads/GTechFinal/gui.h
@@ -2256,6 +2260,7 @@ CMakeFiles/gametechp2.dir/state.cpp.o
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
+ /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/audio.h
  /home/steve/Downloads/GTechFinal/physics.h
  /home/steve/Downloads/GTechFinal/state.cpp

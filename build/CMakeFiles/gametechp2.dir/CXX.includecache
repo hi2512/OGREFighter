@@ -27,6 +27,8 @@ SDL2/SDL.h
 -
 InputContainer.h
 /home/steve/Downloads/GTechFinal/InputContainer.h
+Spark.h
+/home/steve/Downloads/GTechFinal/Spark.h
 
 /home/steve/Downloads/GTechFinal/DebugDraw.h
 btBulletDynamicsCommon.h
@@ -42,6 +44,10 @@ Ogre.h
 
 /home/steve/Downloads/GTechFinal/InputContainer.h
 SDL2/SDL.h
+-
+
+/home/steve/Downloads/GTechFinal/Spark.h
+Ogre.h
 -
 
 /home/steve/Downloads/GTechFinal/physics.h

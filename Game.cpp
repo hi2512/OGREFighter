@@ -29,6 +29,7 @@
 #include "Ninja.h"
 #include "InputContainer.h"
 #include "Disc.h"
+#include "Spark.h"
 
 #include "ball.h"
 
@@ -421,6 +422,10 @@ void Game::setup(void) {
 	Ball * bl = new Ball(scnMgr, bl2, "BallObject", blEnt, phys, blPos, /*btQuaternion(1.0f, -1.0f, 1.0f, 0.0f)*/
 	btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
 			btVector3(0, 0, 0));
+
+	//SceneNode * spNode = mgr->getRootSceneNode()->createChildSceneNode();
+	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
+
 
 }
 

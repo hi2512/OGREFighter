@@ -9,6 +9,7 @@ CMakeFiles/gametechp2.dir/Actor.cpp.o: ../Actor.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../DebugDraw.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../InputContainer.h
+CMakeFiles/gametechp2.dir/Actor.cpp.o: ../Spark.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../physics.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: /usr/local/include/OGRE/Ogre.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: /usr/local/include/OGRE/OgreAlignedAllocator.h
@@ -1043,6 +1044,7 @@ CMakeFiles/gametechp2.dir/Game.cpp.o: ../Game.cpp
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../Ground.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../InputContainer.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../Ninja.h
+CMakeFiles/gametechp2.dir/Game.cpp.o: ../Spark.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../audio.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../ball.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../gui.h
@@ -1365,6 +1367,7 @@ CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../InputContainer.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../Ninja.cpp
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../Ninja.h
+CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../Spark.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../audio.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../physics.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: /usr/local/include/OGRE/Bites/OgreApplicationContext.h
@@ -1684,6 +1687,7 @@ CMakeFiles/gametechp2.dir/gui.cc.o: ../Actor.h
 CMakeFiles/gametechp2.dir/gui.cc.o: ../DebugDraw.h
 CMakeFiles/gametechp2.dir/gui.cc.o: ../DynamicLineDrawer.h
 CMakeFiles/gametechp2.dir/gui.cc.o: ../InputContainer.h
+CMakeFiles/gametechp2.dir/gui.cc.o: ../Spark.h
 CMakeFiles/gametechp2.dir/gui.cc.o: ../audio.h
 CMakeFiles/gametechp2.dir/gui.cc.o: ../gui.cc
 CMakeFiles/gametechp2.dir/gui.cc.o: ../gui.h
@@ -2255,6 +2259,7 @@ CMakeFiles/gametechp2.dir/state.cpp.o: ../Actor.h
 CMakeFiles/gametechp2.dir/state.cpp.o: ../DebugDraw.h
 CMakeFiles/gametechp2.dir/state.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/gametechp2.dir/state.cpp.o: ../InputContainer.h
+CMakeFiles/gametechp2.dir/state.cpp.o: ../Spark.h
 CMakeFiles/gametechp2.dir/state.cpp.o: ../audio.h
 CMakeFiles/gametechp2.dir/state.cpp.o: ../physics.h
 CMakeFiles/gametechp2.dir/state.cpp.o: ../state.cpp
