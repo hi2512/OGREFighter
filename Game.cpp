@@ -410,8 +410,7 @@ void Game::setup(void) {
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//btCollisionShape * diShape = new btSphereShape(diSize.x);
 	Disc * dObj = new Disc(scnMgr, dn, "Disc", di, phys, diShape, Vector3(0, 100, 0),
-			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
-			btVector3(0, 0, 0), btVector3(0, 0, 0));
+			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(0, 0, 0), btVector3(0, 0, 0));
 
 	Entity* blEnt = scnMgr->createEntity("sphere.mesh");
 	SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
@@ -425,7 +424,6 @@ void Game::setup(void) {
 
 	//SceneNode * spNode = mgr->getRootSceneNode()->createChildSceneNode();
 	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
-
 
 }
 
@@ -514,7 +512,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	phys->dbd->Update();
+	//phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];
@@ -529,10 +527,10 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 
 		GameObject * go = static_cast<GameObject *>(userPointer);
 		/*
-		if (obj->getCollisionFlags() == 1) {
-			printf("checking box %s \n", go->getName().c_str());
-		}
-		*/
+		 if (obj->getCollisionFlags() == 1) {
+		 printf("checking box %s \n", go->getName().c_str());
+		 }
+		 */
 
 		go->animate(evt);
 
@@ -547,8 +545,11 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		player1->setP2Orientation();
 		player2->setP1Orientation();
 	}
-
-	camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	auto centerPos = (player1->getRootNode()->getPosition().x
+			+ player2->getRootNode()->getPosition().x) / 2;
+	auto curCamPos = camNode->getPosition();
+	camNode->setPosition(centerPos, curCamPos.y, curCamPos.z);
+	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;
 	rightMouseRelease = false;
