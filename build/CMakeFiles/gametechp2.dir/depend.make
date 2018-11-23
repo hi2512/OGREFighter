@@ -1363,6 +1363,7 @@ CMakeFiles/gametechp2.dir/Game.cpp.o: /usr/local/include/bullet/btBulletDynamics
 
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../Actor.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../DebugDraw.h
+CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../Disc.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../InputContainer.h
 CMakeFiles/gametechp2.dir/Ninja.cpp.o: ../Ninja.cpp

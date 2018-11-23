@@ -8,6 +8,7 @@
 #include "Actor.h"
 #include <SDL2/SDL.h>
 #include "InputContainer.h"
+#include "Disc.h"
 
 using namespace std;
 using namespace Ogre;
@@ -15,15 +16,13 @@ class Ninja: public Actor {
 
 private:
 	SceneNode * ninOffsetNode;
-	Real walkSpeed = 350.0;
 	//btCollisionObject * kickCollision;
 
 protected:
 	void createLightBox();
 	void createMediumBox();
 	void createHeavyBox();
-	void createSpecialBox() {
-	}
+	void createSpecialBox();
 	void createJumpAttackBox();
 	void lightAnimation();
 	void mediumAnimation();
@@ -38,6 +37,12 @@ protected:
 	//void clearJumpAnimation();
 	void playHitAnimation();
 	void playBlockAnimation();
+	bool hasActiveProjectile() {
+		if(this->hitboxes.find(AttackType::SPECIAL1) != this->hitboxes.end()) {
+			return true;
+		}
+		return false;
+	}
 
 
 
@@ -46,9 +51,9 @@ public:
 	Ninja(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int up, int light, int medium, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int up, int down, int light, int medium, int heavy) :
 			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, inBuf,
-					relBuf, kBuf, left, right, up, light, medium, heavy) {
+					relBuf, kBuf, left, right, up, down, light, medium, heavy) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
 
 		ninOffsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
@@ -57,6 +62,8 @@ public:
 		playingAnimation = "Idle1";
 		geom->getAnimationState(playingAnimation)->setEnabled(true);
 		geom->getAnimationState(playingAnimation)->setLoop(true);
+
+		this->walkSpeed = 350.0;
 
 		AnimationStateSet *mAnims = this->geom->getAllAnimationStates();
 		AnimationStateIterator it = mAnims->getAnimationStateIterator();
@@ -75,7 +82,7 @@ public:
 		this->createLightBox();
 		this->createMediumBox();
 		this->createHeavyBox();
-		this->createSpecialBox();
+		//this->createSpecialBox();
 		this->createJumpAttackBox();
 
 	}

@@ -387,7 +387,7 @@ void Game::setup(void) {
 	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
 	Actor * p1 = new Ninja(false, scnMgr, p1Node, "P1", p1Entity, phys, p1Box,
 			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), &inputBuffer,
-			&releaseBuffer, &keysHeld, 'a', 'd', 'w', 'x', 'c', 'v');
+			&releaseBuffer, &keysHeld, 'a', 'd', 'w', 's', 'x', 'c', 'v');
 
 	Entity * p2Entity = scnMgr->createEntity("ninja.mesh");
 	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode("P2Node");
@@ -395,14 +395,14 @@ void Game::setup(void) {
 	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
 	Actor * p2 = new Ninja(true, scnMgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
 			btQuaternion(0.0, -0.707, 0.0, -0.707), &inputBuffer2, &releaseBuffer2, &keysHeld2, 'j',
-			'l', 'i', 'b', 'n', 'm');
+			'l', 'i', 'k', 'b', 'n', 'm');
 	p1->setOpponent(p2);
 	p2->setOpponent(p1);
 	player1 = p1;
 	player2 = p2;
 	gameState->p1 = p1;
 	gameState->p2 = p2;
-
+	/*
 	SceneNode * dn = mgr->getRootSceneNode()->createChildSceneNode("disc");
 	Entity * di = mgr->createEntity("disc.mesh");
 	dn->setScale(Vector3(60, 60, 60));
@@ -411,6 +411,7 @@ void Game::setup(void) {
 	//btCollisionShape * diShape = new btSphereShape(diSize.x);
 	Disc * dObj = new Disc(scnMgr, dn, "Disc", di, phys, diShape, Vector3(0, 100, 0),
 			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(0, 0, 0), btVector3(0, 0, 0));
+			*/
 
 	Entity* blEnt = scnMgr->createEntity("sphere.mesh");
 	SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
@@ -512,7 +513,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	//phys->dbd->Update();
+	phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];
@@ -545,11 +546,13 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		player1->setP2Orientation();
 		player2->setP1Orientation();
 	}
+	/*
 	auto centerPos = (player1->getRootNode()->getPosition().x
 			+ player2->getRootNode()->getPosition().x) / 2;
 	auto curCamPos = camNode->getPosition();
 	camNode->setPosition(centerPos, curCamPos.y, curCamPos.z);
-	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	*/
+	camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;
 	rightMouseRelease = false;

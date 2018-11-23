@@ -177,6 +177,40 @@ void Ninja::createHeavyBox() {
 
 }
 
+void Ninja::createSpecialBox() {
+	SceneNode * dn = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
+	Entity * di = sceneMgr->createEntity("disc.mesh");
+	dn->setScale(Vector3(60, 60, 60));
+	auto diSize = di->getBoundingBox().getSize() * 35.0;
+	//btCollisionObject * hbox = new btPairCachingGhostObject();
+	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
+	//hbox->setCollisionShape(diShape);
+
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Real frontPos = this->onPlayer2Side ? -100.0 : 100.0;
+	Disc * dObj = new Disc(sceneMgr, dn, to_string(this->inputBuffer->back().frame), di, physics,
+			diShape, curPos + Vector3(frontPos, 0.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
+			btVector3(frontPos / 10, 0, 0), btVector3(0, 0, 0));
+	//hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
+	HitboxData hbd { dObj->getRigidBody(), 35.0, 25.0, 50, 30, 10, 8, true };
+	//remove a previous hitbox
+	/*
+	for(auto it = this->hitboxes.begin(); it != this->hitboxes.end(); it++) {
+		auto elem = *it;
+		if(elem.first == AttackType::SPECIAL1) {
+			this->hitboxes.erase(it);
+			break;
+		}
+	}
+	*/
+	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::SPECIAL1, hbd));
+	dObj->getRigidBody()->setUserIndex(this->myHitType());
+	//dObj->getRigidBody()->setUserPointer(&this->hitboxes.at(AttackType::SPECIAL1));
+	//hbox->setUserPointer(&this->hitboxes.at(AttackType::SPECIAL1));
+	//hbox->setUserIndex(this->myHitType());
+}
+
 void Ninja::createJumpAttackBox() {
 	btCollisionObject * hbox = new btPairCachingGhostObject();
 	hbox->setCollisionShape(new btBoxShape(btVector3(75, 75, 50)));
@@ -191,9 +225,6 @@ void Ninja::createJumpAttackBox() {
 	physics->dynamicsWorld->addCollisionObject(hbox);
 	HitboxData hbd { hbox, 10.0, 5.0, 52, 30, 8, 6, false };
 	this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::AIRHEAVY, hbd));
-	//auto re = &this->hitboxes.at(AttackType::AIRHEAVY);
-	//printf("hitbox data %f, %f", re->hitPushback, re->blockPushback);
-	//printf("hitbox data %f, %f", hbd.hitPushback, hbd.blockPushback);
 	hbox->setUserPointer(&this->hitboxes.at(AttackType::AIRHEAVY));
 	hbox->setUserIndex(this->myHitType());
 }
@@ -297,11 +328,11 @@ void Ninja::jumpAttackAnimation() {
 		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos + 20, yPos - 100, curPos.z));
 		/*
-		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
-		*/
+		 hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		 hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		 hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		 hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
+		 */
 	} else {
 		xPos = curPos.x - 300;
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
@@ -319,11 +350,11 @@ void Ninja::jumpAttackAnimation() {
 		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 20, yPos - 100, curPos.z));
 		/*
-		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
-		*/
+		 hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		 hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		 hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		 hitFrames.push_back(btVector3(xPos - 30, yPos - 120, curPos.z));
+		 */
 	}
 
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
@@ -600,7 +631,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			case AttackType::HEAVY:
 				this->attackFrameCount = this->hAttackFrames;
 				break;
-			case AttackType::SPECIAL:
+			case AttackType::SPECIAL1:
 				this->attackFrameCount = this->sAttackFrames;
 				break;
 			}
@@ -656,6 +687,14 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::HEAVY;
 				this->hitboxes.at(currentAttack).active = true;
+			}
+			//read for special move
+			if (this->readQCFwithOrientation() && this->actorState == StateType::ATTACK) {
+				//printf("DO SPECIAL MOVE\n");
+				this->actorState = StateType::STOP;
+				this->stopFrameCount = 40;
+				this->createSpecialBox();
+				break;
 			}
 		}
 		//set up jump

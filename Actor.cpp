@@ -1,5 +1,132 @@
 #include "Actor.h"
 #include <cassert>
+bool Actor::keyIsInputType(KeyInput ki, InputType ipt) {
+	if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+		//not mapped
+		return false;
+	}
+	//printf("key is %c\n", ki.key);
+	return this->keyBinding.at(ki.key) == ipt;
+}
+
+bool Actor::readQCFwithOrientation() {
+	return this->onPlayer2Side ? this->readQCB() : this->readQCF();
+}
+
+bool Actor::readQCF() {
+	if (this->inputBuffer->empty()) {
+		return false;
+	}
+	const int cancelWindow = 8;
+	int endInputWindow = inputBuffer->back().frame - cancelWindow;
+	bool right = false;
+	bool drDown = false;
+	bool drRight = false;
+	bool down = false;
+	Uint32 rightFrame, downRightFrame, downFrame;
+	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
+		KeyInput cur = *it;
+		if (cur.frame < endInputWindow) {
+			//printf("INPUTS END\n");
+			break;
+		}
+		if (!right) {
+			//printf("checking right\n");
+			//check for right
+			right = this->keyIsInputType(cur, InputType::RIGHT);
+			if (right) {
+				rightFrame = cur.frame;
+			}
+			continue;
+		}
+		/*
+		 //check for both down and right inputs on the same frame
+		 if (!(drDown && drRight)) {
+		 printf("checking downright\n");
+		 if (cur.frame >= rightFrame) {
+		 continue;
+		 }
+		 //down and right have to held on the same frame
+		 if ((drDown && !drRight) || (!drDown && drRight)) {
+		 if (cur.frame != downRightFrame) {
+		 drDown = false;
+		 drRight = false;
+		 continue;
+		 }
+		 }
+
+		 if (!drDown) {
+		 drDown = this->keyIsInputType(cur, InputType::DOWN);
+		 if (drDown) {
+		 printf("GOT DRDOWN\n");
+		 downRightFrame = cur.frame;
+		 }
+		 continue;
+		 }
+		 if (!drRight) {
+		 drRight = this->keyIsInputType(cur, InputType::RIGHT);
+		 if (drRight) {
+		 printf("GOT DRRIGHT\n");
+		 downRightFrame = cur.frame;
+		 }
+		 continue;
+		 }
+
+		 }
+		 */
+		if (!down) {
+			//printf("checking down\n");
+			//check for down
+			down = this->keyIsInputType(cur, InputType::DOWN);
+			if (down) {
+				//downFrame = cur.frame;
+				//fufilled all requirements
+				return true;
+			}
+			continue;
+		}
+	}
+	return false;
+}
+
+bool Actor::readQCB() {
+	if (this->inputBuffer->empty()) {
+		return false;
+	}
+	const int cancelWindow = 8;
+	int endInputWindow = inputBuffer->back().frame - cancelWindow;
+	bool right = false;
+	bool drDown = false;
+	bool drRight = false;
+	bool down = false;
+	Uint32 rightFrame, downRightFrame, downFrame;
+	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
+		KeyInput cur = *it;
+		if (cur.frame < endInputWindow) {
+			//printf("INPUTS END\n");
+			break;
+		}
+		if (!right) {
+			//check for right
+			right = this->keyIsInputType(cur, InputType::LEFT);
+			if (right) {
+				rightFrame = cur.frame;
+			}
+			continue;
+		}
+
+		if (!down) {
+			down = this->keyIsInputType(cur, InputType::DOWN);
+			if (down) {
+				//downFrame = cur.frame;
+				//fufilled all requirements
+				return true;
+			}
+			continue;
+		}
+	}
+	return false;
+}
 
 bool Actor::isAboveGround() {
 	/*
@@ -60,11 +187,12 @@ void Actor::doCollision(const FrameEvent& evt) {
 		if (context.body->getUserIndex() == this->oppHurtType()) {
 			this->moveLock = true;
 		}
-		printf("check for hit context\n");
+		printf("check for hit context, %d\n", context.body->getUserIndex());
 		//CHECK IF I WAS HIT
 		if (context.body->getUserIndex() == this->oppHitType()) {
-			//printf("I am %s\n", this->name.c_str());
+			printf("I am %s\n", this->name.c_str());
 			HitboxData * hbd = (HitboxData *) context.body->getUserPointer();
+			printf("IS HITBOX ACTIVE? %d\n", hbd->active);
 			if (hbd->active) {
 
 				//do was hit
@@ -75,8 +203,10 @@ void Actor::doCollision(const FrameEvent& evt) {
 					this->recieveBlock(hbd);
 				} else if (this->actorState != StateType::FALLING) {
 					auto hitPoint = context.body->getWorldTransform().getOrigin();
-					printf("SPARK POINT x: %f, y: %f, z %f\n", hitPoint.getX(), hitPoint.getY(),
-							hitPoint.getZ());
+					/*
+					 printf("SPARK POINT x: %f, y: %f, z %f\n", hitPoint.getX(), hitPoint.getY(),
+					 hitPoint.getZ());
+					 */
 					new Spark(this->sceneMgr,
 							this->sceneMgr->getRootSceneNode()->createChildSceneNode(),
 							this->name + to_string(this->inputBuffer->back().frame), this->physics,
@@ -103,7 +233,7 @@ void Actor::recieveBlock(HitboxData * hbd) {
 
 void Actor::recieveHit(HitboxData * hbd) {
 
-	//this->beforeStopState = StateType::HITSTUN;
+//this->beforeStopState = StateType::HITSTUN;
 
 	if (this->actorState == StateType::ATTACK) {
 		//reset hurtbox, hitbox, and collision

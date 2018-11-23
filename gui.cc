@@ -45,7 +45,7 @@ void GameGui::showCamPos() {
 void GameGui::showInputBuffer() {
 	ImGui::Begin("Input Buffer", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(1200, 50));
+	ImGui::SetWindowPos(ImVec2(1000, 50));
 	auto buf = state->inputBuffer;
 	for (int i = 0; i < 20 && ((int) buf->size() - (1 + i) >= 0); i++) {
 		auto ax = buf->at(buf->size() - (1 + i));
