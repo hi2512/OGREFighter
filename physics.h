@@ -85,7 +85,7 @@ protected:
 	//BulletContactCallback* cCallBack;
 
 public:
-	HitboxData myHbd {NULL, 0.0, 0.0, 0, 0, 0, 0, false};
+	HitboxData myHbd { NULL, 0.0, 0.0, 0, 0, 0, 0, false };
 
 	GameObject(Ogre::SceneManager *, String name);
 
@@ -222,8 +222,15 @@ public:
 	}
 
 	bool needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
-		if (body0->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT
-				|| body1->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT) {
+		//LogManager::getSingleton().logMessage("col check")
+		/*
+		 if (body0->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT
+		 || body1->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT) {
+		 return false;
+		 }
+		 */
+		if (body0->getUserIndex2() == 128
+				|| body1->getUserIndex2() == 128) {
 			return false;
 		}
 		return btCollisionDispatcher::needsCollision(body0, body1);
@@ -247,6 +254,7 @@ public:
 		 return false;
 		 }
 		 */
+		LogManager::getSingleton().logMessage("RES col check");
 		if (body0->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT
 				|| body1->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT) {
 			return false;

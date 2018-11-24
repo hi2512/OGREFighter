@@ -180,7 +180,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
 	if (context.hit) {
-		printf("START COLLISION\n");
+		//printf("START COLLISION\n");
 		if (context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
 			this->opponent->pushBack(12.0);
 		}
@@ -190,9 +190,9 @@ void Actor::doCollision(const FrameEvent& evt) {
 		//printf("check for hit context, %d\n", context.body->getUserIndex());
 		//CHECK IF I WAS HIT
 		if (context.body->getUserIndex() == this->oppHitType()) {
-			printf("I am %s\n", this->name.c_str());
+			//printf("I am %s\n", this->name.c_str());
 			HitboxData * hbd = &((Hitbox *) context.body->getUserPointer())->myHbd;
-			printf("IS HITBOX ACTIVE? %d\n", hbd->active);
+			//printf("IS HITBOX ACTIVE? %d\n", hbd->active);
 			if (hbd->active) {
 
 				//do was hit

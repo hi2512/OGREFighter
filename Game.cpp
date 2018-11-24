@@ -403,15 +403,25 @@ void Game::setup(void) {
 	gameState->p1 = p1;
 	gameState->p2 = p2;
 	/*
-	SceneNode * dn = mgr->getRootSceneNode()->createChildSceneNode("disc");
-	Entity * di = mgr->createEntity("disc.mesh");
-	dn->setScale(Vector3(60, 60, 60));
-	auto diSize = di->getBoundingBox().getSize() * 35.0;
-	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
-	//btCollisionShape * diShape = new btSphereShape(diSize.x);
-	Disc * dObj = new Disc(scnMgr, dn, "Disc", di, phys, diShape, Vector3(0, 100, 0),
-			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(0, 0, 0), btVector3(0, 0, 0));
-			*/
+	 SceneNode * dn = mgr->getRootSceneNode()->createChildSceneNode("disc");
+	 Entity * di = mgr->createEntity("disc.mesh");
+	 dn->setScale(Vector3(60, 60, 60));
+	 auto diSize = di->getBoundingBox().getSize() * 35.0;
+	 btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
+	 //btCollisionShape * diShape = new btSphereShape(diSize.x);
+	 Disc * dObj = new Disc(scnMgr, dn, "Disc", di, phys, diShape, Vector3(0, 100, 0),
+	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(0, 0, 0), btVector3(0, 0, 0));
+	 */
+
+	auto temp1 = p1->getRigidBody();
+	phys->dynamicsWorld->removeRigidBody(temp1);
+	phys->dynamicsWorld->addRigidBody(temp1, 128, 3);
+	p1->getRigidBody()->setFlags(128);
+	printf("col flags %d\n", p1->getRigidBody()->getFlags());
+
+	auto temp2 = p2->getRigidBody();
+	phys->dynamicsWorld->removeRigidBody(temp2);
+	phys->dynamicsWorld->addRigidBody(temp2, 128, 3);
 
 	Entity* blEnt = scnMgr->createEntity("sphere.mesh");
 	SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
@@ -547,11 +557,11 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		player2->setP1Orientation();
 	}
 	/*
-	auto centerPos = (player1->getRootNode()->getPosition().x
-			+ player2->getRootNode()->getPosition().x) / 2;
-	auto curCamPos = camNode->getPosition();
-	camNode->setPosition(centerPos, curCamPos.y, curCamPos.z);
-	*/
+	 auto centerPos = (player1->getRootNode()->getPosition().x
+	 + player2->getRootNode()->getPosition().x) / 2;
+	 auto curCamPos = camNode->getPosition();
+	 camNode->setPosition(centerPos, curCamPos.y, curCamPos.z);
+	 */
 	camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;

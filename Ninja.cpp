@@ -204,7 +204,7 @@ void Ninja::createSpecial1Box() {
 	SceneNode * dn = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
 	Entity * di = sceneMgr->createEntity("disc.mesh");
 	dn->setScale(Vector3(50, 50, 50));
-	auto diSize = di->getBoundingBox().getSize() * 25.0;
+	auto diSize = di->getBoundingBox().getSize() * 35.0;
 	//btCollisionObject * hbox = new btPairCachingGhostObject();
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//hbox->setCollisionShape(diShape);
@@ -214,7 +214,7 @@ void Ninja::createSpecial1Box() {
 	Real frontPos = this->onPlayer2Side ? -150.0 : 150.0;
 	Disc * dObj = new Disc(sceneMgr, dn, to_string(this->inputBuffer->back().frame), di, physics,
 			diShape, curPos + Vector3(frontPos, 0.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
-			btVector3(frontPos / 5, 0, 0), btVector3(0, 0, 0), hbd, this);
+			btVector3(frontPos / 10, 0, 0), btVector3(0, 0, 0), hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
 	//this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SPECIAL1, hitObj));
@@ -613,7 +613,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//printf("jump attack frame count %d\n", this->attackFrameCount);
 		//printf("playing animation %s \n", this->playingAnimation.c_str());
 		if (this->attackFrameCount == 0) {
-			printf("finished jump attack\n");
+			//printf("finished jump attack\n");
 			this->cancelJump();
 			this->clearAttack();
 			//this->actorState = StateType::FALLING;
@@ -669,7 +669,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		this->stopFrameCount -= 1;
 		break;
 	case StateType::ATTACK:
-		printf("attack reached\n");
+		//printf("attack reached\n");
 		if (this->attackFrameCount == 0) {
 			//reset animation
 			this->clearAttack();
@@ -706,7 +706,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			this->heavyAnimation();
 			break;
 		case AttackType::SPECIAL1:
-			printf("entering special animation\n");
+			//printf("entering special animation\n");
 			this->special1Animation();
 		}
 		this->attackFrameCount -= 1;

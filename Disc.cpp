@@ -41,6 +41,7 @@ void Disc::animate(const FrameEvent& evt) {
 	as->addTime(0.05);
 	GameObject::animate(evt);
 	if (!this->myHbd.active || (this->activeTime < 0) ) {
+		printf("projectile deleted\n");
 		this->physics->dynamicsWorld->removeRigidBody(body);
 		this->sceneMgr->destroySceneNode(rootNode);
 		this->owner->removeActiveProjectile();

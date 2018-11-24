@@ -22,10 +22,14 @@ public:
 			const btVector3& linearVelocity, const btVector3& angularVelocity, HitboxData hbd,
 			Actor * owner) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 2.0, false, origin,
-					btQuaternion(1.0, 0.0, 0.0, 0.0), linearVelocity, btVector3(0, 0, 0), 1.0,
-					0.0) {
+					btQuaternion(1.0, 0.0, 0.0, 0.0), linearVelocity, btVector3(0, 0, 0), 1.0, 0.0) {
 		this->owner = owner;
 		myHbd.hitbox = this->getRigidBody();
+		body->setUserIndex2(128);
+		printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
+		this->physics->dynamicsWorld->removeRigidBody(body);
+		physics->dynamicsWorld->addRigidBody((btRigidBody *) myHbd.hitbox);
+		printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
 		this->myHbd = hbd;
 		offsetNode = rootNode->createChildSceneNode("Offset" + name);
 
@@ -33,7 +37,7 @@ public:
 
 		activeTime = 250;
 		//printf("collision flags: %d\n", this->body->getCollisionFlags());
-		//this->body->setCollisionFlags(1);
+		//this->body->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 		this->createAnim();
 	}
 
