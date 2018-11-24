@@ -22,11 +22,12 @@ protected:
 	void createLightBox();
 	void createMediumBox();
 	void createHeavyBox();
-	void createSpecialBox();
+	void createSpecial1Box();
 	void createJumpAttackBox();
 	void lightAnimation();
 	void mediumAnimation();
 	void heavyAnimation();
+	void special1Animation();
 	void jumpAttackAnimation();
 
 	void createJumpUpArc();
@@ -71,7 +72,7 @@ public:
 		this->lAttackFrames = 30;
 		this->mAttackFrames = 40;
 		this->hAttackFrames = 90;
-		this->sAttackFrames = 50;
+		this->s1AttackFrames = 80;
 		this->jhAttackFrames = 60;
 
 		this->createLightBox();

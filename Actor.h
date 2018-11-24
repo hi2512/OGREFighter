@@ -56,6 +56,9 @@ protected:
 	int hitstunFrames = -1;
 	int blockstunFrames = -1;
 
+	int specialMoveWindow = -1;
+	int attackCancelWindow = -1;
+
 	std::map<int, InputType> keyBinding;
 
 	String playingAnimation;
@@ -73,20 +76,22 @@ protected:
 	}
 	virtual void createHeavyBox() {
 	}
-	virtual void createSpecialBox() {
+	virtual void createSpecial1Box() {
 	}
 	virtual void createJumpAttackBox() {
 	}
 	int lAttackFrames = -1;
 	int mAttackFrames = -1;
 	int hAttackFrames = -1;
-	int sAttackFrames = -1;
+	int s1AttackFrames = -1;
 	int jhAttackFrames = -1;
 	virtual void lightAnimation() {
 	}
 	virtual void mediumAnimation() {
 	}
 	virtual void heavyAnimation() {
+	}
+	virtual void special1Animation() {
 	}
 	virtual void jumpAttackAnimation() {
 	}

@@ -187,7 +187,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 		if (context.body->getUserIndex() == this->oppHurtType()) {
 			this->moveLock = true;
 		}
-		printf("check for hit context, %d\n", context.body->getUserIndex());
+		//printf("check for hit context, %d\n", context.body->getUserIndex());
 		//CHECK IF I WAS HIT
 		if (context.body->getUserIndex() == this->oppHitType()) {
 			printf("I am %s\n", this->name.c_str());
@@ -263,7 +263,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 }
 
 void Actor::enterStopState(int stopFrames) {
-	if(actorState == StateType::STOP) {
+	if (actorState == StateType::STOP) {
 		return;
 	}
 	this->beforeStopState = this->actorState;
@@ -287,13 +287,17 @@ void Actor::clearAttack() {
 	if (currentAttack == AttackType::NONE) {
 		return;
 	}
-	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	btVector3 targetPos(curPos.x, curPos.y - 1500, curPos.z);
-	this->setBox(this->hitboxes.at(currentAttack)->myHbd.hitbox, targetPos);
+	if (currentAttack != AttackType::SPECIAL1) {
+		Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+		btVector3 targetPos(curPos.x, curPos.y - 1500, curPos.z);
+		this->setBox(this->hitboxes.at(currentAttack)->myHbd.hitbox, targetPos);
+		this->hitboxes.at(currentAttack)->myHbd.active = false;
+	}
+
 	this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setTimePosition(0.0);
-	this->hitboxes.at(currentAttack)->myHbd.active = false;
+
 	this->attackFrameCount = -1;
 	this->currentAttack = AttackType::NONE;
 	this->actorState = StateType::FREE;

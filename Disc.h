@@ -10,7 +10,7 @@ using namespace std;
 class Disc: public GameObject {
 
 protected:
-
+	int activeTime;
 	SceneNode * offsetNode;
 	void createAnim();
 	void animate(const FrameEvent& evt);
@@ -22,7 +22,7 @@ public:
 			const btVector3& linearVelocity, const btVector3& angularVelocity, HitboxData hbd,
 			Actor * owner) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 2.0, false, origin,
-					btQuaternion(1.0, 0.0, 0.0, 0.0), btVector3(0, 20, 0), btVector3(0, 0, 0), 1.0,
+					btQuaternion(1.0, 0.0, 0.0, 0.0), linearVelocity, btVector3(0, 0, 0), 1.0,
 					0.0) {
 		this->owner = owner;
 		myHbd.hitbox = this->getRigidBody();
@@ -30,6 +30,8 @@ public:
 		offsetNode = rootNode->createChildSceneNode("Offset" + name);
 
 		offsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
+
+		activeTime = 250;
 		//printf("collision flags: %d\n", this->body->getCollisionFlags());
 		//this->body->setCollisionFlags(1);
 		this->createAnim();
