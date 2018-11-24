@@ -48,12 +48,6 @@ assert.h
 imgui_user.h
 ../ogre-imgui/imgui/imgui_user.h
 
-/home/steve/Downloads/GTechFinal/Actor.cpp
-Actor.h
-/home/steve/Downloads/GTechFinal/Actor.h
-cassert
--
-
 /home/steve/Downloads/GTechFinal/Actor.h
 Ogre.h
 -
@@ -81,10 +75,6 @@ Ogre.h
 -
 DynamicLineDrawer.h
 /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
-
-/home/steve/Downloads/GTechFinal/Disc.cpp
-Disc.h
-/home/steve/Downloads/GTechFinal/Disc.h
 
 /home/steve/Downloads/GTechFinal/Disc.h
 Ogre.h
@@ -230,12 +220,6 @@ Ogre.h
 physics.h
 /home/steve/Downloads/GTechFinal/physics.h
 
-/home/steve/Downloads/GTechFinal/gui.cc
-gui.h
-/home/steve/Downloads/GTechFinal/gui.h
-ImguiManager.h
--
-
 /home/steve/Downloads/GTechFinal/gui.h
 Ogre.h
 -
@@ -243,14 +227,6 @@ ImguiManager.h
 -
 state.h
 /home/steve/Downloads/GTechFinal/state.h
-
-/home/steve/Downloads/GTechFinal/physics.cpp
-physics.h
-/home/steve/Downloads/GTechFinal/physics.h
-string
--
-iostream
--
 
 /home/steve/Downloads/GTechFinal/physics.h
 Ogre.h
@@ -269,10 +245,6 @@ map
 -
 DebugDraw.h
 /home/steve/Downloads/GTechFinal/DebugDraw.h
-
-/home/steve/Downloads/GTechFinal/state.cpp
-state.h
-/home/steve/Downloads/GTechFinal/state.h
 
 /home/steve/Downloads/GTechFinal/state.h
 Ogre.h

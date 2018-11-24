@@ -416,8 +416,8 @@ void Game::setup(void) {
 	auto temp1 = p1->getRigidBody();
 	phys->dynamicsWorld->removeRigidBody(temp1);
 	phys->dynamicsWorld->addRigidBody(temp1, 128, 3);
-	p1->getRigidBody()->setFlags(128);
-	printf("col flags %d\n", p1->getRigidBody()->getFlags());
+	//p1->getRigidBody()->setFlags(128);
+	//printf("col flags %d\n", p1->getRigidBody()->getFlags());
 
 	auto temp2 = p2->getRigidBody();
 	phys->dynamicsWorld->removeRigidBody(temp2);
@@ -523,7 +523,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	phys->dbd->Update();
+	//phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];

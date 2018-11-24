@@ -214,7 +214,7 @@ void Ninja::createSpecial1Box() {
 	Real frontPos = this->onPlayer2Side ? -150.0 : 150.0;
 	Disc * dObj = new Disc(sceneMgr, dn, to_string(this->inputBuffer->back().frame), di, physics,
 			diShape, curPos + Vector3(frontPos, 0.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
-			btVector3(frontPos / 10, 0, 0), btVector3(0, 0, 0), hbd, this);
+			btVector3(frontPos / 5, 0, 0), btVector3(0, 0, 0), hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
 	//this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SPECIAL1, hitObj));
