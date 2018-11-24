@@ -254,7 +254,7 @@ public:
 		 return false;
 		 }
 		 */
-		LogManager::getSingleton().logMessage("RES col check");
+		//LogManager::getSingleton().logMessage("RES col check");
 		if (body0->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT
 				|| body1->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT) {
 			return false;

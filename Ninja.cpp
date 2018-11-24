@@ -15,7 +15,7 @@ void Ninja::createJumpUpArc() {
 	if (this->sceneMgr->hasAnimation("JumpN" + name)) {
 		this->sceneMgr->destroyAnimation("JumpN" + name);
 	}
-	Ogre::Animation * animation = sceneMgr->createAnimation("JumpN" + name, 4.4);
+	Ogre::Animation * animation = sceneMgr->createAnimation("JumpN" + name, 5.2);
 	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
 	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(0, this->rootNode);
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
@@ -26,7 +26,7 @@ void Ninja::createJumpUpArc() {
 	key->setTranslate((curPos + Vector3(0, 0, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(1.0);
+	key = track->createNodeKeyFrame(0.75);
 	key->setTranslate((curPos + Vector3(0, 200, 0)));
 	key->setRotation(curRot);
 
@@ -34,11 +34,11 @@ void Ninja::createJumpUpArc() {
 	key->setTranslate((curPos + Vector3(0, 400, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(3.0);
+	key = track->createNodeKeyFrame(3.8);
 	key->setTranslate((curPos + Vector3(0, 200, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(4.0);
+	key = track->createNodeKeyFrame(4.8);
 	key->setTranslate((curPos + Vector3(0, 0, 0)));
 	key->setRotation(curRot);
 
@@ -51,7 +51,7 @@ void Ninja::createJumpLeftArc() {
 	if (this->sceneMgr->hasAnimation("JumpL" + name)) {
 		this->sceneMgr->destroyAnimation("JumpL" + name);
 	}
-	Ogre::Animation * animation = sceneMgr->createAnimation("JumpL" + name, 4.4);
+	Ogre::Animation * animation = sceneMgr->createAnimation("JumpL" + name, 5.2);
 	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
 	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(1, this->rootNode);
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
@@ -62,7 +62,7 @@ void Ninja::createJumpLeftArc() {
 	key->setTranslate((curPos + Vector3(0, 0, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(1.0);
+	key = track->createNodeKeyFrame(0.75);
 	key->setTranslate((curPos + Vector3(-75, 200, 0)));
 	key->setRotation(curRot);
 
@@ -70,11 +70,11 @@ void Ninja::createJumpLeftArc() {
 	key->setTranslate((curPos + Vector3(-150, 400, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(3.0);
+	key = track->createNodeKeyFrame(3.8);
 	key->setTranslate((curPos + Vector3(-250, 200, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(4.0);
+	key = track->createNodeKeyFrame(4.8);
 	key->setTranslate((curPos + Vector3(-350, 0, 0)));
 	key->setRotation(curRot);
 
@@ -87,7 +87,7 @@ void Ninja::createJumpRightArc() {
 	if (this->sceneMgr->hasAnimation("JumpR" + name)) {
 		this->sceneMgr->destroyAnimation("JumpR" + name);
 	}
-	Ogre::Animation * animation = sceneMgr->createAnimation("JumpR" + name, 4.4);
+	Ogre::Animation * animation = sceneMgr->createAnimation("JumpR" + name, 5.2);
 	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
 	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(2, this->rootNode);
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
@@ -98,7 +98,7 @@ void Ninja::createJumpRightArc() {
 	key->setTranslate((curPos + Vector3(0, 0, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(1.0);
+	key = track->createNodeKeyFrame(0.75);
 	key->setTranslate((curPos + Vector3(75, 200, 0)));
 	key->setRotation(curRot);
 
@@ -106,11 +106,11 @@ void Ninja::createJumpRightArc() {
 	key->setTranslate((curPos + Vector3(150, 400, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(3.0);
+	key = track->createNodeKeyFrame(3.8);
 	key->setTranslate((curPos + Vector3(250, 200, 0)));
 	key->setRotation(curRot);
 
-	key = track->createNodeKeyFrame(4.0);
+	key = track->createNodeKeyFrame(4.8);
 	key->setTranslate((curPos + Vector3(350, 0, 0)));
 	key->setRotation(curRot);
 
@@ -212,9 +212,9 @@ void Ninja::createSpecial1Box() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -150.0 : 150.0;
-	Disc * dObj = new Disc(sceneMgr, dn, to_string(this->inputBuffer->back().frame), di, physics,
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di, physics,
 			diShape, curPos + Vector3(frontPos, -50.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
-			btVector3(frontPos / 2.5, 0, 0), btVector3(0, 0, 0), hbd, this);
+			btVector3(frontPos / 3, 0, 0), btVector3(0, 0, 0), hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
 	//this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SPECIAL1, hitObj));
@@ -343,7 +343,7 @@ void Ninja::jumpAttackAnimation() {
 	trans = hbox->getWorldTransform();
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	Real xPos = curPos.x + 300;
+	Real xPos = curPos.x + 250;
 
 	Real yPos = curPos.y;
 	std::vector<btVector3> hitFrames;
@@ -369,7 +369,7 @@ void Ninja::jumpAttackAnimation() {
 		 hitFrames.push_back(btVector3(xPos + 30, yPos - 120, curPos.z));
 		 */
 	} else {
-		xPos = curPos.x - 300;
+		xPos = curPos.x - 250;
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
@@ -578,8 +578,8 @@ void Ninja::special1Animation() {
 		//projectile activates and animates itself
 		this->createSpecial1Box();
 	}
-	if (frameTime >= -30 && frameTime <= 30) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 1));
+	if (frameTime >= -30 && frameTime <= 40) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 2.5));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
