@@ -157,12 +157,10 @@ void GameObject::animate(const FrameEvent &evt) {
 					orientation.getZ()));
 }
 
-GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name, Entity * e) {
+GameObject::GameObject(SceneManager * mgr, String name) {
 	this->sceneMgr = mgr;
 	this->name = name;
-	this->rootNode = rootNode;
-	this->geom = e;
-	rootNode->attachObject(e);
+	this->rootNode = NULL;
 }
 
 GameObject::GameObject(SceneManager * mgr, SceneNode * rootNode, String name, Entity * e,

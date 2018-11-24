@@ -37,12 +37,7 @@ protected:
 	//void clearJumpAnimation();
 	void playHitAnimation();
 	void playBlockAnimation();
-	bool hasActiveProjectile() {
-		if(this->hitboxes.find(AttackType::SPECIAL1) != this->hitboxes.end()) {
-			return true;
-		}
-		return false;
-	}
+
 
 
 

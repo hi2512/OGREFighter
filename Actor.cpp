@@ -179,8 +179,8 @@ void Actor::doCollision(const FrameEvent& evt) {
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);
-
 	if (context.hit) {
+		printf("START COLLISION\n");
 		if (context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
 			this->opponent->pushBack(12.0);
 		}
@@ -191,7 +191,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 		//CHECK IF I WAS HIT
 		if (context.body->getUserIndex() == this->oppHitType()) {
 			printf("I am %s\n", this->name.c_str());
-			HitboxData * hbd = (HitboxData *) context.body->getUserPointer();
+			HitboxData * hbd = &((Hitbox *) context.body->getUserPointer())->myHbd;
 			printf("IS HITBOX ACTIVE? %d\n", hbd->active);
 			if (hbd->active) {
 
@@ -217,7 +217,6 @@ void Actor::doCollision(const FrameEvent& evt) {
 			}
 		}
 	}
-
 }
 
 void Actor::recieveBlock(HitboxData * hbd) {
@@ -234,7 +233,6 @@ void Actor::recieveBlock(HitboxData * hbd) {
 void Actor::recieveHit(HitboxData * hbd) {
 
 //this->beforeStopState = StateType::HITSTUN;
-
 	if (this->actorState == StateType::ATTACK) {
 		//reset hurtbox, hitbox, and collision
 		/*
@@ -265,6 +263,9 @@ void Actor::recieveHit(HitboxData * hbd) {
 }
 
 void Actor::enterStopState(int stopFrames) {
+	if(actorState == StateType::STOP) {
+		return;
+	}
 	this->beforeStopState = this->actorState;
 	this->stopFrameCount = stopFrames;
 	this->actorState = StateType::STOP;
@@ -288,11 +289,11 @@ void Actor::clearAttack() {
 	}
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 targetPos(curPos.x, curPos.y - 1500, curPos.z);
-	this->setBox(this->hitboxes.at(currentAttack).hitbox, targetPos);
+	this->setBox(this->hitboxes.at(currentAttack)->myHbd.hitbox, targetPos);
 	this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setTimePosition(0.0);
-	this->hitboxes.at(currentAttack).active = false;
+	this->hitboxes.at(currentAttack)->myHbd.active = false;
 	this->attackFrameCount = -1;
 	this->currentAttack = AttackType::NONE;
 	this->actorState = StateType::FREE;

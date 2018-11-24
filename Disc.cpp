@@ -40,6 +40,11 @@ void Disc::animate(const FrameEvent& evt) {
 	as->setEnabled(true);
 	as->addTime(0.05);
 	GameObject::animate(evt);
+	if (!this->myHbd.active) {
+		this->physics->dynamicsWorld->removeRigidBody(body);
+		this->sceneMgr->destroySceneNode(rootNode);
+		this->owner->removeActiveProjectile();
+	}
 	//auto opos = this->offsetNode->convertLocalToWorldPosition(Vector3::ZERO);
 	//printf("Offset node pos: x: %f, y: %f, z: %f\n", opos.x, opos.y, opos.z);
 	//auto pos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);

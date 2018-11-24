@@ -22,6 +22,17 @@ enum CollisionType {
 	COLLISIONBOX = 2, HITBOX_P1 = 8, HITBOX_P2 = 16, HURTBOX_P1 = 32, HURTBOX_P2 = 64, WALL = 1
 };
 
+struct HitboxData {
+	btCollisionObject * hitbox;
+	Real hitPushback;
+	Real blockPushback;
+	int hitstun;
+	int blockstun;
+	int hitstop;
+	int blockstop;
+	bool active;
+};
+
 class Physics {
 public:
 	btDefaultCollisionConfiguration* collisionConfiguration;
@@ -67,14 +78,16 @@ protected:
 	btScalar restitution;
 	btScalar friction;
 	bool kinematic;
+
 	//bool needsUpdates;
 
 	//CollisionContext* context;
 	//BulletContactCallback* cCallBack;
 
 public:
+	HitboxData myHbd {NULL, 0.0, 0.0, 0, 0, 0, 0, false};
 
-	GameObject(Ogre::SceneManager *, SceneNode * rootNode, String name, Entity *);
+	GameObject(Ogre::SceneManager *, String name);
 
 	GameObject(Ogre::SceneManager *, SceneNode * rootNode, String name, Entity *, Physics *,
 			btCollisionShape *, btScalar mass, bool isKinematic, const Ogre::Vector3&,

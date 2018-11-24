@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include "InputContainer.h"
 #include "Spark.h"
+#include "Hitbox.h"
 
 using namespace Ogre;
 using namespace std;
@@ -27,17 +28,6 @@ enum InputType {
 
 };
 
-struct HitboxData {
-	btCollisionObject * hitbox;
-	Real hitPushback;
-	Real blockPushback;
-	int hitstun;
-	int blockstun;
-	int hitstop;
-	int blockstop;
-	bool active;
-};
-
 class Actor: public GameObject {
 
 protected:
@@ -51,6 +41,7 @@ protected:
 	bool moveLock = false;
 	bool newHit = false;
 	bool jumpAttack = false;
+	GameObject * activeProjectile = NULL;
 	InputType jumpType = InputType::UP;
 
 	Actor * opponent = NULL;
@@ -73,7 +64,8 @@ protected:
 	std::deque<KeyInput> * releaseBuffer;
 	std::vector<KeyInput> * keysHeld;
 
-	std::map<AttackType, HitboxData> hitboxes;
+	//std::map<AttackType, HitboxData> hitboxes;
+	std::map<AttackType, Hitbox *> hitboxes;
 
 	virtual void createLightBox() {
 	}
@@ -134,9 +126,6 @@ protected:
 	}
 	virtual void playBlockAnimation() {
 	}
-	virtual bool hasActiveProjectile() {
-		return false;
-	}
 	bool readQCF();
 	bool readQCB();
 	bool readQCFwithOrientation();
@@ -147,8 +136,8 @@ public:
 	Actor(bool player2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int up, int down, int light, int medium,
-			int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int up, int down, int light,
+			int medium, int heavy) :
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., true, origin, orientation, 1.0,
 					0.0), isPlayer2(player2), onPlayer2Side(player2) {
 		inputBuffer = inBuf;
@@ -181,6 +170,12 @@ public:
 	void readInputs(std::deque<KeyInput>& buf, std::deque<KeyInput>& rBuf);
 	//void animate(const FrameEvent& evt);
 	void doCollision(const FrameEvent& evt);
+	bool hasActiveProjectile() {
+		return this->activeProjectile != NULL;
+	}
+	void removeActiveProjectile() {
+		this->activeProjectile = NULL;
+	}
 
 };
 

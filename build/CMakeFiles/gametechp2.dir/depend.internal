@@ -9,6 +9,7 @@ CMakeFiles/gametechp2.dir/Actor.cpp.o
  /home/steve/Downloads/GTechFinal/Actor.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
+ /home/steve/Downloads/GTechFinal/Hitbox.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
  /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/physics.h
@@ -570,10 +571,14 @@ CMakeFiles/gametechp2.dir/DebugDraw.cpp.o
  /usr/local/include/bullet/btBulletCollisionCommon.h
  /usr/local/include/bullet/btBulletDynamicsCommon.h
 CMakeFiles/gametechp2.dir/Disc.cpp.o
+ /home/steve/Downloads/GTechFinal/Actor.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/Disc.cpp
  /home/steve/Downloads/GTechFinal/Disc.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
+ /home/steve/Downloads/GTechFinal/Hitbox.h
+ /home/steve/Downloads/GTechFinal/InputContainer.h
+ /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/physics.h
  /usr/local/include/OGRE/Ogre.h
  /usr/local/include/OGRE/OgreAlignedAllocator.h
@@ -1043,6 +1048,7 @@ CMakeFiles/gametechp2.dir/Game.cpp.o
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
  /home/steve/Downloads/GTechFinal/Game.cpp
  /home/steve/Downloads/GTechFinal/Ground.h
+ /home/steve/Downloads/GTechFinal/Hitbox.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
  /home/steve/Downloads/GTechFinal/Ninja.h
  /home/steve/Downloads/GTechFinal/Spark.h
@@ -1366,6 +1372,7 @@ CMakeFiles/gametechp2.dir/Ninja.cpp.o
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/Disc.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
+ /home/steve/Downloads/GTechFinal/Hitbox.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
  /home/steve/Downloads/GTechFinal/Ninja.cpp
  /home/steve/Downloads/GTechFinal/Ninja.h
@@ -1688,6 +1695,7 @@ CMakeFiles/gametechp2.dir/gui.cc.o
  /home/steve/Downloads/GTechFinal/Actor.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
+ /home/steve/Downloads/GTechFinal/Hitbox.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
  /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/audio.h
@@ -2260,6 +2268,7 @@ CMakeFiles/gametechp2.dir/state.cpp.o
  /home/steve/Downloads/GTechFinal/Actor.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
+ /home/steve/Downloads/GTechFinal/Hitbox.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
  /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/audio.h
