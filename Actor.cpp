@@ -200,6 +200,11 @@ void Actor::doCollision(const FrameEvent& evt) {
 
 				//AM I BLOCKING???
 				if (this->isBlocking()) {
+					auto hitPoint = context.body->getWorldTransform().getOrigin();
+					new Spark("Examples/Flare3", this->sceneMgr,
+							this->sceneMgr->getRootSceneNode()->createChildSceneNode(),
+							this->name + to_string(this->inputBuffer->back().frame), this->physics,
+							Vector3(hitPoint.getX() / 3.0, hitPoint.getY() / 3.0, 100));
 					this->recieveBlock(hbd);
 				} else if (this->actorState != StateType::FALLING) {
 					auto hitPoint = context.body->getWorldTransform().getOrigin();
@@ -207,7 +212,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 					 printf("SPARK POINT x: %f, y: %f, z %f\n", hitPoint.getX(), hitPoint.getY(),
 					 hitPoint.getZ());
 					 */
-					new Spark(this->sceneMgr,
+					new Spark("Spark", this->sceneMgr,
 							this->sceneMgr->getRootSceneNode()->createChildSceneNode(),
 							this->name + to_string(this->inputBuffer->back().frame), this->physics,
 							Vector3(hitPoint.getX() / 3.0, hitPoint.getY() / 3.0, 100)); //THE COORDINATES ARE AFFECTED BY THE SCALE OF THE NODE
@@ -232,6 +237,7 @@ void Actor::recieveBlock(HitboxData * hbd) {
 
 void Actor::recieveHit(HitboxData * hbd) {
 
+	int counterFrames = 0;
 //this->beforeStopState = StateType::HITSTUN;
 	if (this->actorState == StateType::ATTACK) {
 		//reset hurtbox, hitbox, and collision
@@ -243,6 +249,8 @@ void Actor::recieveHit(HitboxData * hbd) {
 		 this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 		 */
 		this->clearAttack();
+		//counter status
+		counterFrames = 5;
 	}
 	if (this->actorState == StateType::JUMPING) {
 		this->cancelJump();
@@ -252,7 +260,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 		return;
 	}
 	this->actorState = StateType::HITSTUN;
-	this->hitstunFrames = hbd->hitstun;
+	this->hitstunFrames = hbd->hitstun + counterFrames;
 	this->enterStopState(hbd->hitstop);
 	this->opponent->enterStopState(hbd->hitstop);
 	this->comboCounter += 1;

@@ -168,6 +168,12 @@ public:
 	void setP2Orientation();
 	bool onP1Side();
 	bool onP2Side();
+	bool isP1() {
+		return !this->isPlayer2;
+	}
+	bool isP2() {
+		return this->isPlayer2;
+	}
 	void setOpponent(Actor * opp) {
 		opponent = opp;
 	}

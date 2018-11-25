@@ -7,10 +7,10 @@ using namespace Ogre;
 using namespace std;
 class Spark: public GameObject {
 private:
-	Entity * createBillboardSet(SceneManager * sMgr, SceneNode * rNode, String name,
+	Entity * createBillboardSet(String effectMaterialName, SceneManager * sMgr, SceneNode * rNode, String name,
 			const Vector3& origin) {
 		bbSet = sMgr->createBillboardSet(name);
-		bbSet->setMaterialName("Spark");
+		bbSet->setMaterialName(effectMaterialName);
 		Billboard* myBill = bbSet->createBillboard(origin);
 		return (Entity *) bbSet;
 	}
@@ -19,9 +19,9 @@ protected:
 	Real timeOnScreen;
 	BillboardSet * bbSet;
 public:
-	Spark(SceneManager * mgr, SceneNode * rNode, String name, Physics * phys, const Vector3& origin,
+	Spark(String effectMaterialName, SceneManager * mgr, SceneNode * rNode, String name, Physics * phys, const Vector3& origin,
 			Real time = 0.2) :
-			GameObject(mgr, rNode, name, this->createBillboardSet(mgr, rNode, name, origin), phys,
+			GameObject(mgr, rNode, name, this->createBillboardSet(effectMaterialName, mgr, rNode, name, origin), phys,
 					new btBoxShape(btVector3(0, 0, 0)), 0.0, true, origin,
 					btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), 0.0, 0.0), timeOnScreen(time), bbSet(
 					bbSet) {

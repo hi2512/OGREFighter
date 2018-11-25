@@ -556,13 +556,21 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		player1->setP2Orientation();
 		player2->setP1Orientation();
 	}
+
 	/*
-	 auto centerPos = (player1->getRootNode()->getPosition().x
+	 auto centerPosX = (player1->getRootNode()->getPosition().x
 	 + player2->getRootNode()->getPosition().x) / 2;
 	 auto curCamPos = camNode->getPosition();
-	 camNode->setPosition(centerPos, curCamPos.y, curCamPos.z);
+	 //camNode->setPosition(centerPosX, curCamPos.y, curCamPos.z);
+	 Real xDir = centerPosX - curCamPos.x;
+	 camNode->translate(Vector3(xDir * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
 	 */
-	camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
+			/ 2;
+	Vector3 transDir = centerPos - camNode->getPosition();
+	camNode->translate(Vector3(transDir.x * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
+
+	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;
 	rightMouseRelease = false;

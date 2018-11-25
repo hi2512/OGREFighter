@@ -79,6 +79,8 @@ protected:
 	btScalar friction;
 	bool kinematic;
 
+	CollisionType myCollisionType = CollisionType::COLLISIONBOX;
+
 	//bool needsUpdates;
 
 	//CollisionContext* context;
@@ -112,6 +114,12 @@ public:
 	}
 	String getName() {
 		return name;
+	}
+	void setCollisionType(CollisionType ct) {
+		this->myCollisionType = ct;
+	}
+	CollisionType getCollisionType() {
+		return this->myCollisionType;
 	}
 	virtual void animate(const FrameEvent &evt);
 	const CollisionContext& getCollisionContext();
@@ -229,8 +237,16 @@ public:
 		 return false;
 		 }
 		 */
-		if (body0->getUserIndex2() == 128
-				|| body1->getUserIndex2() == 128) {
+		/*
+		 if (body0->getUserIndex2() == 128
+		 || body1->getUserIndex2() == 128) {
+		 return false;
+		 }
+		 */
+		if ((((GameObject *) body0->getUserPointer())->getCollisionType()
+				!= CollisionType::COLLISIONBOX)
+				|| (((GameObject *) body1->getUserPointer())->getCollisionType()
+						!= CollisionType::COLLISIONBOX)) {
 			return false;
 		}
 		return btCollisionDispatcher::needsCollision(body0, body1);

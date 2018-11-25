@@ -25,11 +25,13 @@ public:
 					btQuaternion(1.0, 0.0, 0.0, 0.0), linearVelocity, btVector3(0, 0, 0), 1.0, 0.0) {
 		this->owner = owner;
 		myHbd.hitbox = this->getRigidBody();
-		body->setUserIndex2(128);
-		printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
+		CollisionType myType = owner->isP1() ? CollisionType::HITBOX_P1 : CollisionType::HITBOX_P2;
+		this->setCollisionType(myType);
+		//body->setUserIndex2(128);
+		//printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
 		this->physics->dynamicsWorld->removeRigidBody(body);
 		physics->dynamicsWorld->addRigidBody((btRigidBody *) myHbd.hitbox);
-		printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
+		//printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
 		this->myHbd = hbd;
 		offsetNode = rootNode->createChildSceneNode("Offset" + name);
 

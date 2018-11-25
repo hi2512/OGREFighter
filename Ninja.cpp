@@ -204,7 +204,7 @@ void Ninja::createSpecial1Box() {
 	SceneNode * dn = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
 	Entity * di = sceneMgr->createEntity("disc.mesh");
 	dn->setScale(Vector3(50, 50, 50));
-	auto diSize = di->getBoundingBox().getSize() * 35.0;
+	auto diSize = di->getBoundingBox().getSize() * 25.0;
 	//btCollisionObject * hbox = new btPairCachingGhostObject();
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//hbox->setCollisionShape(diShape);
@@ -578,7 +578,7 @@ void Ninja::special1Animation() {
 		//projectile activates and animates itself
 		this->createSpecial1Box();
 	}
-	if (frameTime >= -30 && frameTime <= 40) {
+	if (frameTime >= -40 && frameTime <= 40) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 2.5));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
