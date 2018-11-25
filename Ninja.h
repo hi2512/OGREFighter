@@ -16,7 +16,6 @@ class Ninja: public Actor {
 
 private:
 	SceneNode * ninOffsetNode;
-	//btCollisionObject * kickCollision;
 
 protected:
 	void createLightBox();

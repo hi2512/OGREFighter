@@ -212,9 +212,10 @@ void Ninja::createSpecial1Box() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -150.0 : 150.0;
-	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di, physics,
-			diShape, curPos + Vector3(frontPos, -50.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
-			btVector3(frontPos / 3, 0, 0), btVector3(0, 0, 0), hbd, this);
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
+			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
+			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 3, 0, 0), btVector3(0, 0, 0),
+			hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
 	//this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SPECIAL1, hitObj));
@@ -662,6 +663,19 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		this->hitstunFrames -= 1;
 		break;
 	case StateType::STOP:
+		//check for cancel
+		if ( (!this->isAboveGround()) && (this->currentAttack != AttackType::NONE) && (this->specialMoveWindow >= 0)) {
+			for (KeyInput ki : *this->keysHeld) {
+				//skip if key is not binded for this ninja
+				if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+					continue;
+				}
+				if(this->keyBinding.at(ki.key) == InputType::L) {
+					this->clearAttack();
+					this->currentAttack = AttackType::SPECIAL1;
+				}
+			}
+		}
 		//printf("Stop frame count: %d\n", this->stopFrameCount);
 		if (this->stopFrameCount == 0) {
 			this->exitStopState();
