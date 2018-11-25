@@ -71,7 +71,7 @@ public:
 		this->lAttackFrames = 30;
 		this->mAttackFrames = 40;
 		this->hAttackFrames = 90;
-		this->s1AttackFrames = 85;
+		this->s1AttackFrames = 80;
 		this->jhAttackFrames = 60;
 
 		this->createLightBox();

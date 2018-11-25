@@ -211,7 +211,7 @@ void Ninja::createSpecial1Box() {
 	HitboxData hbd { NULL, 35.0, 25.0, 50, 30, 10, 8, true };
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	Real frontPos = this->onPlayer2Side ? -150.0 : 150.0;
+	Real frontPos = this->onPlayer2Side ? -160.0 : 160.0;
 	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
 			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
 			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 3, 0, 0), btVector3(0, 0, 0),
@@ -579,7 +579,7 @@ void Ninja::special1Animation() {
 		//projectile activates and animates itself
 		this->createSpecial1Box();
 	}
-	if (frameTime >= -40 && frameTime <= 40) {
+	if (frameTime >= -35 && frameTime <= 40) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 2.5));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
@@ -602,7 +602,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//this->actorState = StateType::STOP;
 		//this->stopFrameCount = 40;
 		//this->createSpecialBox();
-		this->specialMoveWindow = 5;
+		this->specialMoveWindow = 6;
 	}
 
 	switch (this->actorState) {
@@ -672,6 +672,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				}
 				if(this->keyBinding.at(ki.key) == InputType::L) {
 					this->clearAttack();
+					this->beforeStopState = StateType::ATTACK;
 					this->currentAttack = AttackType::SPECIAL1;
 				}
 			}
