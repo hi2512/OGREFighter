@@ -39,6 +39,7 @@ void Disc::animate(const FrameEvent& evt) {
 	AnimationState * as = sceneMgr->getAnimationState("Spin" + name);
 	as->setEnabled(true);
 	as->addTime(0.05);
+	this->getRigidBody()->setGravity(btVector3(0, 0, 0));
 	GameObject::animate(evt);
 	if (!this->myHbd.active || (this->activeTime < 0) ) {
 		printf("projectile deleted\n");

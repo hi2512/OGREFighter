@@ -80,6 +80,10 @@ public:
 		//this->createSpecialBox();
 		this->createJumpAttackBox();
 
+		this->createJumpUpArc();
+		this->createJumpLeftArc();
+		this->createJumpRightArc();
+
 	}
 
 	void animate(const Ogre::FrameEvent& evt);

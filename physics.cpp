@@ -48,7 +48,7 @@ void Physics::initObjects() {
 	dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(
 			new btGhostPairCallback());
 
-	dynamicsWorld->setGravity(btVector3(0, 0, 0));
+	//dynamicsWorld->setGravity(btVector3(0, -2, 0));
 
 }
 
