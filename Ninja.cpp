@@ -134,7 +134,7 @@ void Ninja::createLightBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 22.0, 12.0, 35, 30, 4, 3, false };
+	HitboxData hbd { hbox, 22.0, 12.0, 40.0, 10.0, 35, 30, 4, 3, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
@@ -160,7 +160,7 @@ void Ninja::createMediumBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 50.0, 30.0, 44, 25, 6, 4, false };
+	HitboxData hbd { hbox, 50.0, 30.0, 60.0, 20.0, 44, 25, 6, 4, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
@@ -186,7 +186,7 @@ void Ninja::createHeavyBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 35.0, 5.0, 50, 5, 8, 6, false };
+	HitboxData hbd { hbox, 35.0, 5.0, 120.0, 40.0, 50, 5, 8, 6, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	 //auto re = &this->hitboxes.at(AttackType::HEAVY);
@@ -208,7 +208,7 @@ void Ninja::createSpecial1Box() {
 	//btCollisionObject * hbox = new btPairCachingGhostObject();
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//hbox->setCollisionShape(diShape);
-	HitboxData hbd { NULL, 35.0, 25.0, 50, 30, 10, 8, true };
+	HitboxData hbd { NULL, 35.0, 25.0, 100.0, 30.0, 50, 30, 10, 8, true };
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -160.0 : 160.0;
@@ -254,7 +254,7 @@ void Ninja::createJumpAttackBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 10.0, 5.0, 52, 30, 8, 6, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 90.0, 30.0, 52, 30, 8, 6, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::AIRHEAVY, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::AIRHEAVY));
@@ -606,6 +606,14 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	}
 
 	switch (this->actorState) {
+	case StateType::DEAD: {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(0, 0, 0));
+		this->setAnimation("Death2");
+		AnimationState * asd = this->geom->getAnimationState(this->playingAnimation);
+		asd->setLoop(false);
+		asd->addTime(evt.timeSinceLastFrame * 0.5);
+	}
+		break;
 	case StateType::FALLING:
 		this->doFall();
 		//printf("FALL POS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
@@ -664,13 +672,14 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		break;
 	case StateType::STOP:
 		//check for cancel
-		if ( (!this->isAboveGround()) && (this->currentAttack != AttackType::NONE) && (this->specialMoveWindow >= 0)) {
+		if ((!this->isAboveGround()) && (this->currentAttack != AttackType::NONE)
+				&& (this->specialMoveWindow >= 0)) {
 			for (KeyInput ki : *this->keysHeld) {
 				//skip if key is not binded for this ninja
 				if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
 					continue;
 				}
-				if(this->keyBinding.at(ki.key) == InputType::L) {
+				if (this->keyBinding.at(ki.key) == InputType::L) {
 					this->clearAttack();
 					this->beforeStopState = StateType::ATTACK;
 					this->currentAttack = AttackType::SPECIAL1;

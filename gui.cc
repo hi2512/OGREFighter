@@ -2,6 +2,22 @@
 #include <ImguiManager.h>
 
 using namespace std;
+void GameGui::showHealth1() {
+	ImGui::Begin("Player 1 Health", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(100, 500));
+	ImGui::Text("HEALTH                   ");
+	ImGui::ProgressBar(state->p1->getHealth() / state->p1->getMaxHealth());
+	ImGui::End();
+}
+
+void GameGui::showHealth2() {
+	ImGui::Begin("Player 2 Health", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(1200, 500));
+	ImGui::Text("HEALTH                   ");
+	ImGui::ProgressBar(state->p2->getHealth() / state->p2->getMaxHealth());
+	ImGui::End();
+}
+
 void GameGui::showComboCounter1() {
 
 	ImGui::Begin("Player 1", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);

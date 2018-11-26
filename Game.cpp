@@ -68,6 +68,7 @@ private:
 	SceneManager * mgr;
 	GameState* gameState;
 	GameGui* gameGui;
+	GameGui* healthDisplay;
 	Vector3 camDir = Ogre::Vector3(0, 0, 0);
 
 	Vector3 moveDir = Vector3(0, 0, 0);
@@ -412,7 +413,7 @@ void Game::setup(void) {
 	 Disc * dObj = new Disc(scnMgr, dn, "Disc", di, phys, diShape, Vector3(0, 100, 0),
 	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(0, 0, 0), btVector3(0, 0, 0));
 	 */
-
+	/*
 	auto temp1 = p1->getRigidBody();
 	phys->dynamicsWorld->removeRigidBody(temp1);
 	phys->dynamicsWorld->addRigidBody(temp1, 128, 3);
@@ -422,6 +423,7 @@ void Game::setup(void) {
 	auto temp2 = p2->getRigidBody();
 	phys->dynamicsWorld->removeRigidBody(temp2);
 	phys->dynamicsWorld->addRigidBody(temp2, 128, 3);
+	*/
 
 	Entity* blEnt = scnMgr->createEntity("sphere.mesh");
 	SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
@@ -485,6 +487,8 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	if (player2->comboCount()) {
 		gameGui->showComboCounter2();
 	}
+	gameGui->showHealth1();
+	gameGui->showHealth2();
 	/*
 	 if (gameState->shouldExit) {
 	 getRoot()->queueEndRendering();
@@ -567,8 +571,10 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
 			/ 2;
+	//offset of initial height - average playerheights
+	centerPos.y += 300;
 	Vector3 transDir = centerPos - camNode->getPosition();
-	camNode->translate(Vector3(transDir.x * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
+	camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.5, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
 
 	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 

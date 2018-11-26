@@ -38,6 +38,8 @@ public:
 	void showInputBuffer();
 	void showComboCounter1();
 	void showComboCounter2();
+	void showHealth1();
+	void showHealth2();
 };
 
 

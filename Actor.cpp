@@ -1,5 +1,14 @@
 #include "Actor.h"
 #include <cassert>
+Real Actor::hitScaling() {
+	Real scale = 1.0;
+	scale -= (this->comboCounter + 1) * 0.15;
+	if(health / maxHealth <= .25) {
+		scale *= 0.8;
+	}
+	return scale;
+}
+
 bool Actor::keyIsInputType(KeyInput ki, InputType ipt) {
 	if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
 		//not mapped
@@ -232,6 +241,7 @@ void Actor::recieveBlock(HitboxData * hbd) {
 	this->opponent->enterStopState(hbd->blockstop);
 
 	this->pushBack(hbd->blockPushback);
+	this->health -= hbd->blockDmg;
 
 }
 
@@ -267,7 +277,11 @@ void Actor::recieveHit(HitboxData * hbd) {
 	this->newHit = true;
 
 	this->pushBack(hbd->hitPushback);
+	this->health -= hbd->hitDmg * hitScaling();
 
+	if(this->health <= 0) {
+		this->beforeStopState = StateType::DEAD;
+	}
 }
 
 void Actor::enterStopState(int stopFrames) {

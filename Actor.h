@@ -19,7 +19,7 @@ enum AttackType {
 };
 
 enum StateType {
-	STOP, FREE, ATTACK, JUMPING, AIRRECOVERY, FALLING, KNOCKDOWN, HITSTUN, BLOCKSTUN
+	STOP, FREE, ATTACK, JUMPING, AIRRECOVERY, FALLING, KNOCKDOWN, HITSTUN, BLOCKSTUN, DEAD
 
 };
 
@@ -29,8 +29,12 @@ enum InputType {
 };
 
 class Actor: public GameObject {
+private:
+	Real hitScaling();
 
 protected:
+	const Real maxHealth = 1000.0;
+	Real health = maxHealth;
 	//SceneNode * jumpNode;
 	//SceneNode * jumpP2Node;
 	Real groundHeight = 0;
@@ -186,6 +190,12 @@ public:
 	}
 	void removeActiveProjectile() {
 		this->activeProjectile = NULL;
+	}
+	Real getMaxHealth() {
+		return this->maxHealth;
+	}
+	Real getHealth() {
+		return this->health;
 	}
 
 };

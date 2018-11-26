@@ -26,6 +26,8 @@ struct HitboxData {
 	btCollisionObject * hitbox;
 	Real hitPushback;
 	Real blockPushback;
+	Real hitDmg;
+	Real blockDmg;
 	int hitstun;
 	int blockstun;
 	int hitstop;

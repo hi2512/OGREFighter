@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/home/steve/Downloads/GTechFinal/Actor.cpp
+Actor.h
+/home/steve/Downloads/GTechFinal/Actor.h
+cassert
+-
+
 /home/steve/Downloads/GTechFinal/Actor.h
 Ogre.h
 -
