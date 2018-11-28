@@ -134,7 +134,7 @@ void Ninja::createLightBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 22.0, 12.0, 40.0, 10.0, 35, 30, 4, 3, false };
+	HitboxData hbd { hbox, 22.0, 12.0, 40.0, 10.0, 40, 35, 4, 3, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
@@ -512,7 +512,7 @@ void Ninja::lightAnimation() {
 	this->setAnimation("Attack1");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setLoop(false);
-	as->addTime(0.02);
+	as->addTime(0.024);
 
 	btTransform trans;
 	btCollisionObject * hbox = this->hitboxes.at(currentAttack)->myHbd.hitbox;

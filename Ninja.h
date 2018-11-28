@@ -73,7 +73,7 @@ public:
 			as->setLoop(true);
 		}
 		this->groundHeight = 200;
-		this->lAttackFrames = 30;
+		this->lAttackFrames = 25;
 		this->mAttackFrames = 40;
 		this->hAttackFrames = 90;
 		this->s1LAttackFrames = 90;
