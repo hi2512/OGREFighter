@@ -36,10 +36,10 @@ void Physics::initObjects() {
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	//dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	dispatcher = new myCollisionDispatcher(collisionConfiguration);
-	overlappingPairCache = new btDbvtBroadphase();
-	//btVector3 worldMin(-3000, -3000, -3000);
-	//btVector3 worldMax(3000, 3000, 3000);
-	//overlappingPairCache = new btAxisSweep3(worldMin, worldMax);
+	//overlappingPairCache = new btDbvtBroadphase();
+	btVector3 worldMin(-3000, -3000, -3000);
+	btVector3 worldMax(3000, 3000, 3000);
+	overlappingPairCache = new btAxisSweep3(worldMin, worldMax);
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver,
 			collisionConfiguration);

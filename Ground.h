@@ -16,6 +16,8 @@ public:
 			GameObject(sceneMgr, rootNode, name, e, phys, shape, 0., false,
 					origin, btQuaternion(1.0, 0.0, 0.0, 0.0), 1.15, 0.0) {
 		this->setCollisionType(CollisionType::GROUND);
+		//does this help performance?
+		//this->physics->dynamicsWorld->removeRigidBody(body);
 	}
 
 	void animate(const FrameEvent &evt){} //nothing?

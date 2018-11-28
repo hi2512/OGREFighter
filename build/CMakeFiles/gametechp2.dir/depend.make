@@ -1051,6 +1051,7 @@ CMakeFiles/gametechp2.dir/Game.cpp.o: ../Hitbox.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../InputContainer.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../Ninja.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../Spark.h
+CMakeFiles/gametechp2.dir/Game.cpp.o: ../Wall.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../audio.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../ball.h
 CMakeFiles/gametechp2.dir/Game.cpp.o: ../gui.h

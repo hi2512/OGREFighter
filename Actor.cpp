@@ -195,9 +195,19 @@ void Actor::doCollision(const FrameEvent& evt) {
 		 this->opponent->pushBack(12.0);
 		 }
 		 */
-		if ( ((GameObject *) context.body->getUserPointer())->getCollisionType() == CollisionType::COLLISIONBOX) {
+		CollisionType curCol = ((GameObject *) context.body->getUserPointer())->getCollisionType();
+		if(curCol == CollisionType::WALL) {
+			if(this->actorState == StateType::JUMPING) {
+				this->cancelJump();
+				this->health -= 40;
+			}
+			this->pushBack(-22.0);
+			this->health -= 4.0;
+		}
+		if ( curCol  == CollisionType::COLLISIONBOX) {
 			//printf("collided with %s\n", ((GameObject *) context.body->getUserPointer())->getName().c_str());
 			this->opponent->pushBack(12.0);
+			this->pushBack(3.0);
 		}
 		if (context.body->getUserIndex() == this->oppHurtType()) {
 			this->moveLock = true;

@@ -30,6 +30,7 @@
 #include "InputContainer.h"
 #include "Disc.h"
 #include "Spark.h"
+#include "Wall.h"
 
 #include "ball.h"
 
@@ -371,16 +372,50 @@ void Game::setup(void) {
 
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
 	Ogre::MeshPtr planePtr = Ogre::MeshManager::getSingleton().createPlane("ground",
-			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 3000, 2500, 20, 20,
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 3000, 4000, 20, 20,
 			true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
 
 	Ogre::Entity *entGround = scnMgr->createEntity("GroundEntity", "ground");
 	Ogre::SceneNode *groundNode = scnMgr->getRootSceneNode()->createChildSceneNode("GroundNode");
 	btCollisionShape *groundShape = new btBoxShape(
-			btVector3(btScalar(1500.), btScalar(0), btScalar(1250.)));
+			btVector3(btScalar(1500.), btScalar(0), btScalar(1000.)));
 
 	Ground * g = new Ground(scnMgr, groundNode, "GroundObject", entGround, phys, groundShape,
 			Vector3(0, 0, 0));
+
+	Ogre::Plane wallLeftPlane(Ogre::Vector3::UNIT_X, 0);
+	Ogre::MeshPtr wallLeftPlanePtr = Ogre::MeshManager::getSingleton().createPlane("WallLeft",
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, wallLeftPlane, 3000, 4000, 20,
+			20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+	Ogre::Entity *wallLeft = scnMgr->createEntity("wallLeftEntity", "WallLeft");
+	Ogre::SceneNode *wallLeftNode = scnMgr->getRootSceneNode()->createChildSceneNode(
+			"WallLeftNode");
+	btCollisionShape *wallLeftShape = new btBoxShape(
+			btVector3(btScalar(1000.), btScalar(1500.), btScalar(50)));
+	Wall * wallL = new Wall(scnMgr, wallLeftNode, "WallLeftObject", wallLeft, phys, wallLeftShape,
+			Vector3(-1500, 1500, 0));
+
+	Ogre::Plane wallRightPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0);
+	Ogre::MeshPtr wallRightPlanePtr = Ogre::MeshManager::getSingleton().createPlane("WallRight",
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, wallRightPlane, 3000, 4000, 20,
+			20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+	Ogre::Entity *wallRight = scnMgr->createEntity("wallRightEntity", "WallRight");
+	Ogre::SceneNode *wallRightNode = scnMgr->getRootSceneNode()->createChildSceneNode(
+			"WallRightNode");
+	btCollisionShape *wallRightShape = new btBoxShape(
+			btVector3(btScalar(1000.), btScalar(1500.), btScalar(50)));
+	Wall * wallR = new Wall(scnMgr, wallRightNode, "WallRightObject", wallRight, phys,
+			wallRightShape, Vector3(1500, 1500, 0));
+
+	//this wall is just for show
+	Ogre::Plane backWall(Ogre::Vector3::UNIT_Z, 0);
+	Ogre::MeshManager::getSingleton().createPlane("back",
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, backWall, 3000, 4000, 20, 20,
+			true, 1, 5, 5, Ogre::Vector3::UNIT_X);
+	Ogre::Entity* backEntity = scnMgr->createEntity("back");
+	Ogre::SceneNode * bWallNode = scnMgr->getRootSceneNode()->createChildSceneNode();
+	bWallNode->attachObject(backEntity);
+	bWallNode->setPosition(Vector3(0, 1000, -2000));
 
 	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
 	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode("P1Node");
@@ -414,27 +449,27 @@ void Game::setup(void) {
 	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(0, 0, 0), btVector3(0, 0, 0));
 	 */
 	/*
-	auto temp1 = p1->getRigidBody();
-	phys->dynamicsWorld->removeRigidBody(temp1);
-	phys->dynamicsWorld->addRigidBody(temp1, 128, 3);
-	//p1->getRigidBody()->setFlags(128);
-	//printf("col flags %d\n", p1->getRigidBody()->getFlags());
+	 auto temp1 = p1->getRigidBody();
+	 phys->dynamicsWorld->removeRigidBody(temp1);
+	 phys->dynamicsWorld->addRigidBody(temp1, 128, 3);
+	 //p1->getRigidBody()->setFlags(128);
+	 //printf("col flags %d\n", p1->getRigidBody()->getFlags());
 
-	auto temp2 = p2->getRigidBody();
-	phys->dynamicsWorld->removeRigidBody(temp2);
-	phys->dynamicsWorld->addRigidBody(temp2, 128, 3);
-	*/
-
+	 auto temp2 = p2->getRigidBody();
+	 phys->dynamicsWorld->removeRigidBody(temp2);
+	 phys->dynamicsWorld->addRigidBody(temp2, 128, 3);
+	 */
+	/*
 	Entity* blEnt = scnMgr->createEntity("sphere.mesh");
 	SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
 	bl2->setScale(0.2, 0.2, 0.2);
 	auto camPos2 = camNode->getPosition();
 	auto blPos = Vector3(camPos2.x + (rand() % 500 - 250), camPos2.y + (rand() % 500 - 350),
 			camPos2.z + (rand() % 500 - 2000));
-	Ball * bl = new Ball(scnMgr, bl2, "BallObject", blEnt, phys, blPos, /*btQuaternion(1.0f, -1.0f, 1.0f, 0.0f)*/
+	Ball * bl = new Ball(scnMgr, bl2, "BallObject", blEnt, phys, blPos,
 	btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
 			btVector3(0, 0, 0));
-
+	*/
 	//SceneNode * spNode = mgr->getRootSceneNode()->createChildSceneNode();
 	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
 
@@ -569,12 +604,14 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 Real xDir = centerPosX - curCamPos.x;
 	 camNode->translate(Vector3(xDir * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
 	 */
-	auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
-			/ 2;
-	//offset of initial height - average playerheights
-	centerPos.y += 300;
-	Vector3 transDir = centerPos - camNode->getPosition();
-	camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.5, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
+
+	 auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
+	 / 2;
+	 //offset of initial height - average playerheights
+	 centerPos.y += 300;
+	 Vector3 transDir = centerPos - camNode->getPosition();
+	 camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.8, 0) * evt.timeSinceLastFrame,
+	 Node::TS_LOCAL);
 
 	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
