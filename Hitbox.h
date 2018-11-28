@@ -22,6 +22,8 @@ public:
 		this->physics = phys;
 		this->myHbd = hbd;
 
+		this->setCollisionType(hitboxOwner);
+
 		btTransform trans;
 		trans.setIdentity();
 		trans.setOrigin(origin);

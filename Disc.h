@@ -29,8 +29,8 @@ public:
 		this->setCollisionType(myType);
 		//body->setUserIndex2(128);
 		//printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
-		this->physics->dynamicsWorld->removeRigidBody(body);
-		physics->dynamicsWorld->addRigidBody((btRigidBody *) myHbd.hitbox);
+		//this->physics->dynamicsWorld->removeRigidBody(body);
+		//physics->dynamicsWorld->addRigidBody((btRigidBody *) myHbd.hitbox);
 		//printf("collision FLAGS %d\n", this->getRigidBody()->getCollisionFlags());
 		this->myHbd = hbd;
 		offsetNode = rootNode->createChildSceneNode("Offset" + name);

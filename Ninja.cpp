@@ -837,6 +837,8 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		 printf("FALL POS x: %f, y: %f, z: %f\n", trans.getOrigin().getX(), trans.getOrigin().getY(),
 		 trans.getOrigin().getZ());
 		 */
+		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+		as->addTime(0.003);
 		GameObject::animate(evt);
 		//AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 		//as->addTime(0.005);

@@ -3,7 +3,7 @@
 Real Actor::hitScaling() {
 	Real scale = 1.0;
 	scale -= (this->comboCounter + 1) * 0.15;
-	if(health / maxHealth <= .25) {
+	if (health / maxHealth <= .25) {
 		scale *= 0.8;
 	}
 	return scale;
@@ -190,7 +190,13 @@ void Actor::doCollision(const FrameEvent& evt) {
 	this->physics->getWorld()->contactTest(body, *thing);
 	if (context.hit) {
 		//printf("START COLLISION\n");
-		if (context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
+		/*
+		 if (context.body->getCollisionFlags() == btCollisionObject::CF_KINEMATIC_OBJECT) {
+		 this->opponent->pushBack(12.0);
+		 }
+		 */
+		if ( ((GameObject *) context.body->getUserPointer())->getCollisionType() == CollisionType::COLLISIONBOX) {
+			//printf("collided with %s\n", ((GameObject *) context.body->getUserPointer())->getName().c_str());
 			this->opponent->pushBack(12.0);
 		}
 		if (context.body->getUserIndex() == this->oppHurtType()) {
@@ -267,6 +273,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 		this->setAnimation("Death1");
 		this->enterStopState(hbd->hitstop);
 		this->opponent->enterStopState(hbd->hitstop);
+		this->health -= hbd->hitDmg * hitScaling() * 1.25;
 		return;
 	}
 	this->actorState = StateType::HITSTUN;
@@ -279,7 +286,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 	this->pushBack(hbd->hitPushback);
 	this->health -= hbd->hitDmg * hitScaling();
 
-	if(this->health <= 0) {
+	if (this->health <= 0) {
 		this->beforeStopState = StateType::DEAD;
 	}
 }
