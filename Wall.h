@@ -30,28 +30,7 @@ public:
 		//this->rootNode->setOrientation(ori);
 	}
 
-	void animate(const FrameEvent &evt) {
-		/*
-		 auto curPos = this->rootNode->getPosition();
-		 printf("before wall node pos: x:%f y:%f z:%f\n", curPos.x, curPos.y, curPos.z);
-		 curPos = this->rootNode->getPosition();
-		 printf("after wall node pos: x:%f y:%f z:%f\n", curPos.x, curPos.y, curPos.z);
-		 */
-		/*
-		 btTransform trans;
-		 this->body->getMotionState()->getWorldTransform(trans);
-
-		 btQuaternion orientation = trans.getRotation();
-		 printf("cur orientation, w:%f, x:%f y:%f z:%f\n", orientation.getW(), orientation.getX(),
-		 orientation.getY(), orientation.getZ());
-		 rootNode->setPosition(
-		 Ogre::Vector3(trans.getOrigin().getX(), trans.getOrigin().getY(),
-		 trans.getOrigin().getZ()));
-		 rootNode->setOrientation(
-		 Ogre::Quaternion(orientation.getW(), orientation.getX(), orientation.getY(),
-		 orientation.getZ()));
-		 */
-	}
+	void animate(const FrameEvent &evt) {}
 };
 
 #endif /* WALL_H_ */

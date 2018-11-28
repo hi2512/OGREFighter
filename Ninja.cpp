@@ -186,7 +186,7 @@ void Ninja::createHeavyBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 35.0, 5.0, 120.0, 40.0, 50, 5, 8, 6, false };
+	HitboxData hbd { hbox, 35.0, 5.0, 120.0, 40.0, 45, 5, 8, 6, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	 //auto re = &this->hitboxes.at(AttackType::HEAVY);
@@ -200,7 +200,27 @@ void Ninja::createHeavyBox() {
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::HEAVY, hitObj));
 }
 
-void Ninja::createSpecial1Box() {
+void Ninja::createSpecial1LBox() {
+	SceneNode * dn = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
+	Entity * di = sceneMgr->createEntity("disc.mesh");
+	dn->setScale(Vector3(50, 50, 50));
+	auto diSize = di->getBoundingBox().getSize() * 25.0;
+	//btCollisionObject * hbox = new btPairCachingGhostObject();
+	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
+	//hbox->setCollisionShape(diShape);
+	HitboxData hbd { NULL, 55.0, 45.0, 90.0, 28.0, 50, 30, 10, 8, true };
+
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
+			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
+			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 5.8, 0, 0),
+			btVector3(0, 0, 0), hbd, this);
+	dObj->getRigidBody()->setUserIndex(this->myHitType());
+	this->activeProjectile = dObj;
+}
+
+void Ninja::createSpecial1MBox() {
 	SceneNode * dn = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
 	Entity * di = sceneMgr->createEntity("disc.mesh");
 	dn->setScale(Vector3(50, 50, 50));
@@ -211,10 +231,10 @@ void Ninja::createSpecial1Box() {
 	HitboxData hbd { NULL, 55.0, 45.0, 100.0, 30.0, 50, 30, 10, 8, true };
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	Real frontPos = this->onPlayer2Side ? -160.0 : 160.0;
+	Real frontPos = this->onPlayer2Side ? -200.0 : 200.0;
 	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
 			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
-			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 3, 0, 0), btVector3(0, 0, 0),
+			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 4, 0, 0), btVector3(0, 0, 0),
 			hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
@@ -237,6 +257,26 @@ void Ninja::createSpecial1Box() {
 	//dObj->getRigidBody()->setUserPointer(&this->hitboxes.at(AttackType::HEAVY));
 	//hbox->setUserPointer(&this->hitboxes.at(AttackType::SPECIAL1));
 	//hbox->setUserIndex(this->myHitType());
+}
+
+void Ninja::createSpecial1HBox() {
+	SceneNode * dn = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
+	Entity * di = sceneMgr->createEntity("disc.mesh");
+	dn->setScale(Vector3(50, 50, 50));
+	auto diSize = di->getBoundingBox().getSize() * 25.0;
+	//btCollisionObject * hbox = new btPairCachingGhostObject();
+	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
+	//hbox->setCollisionShape(diShape);
+	HitboxData hbd { NULL, 55.0, 45.0, 110.0, 33.0, 50, 30, 10, 8, true };
+
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
+			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
+			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 2, 0, 0), btVector3(0, 0, 0),
+			hbd, this);
+	dObj->getRigidBody()->setUserIndex(this->myHitType());
+	this->activeProjectile = dObj;
 }
 
 void Ninja::createJumpAttackBox() {
@@ -567,7 +607,26 @@ void Ninja::mediumAnimation() {
 	hbox->setWorldTransform(trans);
 }
 
-void Ninja::special1Animation() {
+void Ninja::special1LAnimation() {
+	this->setAnimation("Spin");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.012);
+
+	int frameTime = -this->attackFrameCount + 30;
+	//printf("frametime: %d\n", frameTime);
+	if (frameTime == 0) {
+		//projectile activates and animates itself
+		this->createSpecial1LBox();
+	}
+	if (frameTime >= -35 && frameTime <= 40) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.3, 2.5));
+	} else {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+	}
+}
+
+void Ninja::special1MAnimation() {
 	this->setAnimation("Spin");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setLoop(false);
@@ -577,13 +636,41 @@ void Ninja::special1Animation() {
 	//printf("frametime: %d\n", frameTime);
 	if (frameTime == 0) {
 		//projectile activates and animates itself
-		this->createSpecial1Box();
+		this->createSpecial1MBox();
 	}
 	if (frameTime >= -35 && frameTime <= 40) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 2.5));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
+}
+
+void Ninja::special1HAnimation() {
+	this->setAnimation("Spin");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.012);
+
+	int frameTime = -this->attackFrameCount + 50;
+	//printf("frametime: %d\n", frameTime);
+	if (frameTime == 0) {
+		//projectile activates and animates itself
+		this->createSpecial1HBox();
+	}
+	if (frameTime >= -35 && frameTime <= 40) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.3, 2.5));
+	} else {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+	}
+}
+
+void Ninja::doDeath() {
+	this->body->getCollisionShape()->setLocalScaling(btVector3(0, 0, 0));
+	this->setAnimation("Death2");
+	AnimationState * asd = this->geom->getAnimationState(this->playingAnimation);
+	asd->setLoop(false);
+	asd->addTime(0.01);
+
 }
 
 void Ninja::animate(const Ogre::FrameEvent& evt) {
@@ -602,17 +689,12 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//this->actorState = StateType::STOP;
 		//this->stopFrameCount = 40;
 		//this->createSpecialBox();
-		this->specialMoveWindow = 6;
+		this->specialMoveWindow = 7;
 	}
 
 	switch (this->actorState) {
-	case StateType::DEAD: {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(0, 0, 0));
-		this->setAnimation("Death2");
-		AnimationState * asd = this->geom->getAnimationState(this->playingAnimation);
-		asd->setLoop(false);
-		asd->addTime(evt.timeSinceLastFrame * 0.5);
-	}
+	case StateType::DEAD:
+		this->doDeath();
 		break;
 	case StateType::FALLING:
 		this->doFall();
@@ -671,24 +753,12 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		this->hitstunFrames -= 1;
 		break;
 	case StateType::STOP:
-		//check for cancel
-		if ((!this->isAboveGround()) && (this->currentAttack != AttackType::NONE)
-				&& (this->specialMoveWindow >= 0)) {
-			for (KeyInput ki : *this->keysHeld) {
-				//skip if key is not binded for this ninja
-				if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-					continue;
-				}
-				if (this->keyBinding.at(ki.key) == InputType::L) {
-					this->clearAttack();
-					this->beforeStopState = StateType::ATTACK;
-					this->currentAttack = AttackType::SPECIAL1;
-				}
-			}
-		}
 		//printf("Stop frame count: %d\n", this->stopFrameCount);
 		if (this->stopFrameCount == 0) {
 			this->exitStopState();
+		} else {
+			//check for cancel
+			this->checkForSpecialCancel();
 		}
 		this->stopFrameCount -= 1;
 		break;
@@ -713,9 +783,15 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->attackFrameCount = this->hAttackFrames;
 				this->hitboxes.at(currentAttack)->myHbd.active = true;
 				break;
-			case AttackType::SPECIAL1:
+			case AttackType::SPECIAL1L:
 				//projectile with activate on creation
-				this->attackFrameCount = this->s1AttackFrames;
+				this->attackFrameCount = this->s1LAttackFrames;
+				break;
+			case AttackType::SPECIAL1M:
+				this->attackFrameCount = this->s1MAttackFrames;
+				break;
+			case AttackType::SPECIAL1H:
+				this->attackFrameCount = this->s1HAttackFrames;
 				break;
 			}
 		}
@@ -729,9 +805,16 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		case AttackType::HEAVY:
 			this->heavyAnimation();
 			break;
-		case AttackType::SPECIAL1:
+		case AttackType::SPECIAL1L:
 			//printf("entering special animation\n");
-			this->special1Animation();
+			this->special1LAnimation();
+			break;
+		case AttackType::SPECIAL1M:
+			this->special1MAnimation();
+			break;
+		case AttackType::SPECIAL1H:
+			this->special1HAnimation();
+			break;
 		}
 		this->attackFrameCount -= 1;
 		break;
@@ -763,17 +846,23 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::LIGHT;
 				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
-					printf("DO SPECIAL MOVE\n");
-					this->currentAttack = AttackType::SPECIAL1;
+					//printf("DO SPECIAL MOVE\n");
+					this->currentAttack = AttackType::SPECIAL1L;
 				}
 			}
 			if (this->keyBinding.at(ki.key) == InputType::M) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::MEDIUM;
+				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
+					this->currentAttack = AttackType::SPECIAL1M;
+				}
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::HEAVY;
+				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
+					this->currentAttack = AttackType::SPECIAL1H;
+				}
 			}
 		}
 		//set up jump

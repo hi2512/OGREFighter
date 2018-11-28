@@ -15,7 +15,7 @@ using namespace Ogre;
 using namespace std;
 
 enum AttackType {
-	NONE, LIGHT, MEDIUM, HEAVY, SPECIAL1, AIRHEAVY
+	NONE, LIGHT, MEDIUM, HEAVY, SPECIAL1L, SPECIAL1M, SPECIAL1H, AIRHEAVY
 };
 
 enum StateType {
@@ -80,14 +80,20 @@ protected:
 	}
 	virtual void createHeavyBox() {
 	}
-	virtual void createSpecial1Box() {
+	virtual void createSpecial1LBox() {
+	}
+	virtual void createSpecial1MBox() {
+	}
+	virtual void createSpecial1HBox() {
 	}
 	virtual void createJumpAttackBox() {
 	}
 	int lAttackFrames = -1;
 	int mAttackFrames = -1;
 	int hAttackFrames = -1;
-	int s1AttackFrames = -1;
+	int s1LAttackFrames = -1;
+	int s1MAttackFrames = -1;
+	int s1HAttackFrames = -1;
 	int jhAttackFrames = -1;
 	virtual void lightAnimation() {
 	}
@@ -95,7 +101,11 @@ protected:
 	}
 	virtual void heavyAnimation() {
 	}
-	virtual void special1Animation() {
+	virtual void special1LAnimation() {
+	}
+	virtual void special1MAnimation() {
+	}
+	virtual void special1HAnimation() {
 	}
 	virtual void jumpAttackAnimation() {
 	}
@@ -120,7 +130,6 @@ protected:
 	void doFall();
 	bool isAboveGround();
 	virtual void cancelJump() {
-
 	}
 	virtual void createJumpUpArc() {
 	}
@@ -135,10 +144,13 @@ protected:
 	}
 	virtual void playBlockAnimation() {
 	}
+	void checkForSpecialCancel();
 	bool readQCF();
 	bool readQCB();
 	bool readQCFwithOrientation();
 	bool keyIsInputType(KeyInput ki, InputType ipt);
+	virtual void doDeath() {
+	}
 
 public:
 
@@ -197,6 +209,10 @@ public:
 	Real getHealth() {
 		return this->health;
 	}
+	static bool attackTypeIsNormal(AttackType at) {
+		return (at == AttackType::LIGHT) || (at == AttackType::MEDIUM) || (at == AttackType::HEAVY);
+	}
+
 
 };
 

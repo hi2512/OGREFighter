@@ -1,5 +1,33 @@
 #include "Actor.h"
 #include <cassert>
+
+void Actor::checkForSpecialCancel() {
+	if ((!this->isAboveGround()) && (this->currentAttack != AttackType::NONE)
+			&& (this->specialMoveWindow >= 0)) {
+		for (KeyInput ki : *this->keysHeld) {
+			//skip if key is not binded for this ninja
+			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+				continue;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::L) {
+				this->clearAttack();
+				this->beforeStopState = StateType::ATTACK;
+				this->currentAttack = AttackType::SPECIAL1L;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::M) {
+				this->clearAttack();
+				this->beforeStopState = StateType::ATTACK;
+				this->currentAttack = AttackType::SPECIAL1M;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::H) {
+				this->clearAttack();
+				this->beforeStopState = StateType::ATTACK;
+				this->currentAttack = AttackType::SPECIAL1H;
+			}
+		}
+	}
+}
+
 Real Actor::hitScaling() {
 	Real scale = 1.0;
 	scale -= (this->comboCounter + 1) * 0.15;
@@ -148,11 +176,15 @@ bool Actor::isAboveGround() {
 void Actor::doFall() {
 	if (isAboveGround()) {
 		this->body->setCollisionFlags(0);
-		this->body->setLinearVelocity(btVector3(0, -45, 0));
+		Real fallAway = this->onPlayer2Side ? 10 : -10;
+		this->body->setLinearVelocity(btVector3(fallAway, -45, 0));
 	} else {
 		//stop falling
 		this->actorState = StateType::FREE;
 		this->body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+		if (this->health <= 0) {
+			this->actorState = StateType::DEAD;
+		}
 	}
 }
 
@@ -196,15 +228,16 @@ void Actor::doCollision(const FrameEvent& evt) {
 		 }
 		 */
 		CollisionType curCol = ((GameObject *) context.body->getUserPointer())->getCollisionType();
-		if(curCol == CollisionType::WALL) {
-			if(this->actorState == StateType::JUMPING) {
+		if (curCol == CollisionType::WALL) {
+			if (this->actorState == StateType::JUMPING) {
 				this->cancelJump();
 				this->health -= 40;
+				this->pushBack(-40);
 			}
 			this->pushBack(-22.0);
 			this->health -= 4.0;
 		}
-		if ( curCol  == CollisionType::COLLISIONBOX) {
+		if (curCol == CollisionType::COLLISIONBOX) {
 			//printf("collided with %s\n", ((GameObject *) context.body->getUserPointer())->getName().c_str());
 			this->opponent->pushBack(12.0);
 			this->pushBack(3.0);
@@ -326,11 +359,13 @@ void Actor::clearAttack() {
 	if (currentAttack == AttackType::NONE) {
 		return;
 	}
-	if (currentAttack != AttackType::SPECIAL1) {
+	if (Actor::attackTypeIsNormal(this->currentAttack)) {
+		//printf("here cur attack is %d\n", this->currentAttack);
 		Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 		btVector3 targetPos(curPos.x, curPos.y - 1500, curPos.z);
 		this->setBox(this->hitboxes.at(currentAttack)->myHbd.hitbox, targetPos);
 		this->hitboxes.at(currentAttack)->myHbd.active = false;
+		//printf("done\n");
 	}
 
 	this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
