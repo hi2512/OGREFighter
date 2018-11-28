@@ -340,7 +340,7 @@ void Game::setup(void) {
 	shaderGen->addSceneManager(scnMgr);
 
 	// set up camera node's position
-	camNode = scnMgr->getRootSceneNode()->createChildSceneNode(Vector3(0, 500, 1750));
+	camNode = scnMgr->getRootSceneNode()->createChildSceneNode(Vector3(0, 300, 1400));
 	camNode->lookAt(Vector3(0, 50, -1), Node::TS_PARENT);
 
 	// create the camera and attach it to the node we just created
@@ -608,7 +608,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
 	 / 2;
 	 //offset of initial height - average playerheights
-	 centerPos.y += 300;
+	 centerPos.y += 200;
 	 Vector3 transDir = centerPos - camNode->getPosition();
 	 camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.8, 0) * evt.timeSinceLastFrame,
 	 Node::TS_LOCAL);
