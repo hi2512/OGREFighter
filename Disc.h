@@ -37,7 +37,7 @@ public:
 
 		offsetNode->attachObject(rootNode->detachObject((unsigned short) 0));
 
-		activeTime = 250;
+		activeTime = 280;
 		//printf("collision flags: %d\n", this->body->getCollisionFlags());
 		//this->body->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 		this->createAnim();

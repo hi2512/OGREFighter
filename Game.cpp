@@ -413,11 +413,13 @@ void Game::setup(void) {
 			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, backWall, 3000, 4000, 20, 20,
 			true, 1, 5, 5, Ogre::Vector3::UNIT_X);
 	Ogre::Entity* backEntity = scnMgr->createEntity("back");
+	backEntity->setMaterialName("WoodPallet");
 	Ogre::SceneNode * bWallNode = scnMgr->getRootSceneNode()->createChildSceneNode();
 	bWallNode->attachObject(backEntity);
 	bWallNode->setPosition(Vector3(0, 1000, -2000));
 
 	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
+	//p1Entity->setMaterialName("Examples/BumpyMetal");
 	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode("P1Node");
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
 	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
@@ -438,6 +440,21 @@ void Game::setup(void) {
 	player2 = p2;
 	gameState->p1 = p1;
 	gameState->p2 = p2;
+
+	/*
+	Entity * p3Entity = scnMgr->createEntity("Sinbad.mesh");
+	SceneNode * p3Node = scnMgr->getRootSceneNode()->createChildSceneNode("SinbadNode");
+	p3Node->setPosition(Vector3(0, 200, 0));
+	p3Node->attachObject(p3Entity);
+	p3Node->setScale(Vector3(15, 15, 15));
+	AnimationStateSet *mAnims = p3Entity->getAllAnimationStates();
+	AnimationStateIterator it = mAnims->getAnimationStateIterator();
+	while (it.hasMoreElements()) {
+		AnimationStateMap::mapped_type as = it.getNext();
+		LogManager::getSingleton().logMessage(as->getAnimationName());
+		as->setLoop(true);
+	}
+	*/
 	/*
 	 SceneNode * dn = mgr->getRootSceneNode()->createChildSceneNode("disc");
 	 Entity * di = mgr->createEntity("disc.mesh");
@@ -460,19 +477,18 @@ void Game::setup(void) {
 	 phys->dynamicsWorld->addRigidBody(temp2, 128, 3);
 	 */
 	/*
-	Entity* blEnt = scnMgr->createEntity("sphere.mesh");
-	SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
-	bl2->setScale(0.2, 0.2, 0.2);
-	auto camPos2 = camNode->getPosition();
-	auto blPos = Vector3(camPos2.x + (rand() % 500 - 250), camPos2.y + (rand() % 500 - 350),
-			camPos2.z + (rand() % 500 - 2000));
-	Ball * bl = new Ball(scnMgr, bl2, "BallObject", blEnt, phys, blPos,
-	btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
-			btVector3(0, 0, 0));
-	*/
+	 Entity* blEnt = scnMgr->createEntity("sphere.mesh");
+	 SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
+	 bl2->setScale(0.2, 0.2, 0.2);
+	 auto camPos2 = camNode->getPosition();
+	 auto blPos = Vector3(camPos2.x + (rand() % 500 - 250), camPos2.y + (rand() % 500 - 350),
+	 camPos2.z + (rand() % 500 - 2000));
+	 Ball * bl = new Ball(scnMgr, bl2, "BallObject", blEnt, phys, blPos,
+	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
+	 btVector3(0, 0, 0));
+	 */
 	//SceneNode * spNode = mgr->getRootSceneNode()->createChildSceneNode();
 	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
-
 }
 
 void Game::initPhys() {
@@ -605,13 +621,13 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 camNode->translate(Vector3(xDir * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
 	 */
 
-	 auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
-	 / 2;
-	 //offset of initial height - average playerheights
-	 centerPos.y += 200;
-	 Vector3 transDir = centerPos - camNode->getPosition();
-	 camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.8, 0) * evt.timeSinceLastFrame,
-	 Node::TS_LOCAL);
+	auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
+			/ 2;
+	//offset of initial height - average playerheights
+	centerPos.y += 200;
+	Vector3 transDir = centerPos - camNode->getPosition();
+	camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.8, 0) * evt.timeSinceLastFrame,
+			Node::TS_LOCAL);
 
 	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 

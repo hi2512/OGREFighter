@@ -144,7 +144,7 @@ protected:
 	}
 	virtual void playBlockAnimation() {
 	}
-	void checkForSpecialCancel();
+	void checkForSpecial1Cancel();
 	bool readQCF();
 	bool readQCB();
 	bool readQCFwithOrientation();
@@ -210,7 +210,7 @@ public:
 		return this->health;
 	}
 	static bool attackTypeIsNormal(AttackType at) {
-		return (at == AttackType::LIGHT) || (at == AttackType::MEDIUM) || (at == AttackType::HEAVY);
+		return (at == AttackType::LIGHT) || (at == AttackType::MEDIUM) || (at == AttackType::HEAVY) || (at == AttackType::AIRHEAVY);
 	}
 
 

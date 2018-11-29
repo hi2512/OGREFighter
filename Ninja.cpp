@@ -134,7 +134,7 @@ void Ninja::createLightBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 22.0, 12.0, 40.0, 10.0, 40, 35, 4, 3, false };
+	HitboxData hbd { hbox, 6.0, 4.0, 16.0, 8.0, 40.0, 10.0, 40, 35, 4, 3, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
@@ -160,7 +160,7 @@ void Ninja::createMediumBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 50.0, 30.0, 60.0, 20.0, 44, 25, 6, 4, false };
+	HitboxData hbd { hbox, 15.0, 10.0, 35.0, 20.0, 60.0, 20.0, 44, 25, 6, 4, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
@@ -186,7 +186,7 @@ void Ninja::createHeavyBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 35.0, 5.0, 120.0, 40.0, 45, 5, 8, 6, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 25.0, 0.0, 120.0, 40.0, 45, 5, 8, 6, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	 //auto re = &this->hitboxes.at(AttackType::HEAVY);
@@ -208,7 +208,7 @@ void Ninja::createSpecial1LBox() {
 	//btCollisionObject * hbox = new btPairCachingGhostObject();
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//hbox->setCollisionShape(diShape);
-	HitboxData hbd { NULL, 55.0, 45.0, 90.0, 28.0, 50, 30, 10, 8, true };
+	HitboxData hbd { NULL, 55.0, 45.0, 0.0, 0.0, 90.0, 28.0, 50, 30, 10, 8, true };
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
@@ -228,7 +228,7 @@ void Ninja::createSpecial1MBox() {
 	//btCollisionObject * hbox = new btPairCachingGhostObject();
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//hbox->setCollisionShape(diShape);
-	HitboxData hbd { NULL, 55.0, 45.0, 100.0, 30.0, 50, 30, 10, 8, true };
+	HitboxData hbd { NULL, 55.0, 45.0, 0.0, 0.0, 100.0, 30.0, 50, 30, 10, 8, true };
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -200.0 : 200.0;
@@ -267,7 +267,7 @@ void Ninja::createSpecial1HBox() {
 	//btCollisionObject * hbox = new btPairCachingGhostObject();
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//hbox->setCollisionShape(diShape);
-	HitboxData hbd { NULL, 55.0, 45.0, 110.0, 33.0, 50, 30, 10, 8, true };
+	HitboxData hbd { NULL, 55.0, 45.0, 0.0, 0.0, 110.0, 33.0, 50, 30, 10, 8, true };
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
@@ -294,7 +294,7 @@ void Ninja::createJumpAttackBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 10.0, 5.0, 90.0, 30.0, 52, 30, 8, 6, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 0.0, 0.0, 90.0, 30.0, 52, 30, 8, 6, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::AIRHEAVY, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::AIRHEAVY));
@@ -619,7 +619,7 @@ void Ninja::special1LAnimation() {
 		//projectile activates and animates itself
 		this->createSpecial1LBox();
 	}
-	if (frameTime >= -35 && frameTime <= 40) {
+	if (frameTime >= -45 && frameTime <= 40) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.3, 2.5));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
@@ -657,7 +657,7 @@ void Ninja::special1HAnimation() {
 		//projectile activates and animates itself
 		this->createSpecial1HBox();
 	}
-	if (frameTime >= -35 && frameTime <= 40) {
+	if (frameTime >= -50 && frameTime <= 40) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.3, 2.5));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
@@ -756,14 +756,15 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//printf("Stop frame count: %d\n", this->stopFrameCount);
 		if (this->stopFrameCount == 0) {
 			this->exitStopState();
+			printf("exit actor state%d\n", this->actorState);
 		} else {
 			//check for cancel
-			this->checkForSpecialCancel();
+			this->checkForSpecial1Cancel();
 		}
 		this->stopFrameCount -= 1;
 		break;
 	case StateType::ATTACK:
-		//printf("attack reached\n");
+		//printf("attack reached, attack frame count %d\n", this->attackFrameCount);
 		if (this->attackFrameCount == 0) {
 			//reset animation
 			this->clearAttack();
@@ -848,6 +849,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
 					//printf("DO SPECIAL MOVE\n");
 					this->currentAttack = AttackType::SPECIAL1L;
+					this->specialMoveWindow = -1;
 				}
 			}
 			if (this->keyBinding.at(ki.key) == InputType::M) {
@@ -855,6 +857,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->currentAttack = AttackType::MEDIUM;
 				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
 					this->currentAttack = AttackType::SPECIAL1M;
+					this->specialMoveWindow = -1;
 				}
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
@@ -862,6 +865,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->currentAttack = AttackType::HEAVY;
 				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
 					this->currentAttack = AttackType::SPECIAL1H;
+					this->specialMoveWindow = -1;
 				}
 			}
 		}

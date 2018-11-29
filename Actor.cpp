@@ -1,7 +1,7 @@
 #include "Actor.h"
 #include <cassert>
 
-void Actor::checkForSpecialCancel() {
+void Actor::checkForSpecial1Cancel() {
 	if ((!this->isAboveGround()) && (this->currentAttack != AttackType::NONE)
 			&& (this->specialMoveWindow >= 0)) {
 		for (KeyInput ki : *this->keysHeld) {
@@ -290,6 +290,7 @@ void Actor::recieveBlock(HitboxData * hbd) {
 	this->opponent->enterStopState(hbd->blockstop);
 
 	this->pushBack(hbd->blockPushback);
+	this->opponent->pushBack(hbd->attackBlockPushback);
 	this->health -= hbd->blockDmg;
 
 }
@@ -327,6 +328,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 	this->newHit = true;
 
 	this->pushBack(hbd->hitPushback);
+	this->opponent->pushBack(hbd->attackHitPushback);
 	this->health -= hbd->hitDmg * hitScaling();
 
 	if (this->health <= 0) {
