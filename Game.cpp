@@ -541,6 +541,7 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	if (debug) {
 		gameGui->showFrameCount();
 		gameState->camPos = Vector3(camNode->getPosition());
+		//gameState->camPos = Vector3(mgr->getSceneNode("SuperCamNode")->getPosition());
 		gameGui->showCamPos();
 		gameGui->showInputBuffer();
 	}
@@ -647,6 +648,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 }
 
 void Game::createCameraSwingAnimation(const Vector3& point) {
+	//hooray for linear algebra
 	if (mgr->hasAnimation("CamSwing")) {
 		mgr->destroyAnimation("CamSwing");
 	}
@@ -660,35 +662,55 @@ void Game::createCameraSwingAnimation(const Vector3& point) {
 	Vector3 pointXZ(point.x, 0, point.z);
 	Vector3 swingNodeXZ(curPos.x, 0, curPos.z);
 	Vector3 dir = swingNodeXZ - pointXZ;
+	dir.normalise();
 	//Quaternion rot = pointXZ.getRotationTo(swingNodeXZ);
 	Quaternion rot = Quaternion::IDENTITY;
 	Real distToPoint = pointXZ.distance(swingNodeXZ);
+	dir = dir * distToPoint;
+
+	printf("swingnode: x: %f z:%f\n", curPos.x, curPos.z);
+	printf("point: x: %f z:%f\n", pointXZ.x, pointXZ.z);
+
+	printf("0: x: %f z:%f\n", dir.x + pointXZ.x, dir.z + pointXZ.z);
+	//printf("0: x: %f z:%f\n", pointXZ.x, pointXZ.z);
 
 	TransformKeyFrame * key;
 	key = track->createNodeKeyFrame(0.0f);
-	key->setTranslate(curPos);
+	key->setTranslate(curPos + pointXZ);
 	//key->setRotation(curRot);
 
-	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
-	newPos = rot * swingNodeXZ;
+	rot = rot * Quaternion(Degree(45), Vector3::UNIT_Y);
+	//newPos = rot * swingNodeXZ;
+	newPos = rot * dir;
+	newPos = newPos + pointXZ;
+	printf("1: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(2.0f);
 	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
 
-	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
-	newPos = rot * swingNodeXZ;
+	rot = rot * Quaternion(Degree(45), Vector3::UNIT_Y);
+	//newPos = rot * swingNodeXZ;
+	newPos = rot * dir;
+	newPos = newPos + pointXZ;
+	printf("2: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(4.0f);
 	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
 
-	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
-	newPos = rot * swingNodeXZ;
+	rot = rot * Quaternion(Degree(45), Vector3::UNIT_Y);
+	//newPos = rot * swingNodeXZ;
+	newPos = rot * dir;
+	newPos = newPos + pointXZ;
+	printf("3: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(6.0f);
 	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
 
-	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
-	newPos = rot * swingNodeXZ;
+	rot = rot * Quaternion(Degree(45), Vector3::UNIT_Y);
+	//newPos = rot * swingNodeXZ;
+	newPos = rot * dir;
+	newPos = newPos + pointXZ;
+	printf("4: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(8.0f);
 	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
@@ -702,7 +724,7 @@ void Game::cameraSwing(Real time, const Vector3& targetPoint) {
 	AnimationState * swingAnim = mgr->getAnimationState("CamSwing");
 	swingAnim->setLoop(false);
 	swingAnim->setEnabled(true);
-	swingAnim->addTime(time * 3.0);
+	swingAnim->addTime(time * 2.0);
 	//mgr->getSceneNode("SuperCamNode")->lookAt(targetPoint, Node::TS_WORLD);
 	if (swingAnim->hasEnded()) {
 		swingAnim->setTimePosition(0);
