@@ -34,7 +34,7 @@ void Actor::checkForSpecial1Cancel() {
 
 Real Actor::hitScaling() {
 	Real scale = 1.0;
-	scale -= (this->comboCounter + 1) * 0.15;
+	scale -= (this->comboCounter + 1) * 0.06;
 	if (health / maxHealth <= .25) {
 		scale *= 0.8;
 	}
@@ -361,7 +361,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 		}
 		//printf("check for hit context, %d\n", context.body->getUserIndex());
 		//CHECK IF I WAS HIT
-		if (context.body->getUserIndex() == this->oppHitType()) {
+		if (context.body->getUserIndex() == this->oppHitType() && !invincible) {
 			//printf("I am %s\n", this->name.c_str());
 			HitboxData * hbd = &((Hitbox *) context.body->getUserPointer())->myHbd;
 			//printf("IS HITBOX ACTIVE? %d\n", hbd->active);

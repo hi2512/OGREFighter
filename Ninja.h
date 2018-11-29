@@ -47,6 +47,9 @@ protected:
 	void playHitAnimation();
 	void playBlockAnimation();
 	void doDeath();
+	Vector3 getSuperPos() {
+		return this->getRootNode()->getPosition() + Vector3(0, 380, 0);
+	}
 
 
 

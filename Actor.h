@@ -45,6 +45,8 @@ protected:
 	bool moveLock = false;
 	bool newHit = false;
 	bool jumpAttack = false;
+	bool invincible = false;
+	bool startSuperFreeze = false;
 	GameObject * activeProjectile = NULL;
 	InputType jumpType = InputType::UP;
 
@@ -132,7 +134,6 @@ protected:
 	void clearAttack();
 	void recieveHit(HitboxData * hbd);
 	void recieveBlock(HitboxData * hbd);
-	void enterStopState(int stopFrames);
 	void exitStopState();
 	void doFall();
 	bool isAboveGround();
@@ -163,7 +164,6 @@ protected:
 	}
 	void doSuperFreeze();
 	virtual void doSuperFreezeAnimation() {
-
 	}
 
 public:
@@ -189,6 +189,7 @@ public:
 		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
 
 	}
+	void enterStopState(int stopFrames);
 	int comboCount() {
 		return this->comboCounter;
 	}
@@ -226,6 +227,15 @@ public:
 	static bool attackTypeIsNormal(AttackType at) {
 		return (at == AttackType::LIGHT) || (at == AttackType::MEDIUM) || (at == AttackType::HEAVY)
 				|| (at == AttackType::AIRHEAVY);
+	}
+	void setStartSuperFreeze(bool b) {
+		this->startSuperFreeze = b;
+	}
+	bool getStartSuperFreeze() {
+		return this->startSuperFreeze;
+	}
+	virtual Vector3 getSuperPos() {
+		return this->getRootNode()->getPosition();
 	}
 
 };

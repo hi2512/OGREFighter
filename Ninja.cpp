@@ -307,7 +307,7 @@ void Ninja::createJumpAttackBox() {
 
 void Ninja::createSuperBox() {
 	btCollisionObject * hbox = new btPairCachingGhostObject();
-	hbox->setCollisionShape(new btBoxShape(btVector3(100, 100, 50)));
+	hbox->setCollisionShape(new btBoxShape(btVector3(120, 180, 50)));
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
 
@@ -688,40 +688,66 @@ void Ninja::superAnimation() {
 	trans = hbox->getWorldTransform();
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	Real xPos = curPos.x + 200;
+	Real xPos = curPos.x + 350;
 
 	Real yPos = curPos.y + 80;
 	std::vector<btVector3> hitFrames;
 	if (this->onP1Side()) {
 		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
-		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos ,yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
 	} else {
-		xPos = curPos.x - 200;
+		xPos = curPos.x - 350;
 		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 40, yPos + 30, curPos.z));
-		hitFrames.push_back(btVector3(xPos - 40, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
 	}
 
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
 	//btVector3 hurtpos(curPos.x, curPos.y - 500, curPos.z);
 
-	int frameTime = -this->attackFrameCount + 80;
-	//printf("frametime: %d\n", frameTime);
-	if (frameTime >= 0 && frameTime <= 6) {
+	int frameTime = -this->attackFrameCount + 50;
+	//do super freeze
+	if(frameTime == -10) {
+		this->enterStopState(180);
+		this->opponent->enterStopState(180);
+		this->setStartSuperFreeze(true);
+		return;
+	}
+	if(frameTime >= -50 && frameTime <= 10) {
+		this->invincible = true;
+	}
+	if (frameTime >= 0 && frameTime <= 15) {
 		pos = hitFrames.at(frameTime);
 	}
-	if (frameTime >= -10 && frameTime <= 12) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
-	} else {
+	if (frameTime >= 11 && frameTime <= 40) {
+		this->invincible = false;
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
 	//printf("in attack x: %f, y: %f, z %f\n", pos.getX(), pos.getY(), pos.getZ());
@@ -865,6 +891,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				break;
 			case AttackType::SUPER:
 				this->attackFrameCount = this->superAttackFrames;
+				this->hitboxes.at(currentAttack)->myHbd.active = true;
 				break;
 			}
 		}
@@ -926,7 +953,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 					this->currentAttack = AttackType::SPECIAL1L;
 					this->specialMove1Window = -1;
 				}
-				if(this->superMoveWindow > -1) {
+				if (this->superMoveWindow > -1) {
 					this->currentAttack = AttackType::SUPER;
 					this->superMoveWindow = -1;
 				}

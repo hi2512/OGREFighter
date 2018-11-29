@@ -104,6 +104,8 @@ private:
 	Actor * player1;
 	Actor * player2;
 
+	Actor * curSuperPlayer;
+
 };
 
 //! [constructor]
@@ -200,6 +202,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	case 'y':
 		cameraSwap();
 		createCameraSwingAnimation(player1->getRootNode()->getPosition(), player1->onP1Side());
+		curSuperPlayer = player1;
 		swing = !swing;
 		break;
 	case 'p':
@@ -635,10 +638,24 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 Real xDir = centerPosX - curCamPos.x;
 	 camNode->translate(Vector3(xDir * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
 	 */
+	if (player1->getStartSuperFreeze()) {
+		cameraSwap();
+		createCameraSwingAnimation(player1->getRootNode()->getPosition(), player1->onP1Side());
+		swing = true;
+		player1->setStartSuperFreeze(false);
+		curSuperPlayer = player1;
+	} else if (player2->getStartSuperFreeze()) {
+		cameraSwap();
+		createCameraSwingAnimation(player2->getRootNode()->getPosition(), player2->onP1Side());
+		swing = true;
+		player2->setStartSuperFreeze(false);
+		curSuperPlayer = player2;
+	}
 	if (!swing) {
 		cameraTracking(evt.timeSinceLastFrame);
 	} else {
-		cameraSwing(evt.timeSinceLastFrame, player1->getRootNode()->getPosition());
+		//printf("start camera swing\n");
+		cameraSwing(evt.timeSinceLastFrame, curSuperPlayer->getSuperPos());
 	}
 	//cameraTracking(evt.timeSinceLastFrame);
 
@@ -654,7 +671,7 @@ void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
 	if (mgr->hasAnimation("CamSwing")) {
 		mgr->destroyAnimation("CamSwing");
 	}
-	Animation * animation = mgr->createAnimation("CamSwing", 9.0);
+	Animation * animation = mgr->createAnimation("CamSwing", 8.5);
 	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
 	SceneNode * swingNode = mgr->getSceneNode("SuperCamNode");
 	swingNode->setPosition(camNode->getPosition());
@@ -666,7 +683,6 @@ void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
 	Vector3 dir = swingNodeXZ - pointXZ;
 	Quaternion rot = Quaternion::IDENTITY;
 	Real rotDir = leftSide ? 10 : -10;
-
 
 	printf("swingnode: x: %f z:%f\n", curPos.x, curPos.z);
 	printf("point: x: %f z:%f\n", pointXZ.x, pointXZ.z);
@@ -683,7 +699,7 @@ void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
 	//newPos = rot * swingNodeXZ;
 	newPos = rot * dir;
 	newPos = newPos + pointXZ;
-	//printf("1: x: %f z:%f\n", newPos.x, newPos.z);
+	printf("1: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(2.0f);
 	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z) * 0.85);
@@ -728,7 +744,7 @@ void Game::cameraSwing(Real time, const Vector3& targetPoint) {
 	AnimationState * swingAnim = mgr->getAnimationState("CamSwing");
 	swingAnim->setLoop(false);
 	swingAnim->setEnabled(true);
-	swingAnim->addTime(time * 2.0);
+	swingAnim->addTime(time * 3);
 	//mgr->getSceneNode("SuperCamNode")->lookAt(targetPoint, Node::TS_WORLD);
 	if (swingAnim->hasEnded()) {
 		swingAnim->setTimePosition(0);

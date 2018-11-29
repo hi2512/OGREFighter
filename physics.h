@@ -19,7 +19,7 @@ struct BulletContactCallback;
 struct CollisionContext;
 
 enum CollisionType {
-	COLLISIONBOX = 2, HITBOX_P1 = 8, HITBOX_P2 = 16, HURTBOX_P1 = 32, HURTBOX_P2 = 64, WALL = 1, GROUND = 128
+	COLLISIONBOX = 2, HITBOX_P1 = 8, HITBOX_P2 = 16, HURTBOX_P1 = 32, HURTBOX_P2 = 64, WALL = 1, GROUND = 128, COL_NONE = 256
 };
 
 struct HitboxData {

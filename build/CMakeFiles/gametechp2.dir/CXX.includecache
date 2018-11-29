@@ -172,6 +172,24 @@ Actor.h
 SDL2/SDL.h
 -
 
+/home/steve/Downloads/GTechFinal/Ninja.cpp
+Ogre.h
+-
+physics.h
+/home/steve/Downloads/GTechFinal/physics.h
+OgreApplicationContext.h
+-
+btBulletCollisionCommon.h
+-
+btBulletDynamicsCommon.h
+-
+BulletCollision/CollisionDispatch/btGhostObject.h
+-
+Ninja.h
+/home/steve/Downloads/GTechFinal/Ninja.h
+audio.h
+/home/steve/Downloads/GTechFinal/audio.h
+
 /home/steve/Downloads/GTechFinal/Ninja.h
 Ogre.h
 -
