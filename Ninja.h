@@ -18,6 +18,9 @@ private:
 	SceneNode * ninOffsetNode;
 
 protected:
+	const String walkName = "Walk";
+	const String jumpName = "JumpNoHeight";
+	const String superName = "HighJump";
 	void createLightBox();
 	void createMediumBox();
 	void createHeavyBox();
@@ -25,6 +28,7 @@ protected:
 	void createSpecial1MBox();
 	void createSpecial1HBox();
 	void createJumpAttackBox();
+	void createSuperBox();
 	void lightAnimation();
 	void mediumAnimation();
 	void heavyAnimation();
@@ -32,6 +36,7 @@ protected:
 	void special1MAnimation();
 	void special1HAnimation();
 	void jumpAttackAnimation();
+	void superAnimation();
 
 	void createJumpUpArc();
 	void createJumpLeftArc();
@@ -80,12 +85,15 @@ public:
 		this->s1MAttackFrames = 80;
 		this->s1HAttackFrames = 95;
 		this->jhAttackFrames = 60;
+		this->superAttackFrames = 100;
+		this->superFreezeFrames = 180;
 
 		this->createLightBox();
 		this->createMediumBox();
 		this->createHeavyBox();
 		//this->createSpecialBox();
 		this->createJumpAttackBox();
+		this->createSuperBox();
 
 		this->createJumpUpArc();
 		this->createJumpLeftArc();

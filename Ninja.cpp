@@ -305,6 +305,19 @@ void Ninja::createJumpAttackBox() {
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::AIRHEAVY, hitObj));
 }
 
+void Ninja::createSuperBox() {
+	btCollisionObject * hbox = new btPairCachingGhostObject();
+	hbox->setCollisionShape(new btBoxShape(btVector3(100, 100, 50)));
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
+
+	HitboxData hbd { hbox, 10.0, 5.0, 5.0, 5.0, 250.0, 50.0, 100, 20, 10, 8, false };
+	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "SUPER", physics, hbox, pos, hbd,
+			this->myHitType());
+	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SUPER, hitObj));
+
+}
+
 void Ninja::playJumpAnimation(InputType jumpType) {
 	if (!jumpAttack) {
 		this->setAnimation("JumpNoHeight");
@@ -664,6 +677,58 @@ void Ninja::special1HAnimation() {
 	}
 }
 
+void Ninja::superAnimation() {
+	this->setAnimation(this->superName);
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.01);
+
+	btTransform trans;
+	btCollisionObject * hbox = this->hitboxes.at(currentAttack)->myHbd.hitbox;
+	trans = hbox->getWorldTransform();
+
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Real xPos = curPos.x + 200;
+
+	Real yPos = curPos.y + 80;
+	std::vector<btVector3> hitFrames;
+	if (this->onP1Side()) {
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
+	} else {
+		xPos = curPos.x - 200;
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 80, yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 40, yPos + 30, curPos.z));
+		hitFrames.push_back(btVector3(xPos - 40, yPos + 30, curPos.z));
+	}
+
+	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
+	//btVector3 hurtpos(curPos.x, curPos.y - 500, curPos.z);
+
+	int frameTime = -this->attackFrameCount + 80;
+	//printf("frametime: %d\n", frameTime);
+	if (frameTime >= 0 && frameTime <= 6) {
+		pos = hitFrames.at(frameTime);
+	}
+	if (frameTime >= -10 && frameTime <= 12) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+	} else {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+	}
+	//printf("in attack x: %f, y: %f, z %f\n", pos.getX(), pos.getY(), pos.getZ());
+	trans.setOrigin(pos);
+	hbox->setWorldTransform(trans);
+}
+
 void Ninja::doDeath() {
 	this->body->getCollisionShape()->setLocalScaling(btVector3(0, 0, 0));
 	this->setAnimation("Death2");
@@ -689,7 +754,11 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//this->actorState = StateType::STOP;
 		//this->stopFrameCount = 40;
 		//this->createSpecialBox();
-		this->specialMoveWindow = 7;
+		this->specialMove1Window = 7;
+	}
+
+	if (this->readDoubleQCFwithOrientation()) {
+		this->superMoveWindow = 7;
 	}
 
 	switch (this->actorState) {
@@ -756,7 +825,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//printf("Stop frame count: %d\n", this->stopFrameCount);
 		if (this->stopFrameCount == 0) {
 			this->exitStopState();
-			printf("exit actor state%d\n", this->actorState);
+			//printf("exit actor state%d\n", this->actorState);
 		} else {
 			//check for cancel
 			this->checkForSpecial1Cancel();
@@ -794,6 +863,9 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			case AttackType::SPECIAL1H:
 				this->attackFrameCount = this->s1HAttackFrames;
 				break;
+			case AttackType::SUPER:
+				this->attackFrameCount = this->superAttackFrames;
+				break;
 			}
 		}
 		switch (this->currentAttack) {
@@ -815,6 +887,9 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			break;
 		case AttackType::SPECIAL1H:
 			this->special1HAnimation();
+			break;
+		case AttackType::SUPER:
+			this->superAnimation();
 			break;
 		}
 		this->attackFrameCount -= 1;
@@ -846,26 +921,30 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			if (this->keyBinding.at(ki.key) == InputType::L) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::LIGHT;
-				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
+				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
 					//printf("DO SPECIAL MOVE\n");
 					this->currentAttack = AttackType::SPECIAL1L;
-					this->specialMoveWindow = -1;
+					this->specialMove1Window = -1;
+				}
+				if(this->superMoveWindow > -1) {
+					this->currentAttack = AttackType::SUPER;
+					this->superMoveWindow = -1;
 				}
 			}
 			if (this->keyBinding.at(ki.key) == InputType::M) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::MEDIUM;
-				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
+				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
 					this->currentAttack = AttackType::SPECIAL1M;
-					this->specialMoveWindow = -1;
+					this->specialMove1Window = -1;
 				}
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->actorState = StateType::ATTACK;
 				this->currentAttack = AttackType::HEAVY;
-				if (this->specialMoveWindow > -1 && !this->hasActiveProjectile()) {
+				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
 					this->currentAttack = AttackType::SPECIAL1H;
-					this->specialMoveWindow = -1;
+					this->specialMove1Window = -1;
 				}
 			}
 		}
@@ -937,8 +1016,8 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		//as->addTime(0.005);
 	}
 
-	if (specialMoveWindow > -1) {
-		this->specialMoveWindow -= 1;
+	if (specialMove1Window > -1) {
+		this->specialMove1Window -= 1;
 	}
 	this->moveLock = false;
 	this->doCollision(evt);

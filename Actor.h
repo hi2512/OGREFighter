@@ -15,7 +15,7 @@ using namespace Ogre;
 using namespace std;
 
 enum AttackType {
-	NONE, LIGHT, MEDIUM, HEAVY, SPECIAL1L, SPECIAL1M, SPECIAL1H, AIRHEAVY
+	NONE, LIGHT, MEDIUM, HEAVY, SPECIAL1L, SPECIAL1M, SPECIAL1H, AIRHEAVY, SUPER
 };
 
 enum StateType {
@@ -60,7 +60,8 @@ protected:
 	int hitstunFrames = -1;
 	int blockstunFrames = -1;
 
-	int specialMoveWindow = -1;
+	int specialMove1Window = -1;
+	int superMoveWindow = -1;
 	int attackCancelWindow = -1;
 
 	std::map<int, InputType> keyBinding;
@@ -88,6 +89,8 @@ protected:
 	}
 	virtual void createJumpAttackBox() {
 	}
+	virtual void createSuperBox() {
+	}
 	int lAttackFrames = -1;
 	int mAttackFrames = -1;
 	int hAttackFrames = -1;
@@ -95,6 +98,8 @@ protected:
 	int s1MAttackFrames = -1;
 	int s1HAttackFrames = -1;
 	int jhAttackFrames = -1;
+	int superAttackFrames = -1;
+	int superFreezeFrames = -1;
 	virtual void lightAnimation() {
 	}
 	virtual void mediumAnimation() {
@@ -108,6 +113,8 @@ protected:
 	virtual void special1HAnimation() {
 	}
 	virtual void jumpAttackAnimation() {
+	}
+	virtual void superAnimation() {
 	}
 	CollisionType myHitType() {
 		return this->isPlayer2 ? CollisionType::HITBOX_P2 : CollisionType::HITBOX_P1;
@@ -146,10 +153,17 @@ protected:
 	}
 	void checkForSpecial1Cancel();
 	bool readQCF();
+	bool readDoubleQCF();
 	bool readQCB();
+	bool readDoubleQCB();
 	bool readQCFwithOrientation();
+	bool readDoubleQCFwithOrientation();
 	bool keyIsInputType(KeyInput ki, InputType ipt);
 	virtual void doDeath() {
+	}
+	void doSuperFreeze();
+	virtual void doSuperFreezeAnimation() {
+
 	}
 
 public:
@@ -210,9 +224,9 @@ public:
 		return this->health;
 	}
 	static bool attackTypeIsNormal(AttackType at) {
-		return (at == AttackType::LIGHT) || (at == AttackType::MEDIUM) || (at == AttackType::HEAVY) || (at == AttackType::AIRHEAVY);
+		return (at == AttackType::LIGHT) || (at == AttackType::MEDIUM) || (at == AttackType::HEAVY)
+				|| (at == AttackType::AIRHEAVY);
 	}
-
 
 };
 

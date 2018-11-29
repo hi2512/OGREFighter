@@ -50,6 +50,10 @@ public:
 	bool frameRenderingQueued(const FrameEvent& evt);
 	bool frameEnded(const Ogre::FrameEvent& evt);
 	Physics * phys;
+	void cameraSwing(const Vector3& point);
+	void cameraZoom(const Vector3& point);
+	void cameraReturn();
+	void cameraTracking(Real time);
 private:
 	bool inKeysHeld(const OgreBites::KeyboardEvent& evt, std::vector<KeyInput> kh);
 	void initPhys();
@@ -442,19 +446,19 @@ void Game::setup(void) {
 	gameState->p2 = p2;
 
 	/*
-	Entity * p3Entity = scnMgr->createEntity("Sinbad.mesh");
-	SceneNode * p3Node = scnMgr->getRootSceneNode()->createChildSceneNode("SinbadNode");
-	p3Node->setPosition(Vector3(0, 200, 0));
-	p3Node->attachObject(p3Entity);
-	p3Node->setScale(Vector3(15, 15, 15));
-	AnimationStateSet *mAnims = p3Entity->getAllAnimationStates();
-	AnimationStateIterator it = mAnims->getAnimationStateIterator();
-	while (it.hasMoreElements()) {
-		AnimationStateMap::mapped_type as = it.getNext();
-		LogManager::getSingleton().logMessage(as->getAnimationName());
-		as->setLoop(true);
-	}
-	*/
+	 Entity * p3Entity = scnMgr->createEntity("Sinbad.mesh");
+	 SceneNode * p3Node = scnMgr->getRootSceneNode()->createChildSceneNode("SinbadNode");
+	 p3Node->setPosition(Vector3(0, 200, 0));
+	 p3Node->attachObject(p3Entity);
+	 p3Node->setScale(Vector3(15, 15, 15));
+	 AnimationStateSet *mAnims = p3Entity->getAllAnimationStates();
+	 AnimationStateIterator it = mAnims->getAnimationStateIterator();
+	 while (it.hasMoreElements()) {
+	 AnimationStateMap::mapped_type as = it.getNext();
+	 LogManager::getSingleton().logMessage(as->getAnimationName());
+	 as->setLoop(true);
+	 }
+	 */
 	/*
 	 SceneNode * dn = mgr->getRootSceneNode()->createChildSceneNode("disc");
 	 Entity * di = mgr->createEntity("disc.mesh");
@@ -620,20 +624,35 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 Real xDir = centerPosX - curCamPos.x;
 	 camNode->translate(Vector3(xDir * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
 	 */
-
-	auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
-			/ 2;
-	//offset of initial height - average playerheights
-	centerPos.y += 200;
-	Vector3 transDir = centerPos - camNode->getPosition();
-	camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.8, 0) * evt.timeSinceLastFrame,
-			Node::TS_LOCAL);
+	cameraTracking(evt.timeSinceLastFrame);
 
 	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;
 	rightMouseRelease = false;
 	return frameVal;
+}
+
+//attach camera to a new node first
+void Game::cameraSwing(const Vector3& point) {
+
+}
+
+void Game::cameraZoom(const Vector3& point) {
+
+}
+
+void Game::cameraReturn() {
+
+}
+
+void Game::cameraTracking(Real time) {
+	auto centerPos = (player1->getRootNode()->getPosition() + player2->getRootNode()->getPosition())
+			/ 2;
+	//offset of initial height - average playerheights
+	centerPos.y += 200;
+	Vector3 transDir = centerPos - camNode->getPosition();
+	camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.8, 0) * time, Node::TS_LOCAL);
 }
 
 bool Game::frameEnded(const FrameEvent &evt) {

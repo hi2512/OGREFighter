@@ -3,7 +3,7 @@
 
 void Actor::checkForSpecial1Cancel() {
 	if ((!this->isAboveGround()) && (this->currentAttack != AttackType::NONE)
-			&& (this->specialMoveWindow >= 0)) {
+			&& (this->specialMove1Window >= 0)) {
 		for (KeyInput ki : *this->keysHeld) {
 			//skip if key is not binded for this ninja
 			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
@@ -50,11 +50,15 @@ bool Actor::readQCFwithOrientation() {
 	return this->onPlayer2Side ? this->readQCB() : this->readQCF();
 }
 
+bool Actor::readDoubleQCFwithOrientation() {
+	return this->onPlayer2Side ? this->readDoubleQCB() : this->readDoubleQCF();
+}
+
 bool Actor::readQCF() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 8;
+	const int cancelWindow = 7;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right = false;
 	bool drDown = false;
@@ -126,11 +130,66 @@ bool Actor::readQCF() {
 	return false;
 }
 
+bool Actor::readDoubleQCF() {
+	if (this->inputBuffer->empty()) {
+		return false;
+	}
+	const int cancelWindow = 23;
+	int endInputWindow = inputBuffer->back().frame - cancelWindow;
+	bool right1 = false;
+	bool down1 = false;
+	bool right2 = false;
+	bool down2 = false;
+	Uint32 right1Frame, down1Frame, right2Frame, down2Frame;
+	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
+		KeyInput cur = *it;
+		if (cur.frame < endInputWindow) {
+			//printf("INPUTS END\n");
+			break;
+		}
+		if (!right1) {
+			//check for right
+			right1 = this->keyIsInputType(cur, InputType::RIGHT);
+			if (right1) {
+				//printf("A\n");
+				right1Frame = cur.frame;
+			}
+			continue;
+		}
+		if (!down1) {
+			down1 = this->keyIsInputType(cur, InputType::DOWN);
+			if (down1) {
+				//printf("B\n");
+				down1Frame = cur.frame;
+			}
+			continue;
+		}
+		if (!right2) {
+			right2 = this->keyIsInputType(cur, InputType::RIGHT);
+			if (right2) {
+				//printf("C\n");
+				right2Frame = cur.frame;
+			}
+			continue;
+		}
+		if (!down2) {
+			down2 = this->keyIsInputType(cur, InputType::DOWN);
+			if (down2) {
+				//printf("D\n");
+				return true;
+			}
+			continue;
+		}
+	}
+
+	return false;
+}
+
 bool Actor::readQCB() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 8;
+	const int cancelWindow = 7;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right = false;
 	bool drDown = false;
@@ -162,6 +221,57 @@ bool Actor::readQCB() {
 			continue;
 		}
 	}
+	return false;
+}
+
+bool Actor::readDoubleQCB() {
+	if (this->inputBuffer->empty()) {
+		return false;
+	}
+	const int cancelWindow = 23;
+	int endInputWindow = inputBuffer->back().frame - cancelWindow;
+	bool left1 = false;
+	bool down1 = false;
+	bool left2 = false;
+	bool down2 = false;
+	Uint32 left1Frame, down1Frame, left2Frame, down2Frame;
+	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
+		KeyInput cur = *it;
+		if (cur.frame < endInputWindow) {
+			//printf("INPUTS END\n");
+			break;
+		}
+		if (!left1) {
+			//check for right
+			left1 = this->keyIsInputType(cur, InputType::LEFT);
+			if (left1) {
+				left1Frame = cur.frame;
+			}
+			continue;
+		}
+		if (!down1) {
+			down1 = this->keyIsInputType(cur, InputType::DOWN);
+			if (down1) {
+				down1Frame = cur.frame;
+			}
+			continue;
+		}
+		if (!left2) {
+			left2 = this->keyIsInputType(cur, InputType::LEFT);
+			if (left2) {
+				left2Frame = cur.frame;
+			}
+			continue;
+		}
+		if (!down2) {
+			down2 = this->keyIsInputType(cur, InputType::DOWN);
+			if (down2) {
+				return true;
+			}
+			continue;
+		}
+	}
+
 	return false;
 }
 
