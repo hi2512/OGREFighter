@@ -50,9 +50,10 @@ public:
 	bool frameRenderingQueued(const FrameEvent& evt);
 	bool frameEnded(const Ogre::FrameEvent& evt);
 	Physics * phys;
-	void cameraSwing(const Vector3& point);
+	void createCameraSwingAnimation(const Vector3& point);
+	void cameraSwing(Real time, const Vector3& point);
 	void cameraZoom(const Vector3& point);
-	void cameraReturn();
+	void cameraSwap();
 	void cameraTracking(Real time);
 private:
 	bool inKeysHeld(const OgreBites::KeyboardEvent& evt, std::vector<KeyInput> kh);
@@ -194,6 +195,11 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 		break;
 	case 'd':
 		moveDir.x = moveVal;
+		break;
+	case 'y':
+		cameraSwap();
+		createCameraSwingAnimation(player1->getRootNode()->getPosition());
+		swing = !swing;
 		break;
 	case 'p':
 		//gameState->incrementScore(0);
@@ -359,6 +365,8 @@ void Game::setup(void) {
 
 	SceneNode * sideNode = scnMgr->getRootSceneNode()->createChildSceneNode("SideNode",
 			Vector3(800, 200, 0));
+	SceneNode * superCamNode = scnMgr->getRootSceneNode()->createChildSceneNode("SuperCamNode",
+			camNode->getPosition());
 
 	// render the light at the top of the room
 	Light* pointLight1 = scnMgr->createLight("pointLight1");
@@ -624,7 +632,12 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 Real xDir = centerPosX - curCamPos.x;
 	 camNode->translate(Vector3(xDir * 1.0, 0, 0) * evt.timeSinceLastFrame, Node::TS_LOCAL);
 	 */
-	cameraTracking(evt.timeSinceLastFrame);
+	if (!swing) {
+		cameraTracking(evt.timeSinceLastFrame);
+	} else {
+		cameraSwing(evt.timeSinceLastFrame, player1->getRootNode()->getPosition());
+	}
+	//cameraTracking(evt.timeSinceLastFrame);
 
 	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
@@ -633,17 +646,87 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	return frameVal;
 }
 
-//attach camera to a new node first
-void Game::cameraSwing(const Vector3& point) {
+void Game::createCameraSwingAnimation(const Vector3& point) {
+	if (mgr->hasAnimation("CamSwing")) {
+		mgr->destroyAnimation("CamSwing");
+	}
+	Animation * animation = mgr->createAnimation("CamSwing", 9.0);
+	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
+	SceneNode * swingNode = mgr->getSceneNode("SuperCamNode");
+	swingNode->setPosition(camNode->getPosition());
+	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(0, swingNode);
+	Vector3 curPos = swingNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Vector3 newPos;
+	Vector3 pointXZ(point.x, 0, point.z);
+	Vector3 swingNodeXZ(curPos.x, 0, curPos.z);
+	Vector3 dir = swingNodeXZ - pointXZ;
+	//Quaternion rot = pointXZ.getRotationTo(swingNodeXZ);
+	Quaternion rot = Quaternion::IDENTITY;
+	Real distToPoint = pointXZ.distance(swingNodeXZ);
 
+	TransformKeyFrame * key;
+	key = track->createNodeKeyFrame(0.0f);
+	key->setTranslate(curPos);
+	//key->setRotation(curRot);
+
+	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
+	newPos = rot * swingNodeXZ;
+
+	key = track->createNodeKeyFrame(2.0f);
+	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
+
+	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
+	newPos = rot * swingNodeXZ;
+
+	key = track->createNodeKeyFrame(4.0f);
+	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
+
+	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
+	newPos = rot * swingNodeXZ;
+
+	key = track->createNodeKeyFrame(6.0f);
+	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
+
+	rot = rot * Quaternion(Degree(10), Vector3::UNIT_Y);
+	newPos = rot * swingNodeXZ;
+
+	key = track->createNodeKeyFrame(8.0f);
+	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z));
+
+	mgr->createAnimationState("CamSwing");
+}
+
+void Game::cameraSwing(Real time, const Vector3& targetPoint) {
+
+	camera->lookAt(targetPoint);
+	AnimationState * swingAnim = mgr->getAnimationState("CamSwing");
+	swingAnim->setLoop(false);
+	swingAnim->setEnabled(true);
+	swingAnim->addTime(time * 3.0);
+	//mgr->getSceneNode("SuperCamNode")->lookAt(targetPoint, Node::TS_WORLD);
+	if (swingAnim->hasEnded()) {
+		swingAnim->setTimePosition(0);
+		swingAnim->setEnabled(false);
+		cameraSwap();
+		swing = false;
+	}
 }
 
 void Game::cameraZoom(const Vector3& point) {
 
 }
 
-void Game::cameraReturn() {
+void Game::cameraSwap() {
 
+	SceneNode * sn = mgr->getSceneNode("SuperCamNode");
+	if (!sn->getAttachedObjects().empty()) {
+		camNode->attachObject(sn->detachObject("mainCamera"));
+		camera->lookAt(Vector3(0, 150, -1));
+		return;
+	}
+	sn->attachObject(camNode->detachObject("mainCamera"));
+	//camNode->lookAt(Vector3(0, 50, -1), Node::TS_PARENT);
+	//sn->lookAt(Vector3(0, 200, 0), Node::TS_WORLD);
 }
 
 void Game::cameraTracking(Real time) {

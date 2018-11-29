@@ -1,6 +1,10 @@
 #include "Actor.h"
 #include <cassert>
 
+void Actor::doSuperFreeze() {
+
+}
+
 void Actor::checkForSpecial1Cancel() {
 	if ((!this->isAboveGround()) && (this->currentAttack != AttackType::NONE)
 			&& (this->specialMove1Window >= 0)) {
