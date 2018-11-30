@@ -558,6 +558,8 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	}
 	gameGui->showHealth1();
 	gameGui->showHealth2();
+	gameGui->showMeter1();
+	gameGui->showMeter2();
 	/*
 	 if (gameState->shouldExit) {
 	 getRoot()->queueEndRendering();

@@ -33,6 +33,22 @@ void GameGui::showComboCounter2() {
 	ImGui::End();
 }
 
+void GameGui::showMeter1() {
+	ImGui::Begin("Player 1 Meter", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(100, 600));
+	ImGui::Text("SUPER                   ");
+	ImGui::ProgressBar(state->p1->getMeterVal() / state->p1->getMeterMax());
+	ImGui::End();
+}
+
+void GameGui::showMeter2() {
+	ImGui::Begin("Player 2 Meter", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(1200, 600));
+	ImGui::Text("SUPER                   ");
+	ImGui::ProgressBar(state->p2->getMeterVal() / state->p2->getMeterMax());
+	ImGui::End();
+}
+
 void GameGui::showFrameCount() {
 	ImGui::Begin("Frame Count", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);

@@ -6,6 +6,7 @@ void Actor::doSuperFreeze() {
 }
 
 void Actor::checkForSpecial1Cancel() {
+	//printf("cur attack %d, %d\n", this->currentAttack, attackTypeIsNormal(this->currentAttack));
 	if ((!this->isAboveGround()) && (attackTypeIsNormal(this->currentAttack))
 			&& (this->specialMove1Window >= 0)) {
 		for (KeyInput ki : *this->keysHeld) {
@@ -17,16 +18,20 @@ void Actor::checkForSpecial1Cancel() {
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SPECIAL1L;
+				this->actorState = StateType::STOP;
 			}
 			if (this->keyBinding.at(ki.key) == InputType::M) {
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SPECIAL1M;
+				this->actorState = StateType::STOP;
+				printf("CANCELED\n");
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SPECIAL1H;
+				this->actorState = StateType::STOP;
 			}
 		}
 	}
@@ -35,7 +40,7 @@ void Actor::checkForSpecial1Cancel() {
 void Actor::checkForSuperCancel() {
 	//printf("check for super cancel\n");
 	if ((!this->isAboveGround()) && (attackTypeIsSpecial(this->currentAttack))
-			&& (this->superMoveWindow >= 0)) {
+			&& (this->superMoveWindow >= 0) && (this->superVal.isFull()) ) {
 		//printf("in window\n");
 		for (KeyInput ki : *this->keysHeld) {
 			//skip if key is not binded for this ninja
@@ -47,16 +52,23 @@ void Actor::checkForSuperCancel() {
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SUPER;
+				this->actorState = StateType::STOP;
+				this->superVal.reset();
 			}
 			if (this->keyBinding.at(ki.key) == InputType::M) {
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SUPER;
+				this->actorState = StateType::STOP;
+				//printf("HER   EEE CANCELED\n");
+				this->superVal.reset();
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SUPER;
+				this->actorState = StateType::STOP;
+				this->superVal.reset();
 			}
 		}
 	}
@@ -438,6 +450,7 @@ void Actor::recieveBlock(HitboxData * hbd) {
 	this->pushBack(hbd->blockPushback);
 	this->opponent->pushBack(hbd->attackBlockPushback);
 	this->health -= hbd->blockDmg;
+	this->superVal.addVal(hbd->blockMeterGain);
 
 }
 
@@ -464,6 +477,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 		this->enterStopState(hbd->hitstop);
 		this->opponent->enterStopState(hbd->hitstop);
 		this->health -= hbd->hitDmg * hitScaling() * 1.25;
+		this->superVal.addVal(hbd->hitMeterGain);
 		return;
 	}
 	this->actorState = StateType::HITSTUN;
@@ -476,6 +490,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 	this->pushBack(hbd->hitPushback);
 	this->opponent->pushBack(hbd->attackHitPushback);
 	this->health -= hbd->hitDmg * hitScaling();
+	this->superVal.addVal(hbd->hitMeterGain);
 
 	if (this->health <= 0) {
 		this->beforeStopState = StateType::DEAD;

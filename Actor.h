@@ -28,6 +28,41 @@ enum InputType {
 
 };
 
+class SuperVal {
+	const Real lim = 100.0;
+	Real val;
+public:
+	SuperVal() :
+			val(0.0) {
+	}
+	Real getVal() {
+		return val;
+	}
+	bool isFull() {
+		return val >= lim;
+	}
+	void addVal(Real gain) {
+		if (val + gain > lim) {
+			val = lim;
+		} else {
+			val += gain;
+		}
+	}
+	void decreaseVal(Real lower) {
+		if (val - lower < 0) {
+			val = 0;
+		} else {
+			val -= lower;
+		}
+	}
+	void reset() {
+		val = 0.0;
+	}
+	Real getMax() {
+		return lim;
+	}
+};
+
 class Actor: public GameObject {
 private:
 	Real hitScaling();
@@ -35,6 +70,7 @@ private:
 protected:
 	const Real maxHealth = 1000.0;
 	Real health = maxHealth;
+	SuperVal superVal;
 	//SceneNode * jumpNode;
 	//SceneNode * jumpP2Node;
 	Real groundHeight = 0;
@@ -230,7 +266,8 @@ public:
 				|| (at == AttackType::AIRHEAVY);
 	}
 	static bool attackTypeIsSpecial(AttackType at) {
-		return (at == AttackType::SPECIAL1L) || (at == AttackType::SPECIAL1M) || (at == AttackType::SPECIAL1H);
+		return (at == AttackType::SPECIAL1L) || (at == AttackType::SPECIAL1M)
+				|| (at == AttackType::SPECIAL1H);
 	}
 	void setStartSuperFreeze(bool b) {
 		this->startSuperFreeze = b;
@@ -240,6 +277,12 @@ public:
 	}
 	virtual Vector3 getSuperPos() {
 		return this->getRootNode()->getPosition();
+	}
+	Real getMeterVal() {
+		return this->superVal.getVal();
+	}
+	Real getMeterMax() {
+		return this->superVal.getMax();
 	}
 
 };

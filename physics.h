@@ -30,6 +30,8 @@ struct HitboxData {
 	Real attackBlockPushback;
 	Real hitDmg;
 	Real blockDmg;
+	Real hitMeterGain;
+	Real blockMeterGain;
 	int hitstun;
 	int blockstun;
 	int hitstop;

@@ -40,6 +40,8 @@ public:
 	void showComboCounter2();
 	void showHealth1();
 	void showHealth2();
+	void showMeter1();
+	void showMeter2();
 };
 
 
