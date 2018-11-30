@@ -25,7 +25,7 @@ void Actor::checkForSpecial1Cancel() {
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SPECIAL1M;
 				this->actorState = StateType::STOP;
-				printf("CANCELED\n");
+				//printf("CANCELED\n");
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->clearAttack();
@@ -104,7 +104,7 @@ bool Actor::readQCF() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 6;
+	const int cancelWindow = 7;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right = false;
 	bool drDown = false;
@@ -180,7 +180,7 @@ bool Actor::readDoubleQCF() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 18;
+	const int cancelWindow = 20;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right1 = false;
 	bool down1 = false;
@@ -235,7 +235,7 @@ bool Actor::readQCB() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 6;
+	const int cancelWindow = 7;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right = false;
 	bool drDown = false;
@@ -274,7 +274,7 @@ bool Actor::readDoubleQCB() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 18;
+	const int cancelWindow = 20;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool left1 = false;
 	bool down1 = false;
