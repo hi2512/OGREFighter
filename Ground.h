@@ -17,7 +17,7 @@ public:
 					origin, btQuaternion(1.0, 0.0, 0.0, 0.0), 1.15, 0.0) {
 		this->setCollisionType(CollisionType::GROUND);
 		//does this help performance?
-		//this->physics->dynamicsWorld->removeRigidBody(body);
+		this->physics->dynamicsWorld->removeRigidBody(body);
 	}
 
 	void animate(const FrameEvent &evt){} //nothing?

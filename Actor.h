@@ -153,6 +153,7 @@ protected:
 	virtual void playBlockAnimation() {
 	}
 	void checkForSpecial1Cancel();
+	void checkForSuperCancel();
 	bool readQCF();
 	bool readDoubleQCF();
 	bool readQCB();
@@ -227,6 +228,9 @@ public:
 	static bool attackTypeIsNormal(AttackType at) {
 		return (at == AttackType::LIGHT) || (at == AttackType::MEDIUM) || (at == AttackType::HEAVY)
 				|| (at == AttackType::AIRHEAVY);
+	}
+	static bool attackTypeIsSpecial(AttackType at) {
+		return (at == AttackType::SPECIAL1L) || (at == AttackType::SPECIAL1M) || (at == AttackType::SPECIAL1H);
 	}
 	void setStartSuperFreeze(bool b) {
 		this->startSuperFreeze = b;

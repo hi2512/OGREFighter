@@ -6,7 +6,7 @@ void Actor::doSuperFreeze() {
 }
 
 void Actor::checkForSpecial1Cancel() {
-	if ((!this->isAboveGround()) && (this->currentAttack != AttackType::NONE)
+	if ((!this->isAboveGround()) && (attackTypeIsNormal(this->currentAttack))
 			&& (this->specialMove1Window >= 0)) {
 		for (KeyInput ki : *this->keysHeld) {
 			//skip if key is not binded for this ninja
@@ -27,6 +27,36 @@ void Actor::checkForSpecial1Cancel() {
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SPECIAL1H;
+			}
+		}
+	}
+}
+
+void Actor::checkForSuperCancel() {
+	//printf("check for super cancel\n");
+	if ((!this->isAboveGround()) && (attackTypeIsSpecial(this->currentAttack))
+			&& (this->superMoveWindow >= 0)) {
+		//printf("in window\n");
+		for (KeyInput ki : *this->keysHeld) {
+			//skip if key is not binded for this ninja
+			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+				continue;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::L) {
+				//printf("here\n");
+				this->clearAttack();
+				this->beforeStopState = StateType::ATTACK;
+				this->currentAttack = AttackType::SUPER;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::M) {
+				this->clearAttack();
+				this->beforeStopState = StateType::ATTACK;
+				this->currentAttack = AttackType::SUPER;
+			}
+			if (this->keyBinding.at(ki.key) == InputType::H) {
+				this->clearAttack();
+				this->beforeStopState = StateType::ATTACK;
+				this->currentAttack = AttackType::SUPER;
 			}
 		}
 	}
@@ -62,7 +92,7 @@ bool Actor::readQCF() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 7;
+	const int cancelWindow = 6;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right = false;
 	bool drDown = false;
@@ -138,7 +168,7 @@ bool Actor::readDoubleQCF() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 23;
+	const int cancelWindow = 18;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right1 = false;
 	bool down1 = false;
@@ -193,7 +223,7 @@ bool Actor::readQCB() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 7;
+	const int cancelWindow = 6;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool right = false;
 	bool drDown = false;
@@ -232,7 +262,7 @@ bool Actor::readDoubleQCB() {
 	if (this->inputBuffer->empty()) {
 		return false;
 	}
-	const int cancelWindow = 23;
+	const int cancelWindow = 18;
 	int endInputWindow = inputBuffer->back().frame - cancelWindow;
 	bool left1 = false;
 	bool down1 = false;
@@ -360,8 +390,10 @@ void Actor::doCollision(const FrameEvent& evt) {
 			this->moveLock = true;
 		}
 		//printf("check for hit context, %d\n", context.body->getUserIndex());
+		//printf("check for hit context, %d to %d\n", ((GameObject *) context.body->getUserPointer())->getCollisionType(), this->oppHitType());
 		//CHECK IF I WAS HIT
-		if (context.body->getUserIndex() == this->oppHitType() && !invincible) {
+		//if (context.body->getUserIndex() == this->oppHitType() && !invincible) {
+		if ( ((GameObject *) context.body->getUserPointer())->getCollisionType() == this->oppHitType() && !invincible) {
 			//printf("I am %s\n", this->name.c_str());
 			HitboxData * hbd = &((Hitbox *) context.body->getUserPointer())->myHbd;
 			//printf("IS HITBOX ACTIVE? %d\n", hbd->active);

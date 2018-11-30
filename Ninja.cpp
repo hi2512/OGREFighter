@@ -696,7 +696,7 @@ void Ninja::superAnimation() {
 		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 100, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
-		hitFrames.push_back(btVector3(xPos ,yPos + 80, curPos.z));
+		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 80, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 30, curPos.z));
@@ -734,13 +734,13 @@ void Ninja::superAnimation() {
 
 	int frameTime = -this->attackFrameCount + 50;
 	//do super freeze
-	if(frameTime == -10) {
+	if (frameTime == -5) {
 		this->enterStopState(180);
 		this->opponent->enterStopState(180);
 		this->setStartSuperFreeze(true);
 		return;
 	}
-	if(frameTime >= -50 && frameTime <= 10) {
+	if (frameTime >= -50 && frameTime <= 10) {
 		this->invincible = true;
 	}
 	if (frameTime >= 0 && frameTime <= 15) {
@@ -784,7 +784,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 	}
 
 	if (this->readDoubleQCFwithOrientation()) {
-		this->superMoveWindow = 7;
+		this->superMoveWindow = 6;
 	}
 
 	switch (this->actorState) {
@@ -855,11 +855,12 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		} else {
 			//check for cancel
 			this->checkForSpecial1Cancel();
+			this->checkForSuperCancel();
 		}
 		this->stopFrameCount -= 1;
 		break;
 	case StateType::ATTACK:
-		//printf("attack reached, attack frame count %d\n", this->attackFrameCount);
+		printf("attack reached, attack frame count %d\n", this->attackFrameCount);
 		if (this->attackFrameCount == 0) {
 			//reset animation
 			this->clearAttack();
@@ -965,6 +966,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 					this->currentAttack = AttackType::SPECIAL1M;
 					this->specialMove1Window = -1;
 				}
+				if (this->superMoveWindow > -1) {
+					this->currentAttack = AttackType::SUPER;
+					this->superMoveWindow = -1;
+				}
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
 				this->actorState = StateType::ATTACK;
@@ -972,6 +977,10 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
 					this->currentAttack = AttackType::SPECIAL1H;
 					this->specialMove1Window = -1;
+				}
+				if (this->superMoveWindow > -1) {
+					this->currentAttack = AttackType::SUPER;
+					this->superMoveWindow = -1;
 				}
 			}
 		}
@@ -1045,6 +1054,9 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 
 	if (specialMove1Window > -1) {
 		this->specialMove1Window -= 1;
+	}
+	if (superMoveWindow > -1) {
+		this->superMoveWindow -= 1;
 	}
 	this->moveLock = false;
 	this->doCollision(evt);
