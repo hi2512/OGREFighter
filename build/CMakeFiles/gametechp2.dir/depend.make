@@ -11,6 +11,7 @@ CMakeFiles/gametechp2.dir/Actor.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../Hitbox.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../InputContainer.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../Spark.h
+CMakeFiles/gametechp2.dir/Actor.cpp.o: ../audio.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: ../physics.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: /usr/local/include/OGRE/Ogre.h
 CMakeFiles/gametechp2.dir/Actor.cpp.o: /usr/local/include/OGRE/OgreAlignedAllocator.h

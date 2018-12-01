@@ -427,13 +427,22 @@ void Game::setup(void) {
 	//this wall is just for show
 	Ogre::Plane backWall(Ogre::Vector3::UNIT_Z, 0);
 	Ogre::MeshManager::getSingleton().createPlane("back",
-			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, backWall, 3000, 4000, 20, 20,
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, backWall, 3000, 5000, 20, 20,
 			true, 1, 5, 5, Ogre::Vector3::UNIT_X);
 	Ogre::Entity* backEntity = scnMgr->createEntity("back");
-	backEntity->setMaterialName("WoodPallet");
+	//backEntity->setMaterialName("WoodPallet");
 	Ogre::SceneNode * bWallNode = scnMgr->getRootSceneNode()->createChildSceneNode();
 	bWallNode->attachObject(backEntity);
-	bWallNode->setPosition(Vector3(0, 1000, -2000));
+	bWallNode->setPosition(Vector3(0, 1500, -2000));
+
+	Ogre::Plane topWall(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);
+	Ogre::MeshManager::getSingleton().createPlane("top",
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, topWall, 3000, 5000, 20, 20,
+			true, 1, 5, 5, Ogre::Vector3::UNIT_X);
+	Ogre::Entity* topEntity = scnMgr->createEntity("top");
+	Ogre::SceneNode * tWallNode = scnMgr->getRootSceneNode()->createChildSceneNode();
+	tWallNode->attachObject(topEntity);
+	tWallNode->setPosition(Vector3(1000, 3000, -1000));
 
 	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
 	//p1Entity->setMaterialName("Examples/BumpyMetal");
@@ -523,10 +532,10 @@ void Game::initPhys() {
 //! [main]
 int main(int argc, char *argv[]) {
 
-	SDL_Init(SDL_INIT_AUDIO);
+	SDL_Init(SDL_INIT_EVERYTHING);
 
 	initAudio();
-	playMusic("../assets/Stealth Groover.wav", SDL_MIX_MAXVOLUME / 3);
+	playMusic("../assets/Wicked_Things.wav", SDL_MIX_MAXVOLUME / 3);
 
 	srand((unsigned) time(NULL));
 	Game app;
@@ -669,11 +678,10 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 }
 
 void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
-	//hooray for linear algebra...
 	if (mgr->hasAnimation("CamSwing")) {
 		mgr->destroyAnimation("CamSwing");
 	}
-	Animation * animation = mgr->createAnimation("CamSwing", 8.5);
+	Animation * animation = mgr->createAnimation("CamSwing", 8.2);
 	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
 	SceneNode * swingNode = mgr->getSceneNode("SuperCamNode");
 	swingNode->setPosition(camNode->getPosition());

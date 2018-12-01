@@ -19,14 +19,12 @@ void GameGui::showHealth2() {
 }
 
 void GameGui::showComboCounter1() {
-
 	ImGui::Begin("Player 1", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::SetWindowPos(ImVec2(100, 50));
 	ImGui::Text("%d Hits    ", this->state->p1->comboCount());
 	ImGui::End();
 }
 void GameGui::showComboCounter2() {
-
 	ImGui::Begin("Player 2", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::SetWindowPos(ImVec2(1100, 50));
 	ImGui::Text("%d Hits    ", this->state->p2->comboCount());
@@ -65,7 +63,8 @@ void GameGui::showCamPos() {
 	ImGui::Text("Camera Y Position: %f", state->camPos.y);
 	ImGui::Text("Camera Z Position: %f", state->camPos.z);
 
-	ImVec2 windowPos = ImGui::GetWindowPos();
+	//ImVec2 windowPos = ImGui::GetWindowPos();
+	ImVec2 windowPos = ImGui::GetWindowContentRegionMax();
 
 	ImGui::Text("Window X Position: %f", windowPos.x);
 	ImGui::Text("Window Y Position: %f", windowPos.y);

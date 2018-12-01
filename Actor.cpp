@@ -1,5 +1,6 @@
 #include "Actor.h"
 #include <cassert>
+#include "audio.h"
 
 void Actor::doSuperFreeze() {
 
@@ -345,7 +346,7 @@ void Actor::doFall() {
 }
 
 bool Actor::isBlocking() {
-	if (this->actorState != StateType::FREE) {
+	if ((this->actorState != StateType::FREE) && (this->actorState != StateType::BLOCKSTUN)) {
 		return false;
 	}
 	bool blocking = false;
@@ -441,7 +442,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 }
 
 void Actor::recieveBlock(HitboxData * hbd) {
-	assert(this->actorState == StateType::FREE);
+	assert((this->actorState == StateType::FREE) || (this->actorState == StateType::BLOCKSTUN));
 	this->actorState = StateType::BLOCKSTUN;
 	this->blockstunFrames = hbd->blockstun;
 	this->enterStopState(hbd->blockstop);
@@ -455,7 +456,7 @@ void Actor::recieveBlock(HitboxData * hbd) {
 }
 
 void Actor::recieveHit(HitboxData * hbd) {
-
+	playSound("../assets/hit1.wav", SDL_MIX_MAXVOLUME / 2);
 	int counterFrames = 0;
 //this->beforeStopState = StateType::HITSTUN;
 	if (this->actorState == StateType::ATTACK) {
