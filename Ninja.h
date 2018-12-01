@@ -86,7 +86,7 @@ public:
 		this->hAttackFrames = 90;
 		this->s1LAttackFrames = 90;
 		this->s1MAttackFrames = 80;
-		this->s1HAttackFrames = 95;
+		this->s1HAttackFrames = 90;
 		this->jhAttackFrames = 60;
 		this->superAttackFrames = 100;
 		this->superFreezeFrames = 180;

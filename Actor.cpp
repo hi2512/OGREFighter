@@ -346,7 +346,7 @@ void Actor::doFall() {
 }
 
 bool Actor::isBlocking() {
-	if ((this->actorState != StateType::FREE) && (this->actorState != StateType::BLOCKSTUN)) {
+	if ( !((this->actorState == StateType::FREE) || (this->actorState == StateType::BLOCKSTUN))) {
 		return false;
 	}
 	bool blocking = false;

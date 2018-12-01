@@ -134,7 +134,7 @@ void Ninja::createLightBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 6.0, 12.0, 16.0, 20.0, 40.0, 10.0, 10.0, 10.0, 40, 35, 4, 3, false };
+	HitboxData hbd { hbox, 6.0, 12.0, 16.0, 20.0, 40.0, 10.0, 10.0, 10.0, 42, 35, 4, 4, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
@@ -160,7 +160,7 @@ void Ninja::createMediumBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 15.0, 25.0, 35.0, 35.0, 60.0, 20.0, 15.0, 15.0, 44, 25, 6, 4, false };
+	HitboxData hbd { hbox, 15.0, 25.0, 35.0, 35.0, 60.0, 20.0, 15.0, 15.0, 44, 15, 6, 4, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::MEDIUM, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::MEDIUM));
@@ -186,7 +186,7 @@ void Ninja::createHeavyBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 10.0, 5.0, 25.0, 0.0, 120.0, 40.0, 15.0, 15.0, 45, 5, 8, 6, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 25.0, 0.0, 150.0, 50.0, 15.0, 15.0, 45, 5, 8, 6, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::HEAVY, hbd));
 	 //auto re = &this->hitboxes.at(AttackType::HEAVY);
@@ -214,7 +214,7 @@ void Ninja::createSpecial1LBox() {
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
 	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
 			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
-			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 5.8, 0, 0),
+			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 6, 0, 0),
 			btVector3(0, 0, 0), hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
@@ -267,7 +267,7 @@ void Ninja::createSpecial1HBox() {
 	//btCollisionObject * hbox = new btPairCachingGhostObject();
 	btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
 	//hbox->setCollisionShape(diShape);
-	HitboxData hbd { NULL, 55.0, 45.0, 0.0, 0.0, 110.0, 33.0, 15.0, 15.0, 45, 30, 10, 8, true };
+	HitboxData hbd { NULL, 55.0, 45.0, 0.0, 0.0, 110.0, 33.0, 15.0, 15.0, 50, 30, 10, 8, true };
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
@@ -311,7 +311,7 @@ void Ninja::createSuperBox() {
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
 
-	HitboxData hbd { hbox, 10.0, 5.0, 5.0, 5.0, 350.0, 50.0, 20.0, 20.0, 100, 20, 10, 8, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 5.0, 5.0, 320.0, 50.0, 20.0, 20.0, 100, 20, 10, 8, false };
 	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "SUPER", physics, hbox, pos, hbd,
 			this->myHitType());
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SUPER, hitObj));
@@ -670,7 +670,7 @@ void Ninja::special1HAnimation() {
 		//projectile activates and animates itself
 		this->createSpecial1HBox();
 	}
-	if (frameTime >= -50 && frameTime <= 40) {
+	if (frameTime >= -45 && frameTime <= 40) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.3, 2.5));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
