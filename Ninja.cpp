@@ -872,6 +872,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			case AttackType::LIGHT:
 				this->attackFrameCount = this->lAttackFrames;
 				this->hitboxes.at(currentAttack)->myHbd.active = true;
+				playSound("../assets/swing1.wav", SDL_MIX_MAXVOLUME / 3);
 				break;
 			case AttackType::MEDIUM:
 				this->attackFrameCount = this->mAttackFrames;
@@ -1024,6 +1025,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			//not walking
 			this->setAnimation("Idle1");
 		}
+		/*
 		//check if movement locked
 		if (moveLock) {
 			printf("MOVE LOCKED\n");
@@ -1033,6 +1035,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 			asb->addTime(0.005);
 			break;
 		}
+		*/
 		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
 		//play animation
 		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);

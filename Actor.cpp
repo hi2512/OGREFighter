@@ -49,7 +49,6 @@ void Actor::checkForSuperCancel() {
 				continue;
 			}
 			if (this->keyBinding.at(ki.key) == InputType::L) {
-				//printf("here\n");
 				this->clearAttack();
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SUPER;
@@ -61,7 +60,6 @@ void Actor::checkForSuperCancel() {
 				this->beforeStopState = StateType::ATTACK;
 				this->currentAttack = AttackType::SUPER;
 				this->actorState = StateType::STOP;
-				//printf("HER   EEE CANCELED\n");
 				this->superVal.reset();
 			}
 			if (this->keyBinding.at(ki.key) == InputType::H) {
@@ -77,7 +75,7 @@ void Actor::checkForSuperCancel() {
 
 Real Actor::hitScaling() {
 	Real scale = 1.0;
-	scale -= (this->comboCounter + 1) * 0.06;
+	scale -= (this->comboCounter + 1) * 0.07;
 	if (health / maxHealth <= .25) {
 		scale *= 0.8;
 	}
@@ -399,9 +397,11 @@ void Actor::doCollision(const FrameEvent& evt) {
 			this->opponent->pushBack(12.0);
 			this->pushBack(3.0);
 		}
+		/*
 		if (context.body->getUserIndex() == this->oppHurtType()) {
 			this->moveLock = true;
 		}
+		*/
 		//printf("check for hit context, %d\n", context.body->getUserIndex());
 		//printf("check for hit context, %d to %d\n", ((GameObject *) context.body->getUserPointer())->getCollisionType(), this->oppHitType());
 		//CHECK IF I WAS HIT
@@ -443,6 +443,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 
 void Actor::recieveBlock(HitboxData * hbd) {
 	assert((this->actorState == StateType::FREE) || (this->actorState == StateType::BLOCKSTUN));
+	playSound("../assets/metal.wav", SDL_MIX_MAXVOLUME / 14);
 	this->actorState = StateType::BLOCKSTUN;
 	this->blockstunFrames = hbd->blockstun;
 	this->enterStopState(hbd->blockstop);

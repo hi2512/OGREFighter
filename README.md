@@ -67,7 +67,7 @@ to cancel the standard attack animation and start
 the special attack to either combo or keep up the
 pressure. Be careful if this attack is blocked at
 close range though because it will let your opponent
-attack you will you are still recovering from the
+attack you while you are still recovering from the
 special attack. When you see the super meter full,
 you can execute your super attack! This can be
 done by pressing down, down-forward, forward, down,

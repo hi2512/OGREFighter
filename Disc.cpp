@@ -49,7 +49,7 @@ void Disc::animate(const FrameEvent& evt) {
 	if ((context.hit)
 			&& (((GameObject *) context.body->getUserPointer())->getCollisionType()
 					== this->owner->oppHitType())) {
-		playSound("../assets/metal.wav", SDL_MIX_MAXVOLUME / 6);
+		playSound("../assets/metal.wav", SDL_MIX_MAXVOLUME / 14);
 		this->activeTime = 0;
 	}
 	if (!this->myHbd.active || (this->activeTime < 0)) {

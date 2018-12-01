@@ -607,7 +607,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	//phys->dbd->Update();
+	phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];
@@ -705,41 +705,41 @@ void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
 	rot = rot * Quaternion(Degree(rotDir), Vector3::UNIT_Y);
 	//newPos = rot * swingNodeXZ;
 	newPos = rot * dir;
-	newPos = newPos + pointXZ;
+	newPos = (newPos + pointXZ) * 0.85;
 	//printf("1: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(2.0f);
-	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z) * 0.85);
+	key->setTranslate(Vector3(newPos.x, curPos.y - 30, newPos.z));
 	//key->setRotation(rot);
 
 	rot = rot * Quaternion(Degree(rotDir), Vector3::UNIT_Y);
 	//newPos = rot * swingNodeXZ;
 	newPos = rot * dir;
-	newPos = newPos + pointXZ;
+	newPos = (newPos + pointXZ) * 0.7;
 	//printf("2: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(4.0f);
-	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z) * 0.7);
+	key->setTranslate(Vector3(newPos.x, curPos.y - 60, newPos.z));
 	//key->setRotation(rot);
 
 	rot = rot * Quaternion(Degree(rotDir), Vector3::UNIT_Y);
 	//newPos = rot * swingNodeXZ;
 	newPos = rot * dir;
-	newPos = newPos + pointXZ;
+	newPos = (newPos + pointXZ) * 0.55;
 	//printf("3: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(6.0f);
-	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z) * 0.55);
+	key->setTranslate(Vector3(newPos.x, curPos.y - 80, newPos.z));
 	//key->setRotation(rot);
 
 	rot = rot * Quaternion(Degree(rotDir), Vector3::UNIT_Y);
 	//newPos = rot * swingNodeXZ;
 	newPos = rot * dir;
-	newPos = newPos + pointXZ;
+	newPos = (newPos + pointXZ) * 0.4;
 	//printf("4: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(8.0f);
-	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z) * 0.4);
+	key->setTranslate(Vector3(newPos.x, curPos.y - 100, newPos.z));
 	//key->setRotation(rot);
 
 	mgr->createAnimationState("CamSwing");
