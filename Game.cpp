@@ -694,11 +694,8 @@ void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
 	Quaternion rot = Quaternion::IDENTITY;
 	Real rotDir = leftSide ? 10 : -10;
 
-	printf("swingnode: x: %f z:%f\n", curPos.x, curPos.z);
-	printf("point: x: %f z:%f\n", pointXZ.x, pointXZ.z);
-
-	printf("0: x: %f z:%f\n", dir.x + pointXZ.x, dir.z + pointXZ.z);
-	//printf("0: x: %f z:%f\n", pointXZ.x, pointXZ.z);
+	//printf("swingnode: x: %f z:%f\n", curPos.x, curPos.z);
+	//printf("point: x: %f z:%f\n", pointXZ.x, pointXZ.z);
 
 	TransformKeyFrame * key;
 	key = track->createNodeKeyFrame(0.0f);
@@ -709,7 +706,7 @@ void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
 	//newPos = rot * swingNodeXZ;
 	newPos = rot * dir;
 	newPos = newPos + pointXZ;
-	printf("1: x: %f z:%f\n", newPos.x, newPos.z);
+	//printf("1: x: %f z:%f\n", newPos.x, newPos.z);
 
 	key = track->createNodeKeyFrame(2.0f);
 	key->setTranslate(Vector3(newPos.x, curPos.y, newPos.z) * 0.85);

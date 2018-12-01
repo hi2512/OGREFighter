@@ -1,4 +1,5 @@
 #include "Disc.h"
+#include "audio.h"
 
 using namespace Ogre;
 using namespace std;
@@ -41,7 +42,17 @@ void Disc::animate(const FrameEvent& evt) {
 	as->addTime(0.05);
 	this->getRigidBody()->setGravity(btVector3(0, 0, 0));
 	GameObject::animate(evt);
-	if (!this->myHbd.active || (this->activeTime < 0) ) {
+	CollisionContext context;
+	BulletContactCallback* thing = new BulletContactCallback(*body, context);
+	this->physics->getWorld()->contactTest(body, *thing);
+	//disappear when contact other hitbox
+	if ((context.hit)
+			&& (((GameObject *) context.body->getUserPointer())->getCollisionType()
+					== this->owner->oppHitType())) {
+		playSound("../assets/metal.wav", SDL_MIX_MAXVOLUME / 6);
+		this->activeTime = 0;
+	}
+	if (!this->myHbd.active || (this->activeTime < 0)) {
 		printf("projectile deleted\n");
 		this->physics->dynamicsWorld->removeRigidBody(body);
 		this->sceneMgr->destroySceneNode(rootNode);

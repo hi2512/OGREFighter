@@ -154,18 +154,6 @@ protected:
 	}
 	virtual void superAnimation() {
 	}
-	CollisionType myHitType() {
-		return this->isPlayer2 ? CollisionType::HITBOX_P2 : CollisionType::HITBOX_P1;
-	}
-	CollisionType oppHitType() {
-		return this->isPlayer2 ? CollisionType::HITBOX_P1 : CollisionType::HITBOX_P2;
-	}
-	CollisionType myHurtType() {
-		return this->isPlayer2 ? CollisionType::HURTBOX_P2 : CollisionType::HURTBOX_P1;
-	}
-	CollisionType oppHurtType() {
-		return this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
-	}
 	void setBox(btCollisionObject * box, const btVector3& targetPos);
 	void clearAttack();
 	void recieveHit(HitboxData * hbd);
@@ -249,6 +237,18 @@ public:
 	void readInputs(std::deque<KeyInput>& buf, std::deque<KeyInput>& rBuf);
 	//void animate(const FrameEvent& evt);
 	void doCollision(const FrameEvent& evt);
+	CollisionType myHitType() {
+		return this->isPlayer2 ? CollisionType::HITBOX_P2 : CollisionType::HITBOX_P1;
+	}
+	CollisionType oppHitType() {
+		return this->isPlayer2 ? CollisionType::HITBOX_P1 : CollisionType::HITBOX_P2;
+	}
+	CollisionType myHurtType() {
+		return this->isPlayer2 ? CollisionType::HURTBOX_P2 : CollisionType::HURTBOX_P1;
+	}
+	CollisionType oppHurtType() {
+		return this->isPlayer2 ? CollisionType::HURTBOX_P1 : CollisionType::HURTBOX_P2;
+	}
 	bool hasActiveProjectile() {
 		return this->activeProjectile != NULL;
 	}

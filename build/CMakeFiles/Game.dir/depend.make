@@ -579,6 +579,7 @@ CMakeFiles/Game.dir/Disc.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/Game.dir/Disc.cpp.o: ../Hitbox.h
 CMakeFiles/Game.dir/Disc.cpp.o: ../InputContainer.h
 CMakeFiles/Game.dir/Disc.cpp.o: ../Spark.h
+CMakeFiles/Game.dir/Disc.cpp.o: ../audio.h
 CMakeFiles/Game.dir/Disc.cpp.o: ../physics.h
 CMakeFiles/Game.dir/Disc.cpp.o: /usr/local/include/OGRE/Ogre.h
 CMakeFiles/Game.dir/Disc.cpp.o: /usr/local/include/OGRE/OgreAlignedAllocator.h
