@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /home/steve/Downloads/GTechFinal/build
 # Target rules for target CMakeFiles/run.dir
 
 # All Build rule for target.
-CMakeFiles/run.dir/all: CMakeFiles/gametechp2.dir/all
+CMakeFiles/run.dir/all: CMakeFiles/Game.dir/all
 	$(MAKE) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/depend
 	$(MAKE) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num= "Built target run"
@@ -97,39 +97,39 @@ clean: CMakeFiles/run.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/gametechp2.dir
+# Target rules for target CMakeFiles/Game.dir
 
 # All Build rule for target.
-CMakeFiles/gametechp2.dir/all: CMakeFiles/OgreImgui.dir/all
-	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/depend
-	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=8,9,10,11,12,13,14,15,16,17,18 "Built target gametechp2"
-.PHONY : CMakeFiles/gametechp2.dir/all
+CMakeFiles/Game.dir/all: CMakeFiles/OgreImgui.dir/all
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/depend
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target Game"
+.PHONY : CMakeFiles/Game.dir/all
 
 # Include target in all.
-all: CMakeFiles/gametechp2.dir/all
+all: CMakeFiles/Game.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/gametechp2.dir/rule: cmake_check_build_system
+CMakeFiles/Game.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/steve/Downloads/GTechFinal/build/CMakeFiles 18
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/gametechp2.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Game.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/steve/Downloads/GTechFinal/build/CMakeFiles 0
-.PHONY : CMakeFiles/gametechp2.dir/rule
+.PHONY : CMakeFiles/Game.dir/rule
 
 # Convenience name for target.
-gametechp2: CMakeFiles/gametechp2.dir/rule
+Game: CMakeFiles/Game.dir/rule
 
-.PHONY : gametechp2
-
-# clean rule for target.
-CMakeFiles/gametechp2.dir/clean:
-	$(MAKE) -f CMakeFiles/gametechp2.dir/build.make CMakeFiles/gametechp2.dir/clean
-.PHONY : CMakeFiles/gametechp2.dir/clean
+.PHONY : Game
 
 # clean rule for target.
-clean: CMakeFiles/gametechp2.dir/clean
+CMakeFiles/Game.dir/clean:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/clean
+.PHONY : CMakeFiles/Game.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/Game.dir/clean
 
 .PHONY : clean
 
@@ -140,7 +140,7 @@ clean: CMakeFiles/gametechp2.dir/clean
 CMakeFiles/OgreImgui.dir/all:
 	$(MAKE) -f CMakeFiles/OgreImgui.dir/build.make CMakeFiles/OgreImgui.dir/depend
 	$(MAKE) -f CMakeFiles/OgreImgui.dir/build.make CMakeFiles/OgreImgui.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target OgreImgui"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/steve/Downloads/GTechFinal/build/CMakeFiles --progress-num=12,13,14,15,16,17,18 "Built target OgreImgui"
 .PHONY : CMakeFiles/OgreImgui.dir/all
 
 # Include target in all.

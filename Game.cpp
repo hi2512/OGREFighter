@@ -607,7 +607,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	phys->dbd->Update();
+	//phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];

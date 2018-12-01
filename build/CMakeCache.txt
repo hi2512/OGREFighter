@@ -160,7 +160,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=gametechp2
+CMAKE_PROJECT_NAME:STATIC=Game
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -233,6 +233,12 @@ FREETYPE_LIBRARY_DEBUG:FILEPATH=FREETYPE_LIBRARY_DEBUG-NOTFOUND
 //Path to a library.
 FREETYPE_LIBRARY_RELEASE:FILEPATH=/usr/local/lib/libfreetype.so
 
+//Value Computed by CMake
+Game_BINARY_DIR:STATIC=/home/steve/Downloads/GTechFinal/build
+
+//Value Computed by CMake
+Game_SOURCE_DIR:STATIC=/home/steve/Downloads/GTechFinal
+
 //The directory containing a CMake configuration file for OGRE.
 OGRE_DIR:PATH=/usr/local/lib/OGRE/cmake
 
@@ -241,12 +247,6 @@ OgreImgui_LIB_DEPENDS:STATIC=general;OgreBites;general;OgreHLMS;general;OgreMesh
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
-
-//Value Computed by CMake
-gametechp2_BINARY_DIR:STATIC=/home/steve/Downloads/GTechFinal/build
-
-//Value Computed by CMake
-gametechp2_SOURCE_DIR:STATIC=/home/steve/Downloads/GTechFinal
 
 //Path to a library.
 pkgcfg_lib_SDL2_SDL2:FILEPATH=/usr/local/lib/libSDL2.so

@@ -12,3 +12,7 @@ compared to the AI in the pong game.
 The architecture will have to be mostly rewritten to support
 a different type of game with Bullet being used to handle
 collisions. I am working alone and will do all the work myself.
+
+4.2:
+The game itself is mostly feature complete now and is in a playable state. The game has a completed ninja character with proper attacks,
+jumping, special attacks and cancels. At the moment, the background is empty, but will be filled in before the due date. Because progress on the game took longer then expected, only now have I begun to work on the AI component. To save time for the deadline, I am going to consider networking and multiple stages as a stretch goal at this point.

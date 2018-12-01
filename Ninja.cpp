@@ -311,7 +311,7 @@ void Ninja::createSuperBox() {
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
 
-	HitboxData hbd { hbox, 10.0, 5.0, 5.0, 5.0, 300.0, 50.0, 20.0, 20.0, 100, 20, 10, 8, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 5.0, 5.0, 350.0, 50.0, 20.0, 20.0, 100, 20, 10, 8, false };
 	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "SUPER", physics, hbox, pos, hbd,
 			this->myHitType());
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SUPER, hitObj));
@@ -935,7 +935,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 		}
 		Real move = walkSpeed * evt.timeSinceLastFrame;
 		Real moveX = 0;
-		bool holdDown = false;
+		//bool holdDown = false;
 		for (KeyInput ki : *this->keysHeld) {
 			//skip if key is not binded for this ninja
 			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
@@ -953,7 +953,7 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				moveX += move;
 			}
 			if (this->keyBinding.at(ki.key) == InputType::DOWN) {
-				holdDown = true;
+				//holdDown = true;
 			}
 			if (this->keyBinding.at(ki.key) == InputType::L) {
 				this->actorState = StateType::ATTACK;
@@ -1011,9 +1011,11 @@ void Ninja::animate(const Ogre::FrameEvent& evt) {
 				this->createJumpUpArc();
 			}
 		}
+		/*
 		if(holdDown && moveX) {
 			moveX = 0;
 		}
+		*/
 
 		//if walking
 		if (moveX) {

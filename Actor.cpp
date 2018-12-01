@@ -477,7 +477,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 		this->setAnimation("Death1");
 		this->enterStopState(hbd->hitstop);
 		this->opponent->enterStopState(hbd->hitstop);
-		this->health -= hbd->hitDmg * hitScaling() * 1.25;
+		this->health -= hbd->hitDmg * hitScaling() * 1.5;
 		this->superVal.addVal(hbd->hitMeterGain);
 		return;
 	}

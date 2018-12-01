@@ -5,7 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/steve/Downloads/GTechFinal/audio.c" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/audio.c.o"
+  "/home/steve/Downloads/GTechFinal/audio.c" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/audio.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -28,15 +28,15 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "/usr/local/include/OGRE/Volume"
   )
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/steve/Downloads/GTechFinal/Actor.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Actor.cpp.o"
-  "/home/steve/Downloads/GTechFinal/DebugDraw.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/DebugDraw.cpp.o"
-  "/home/steve/Downloads/GTechFinal/Disc.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Disc.cpp.o"
-  "/home/steve/Downloads/GTechFinal/DynamicLineDrawer.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/DynamicLineDrawer.cpp.o"
-  "/home/steve/Downloads/GTechFinal/Game.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Game.cpp.o"
-  "/home/steve/Downloads/GTechFinal/Ninja.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/Ninja.cpp.o"
-  "/home/steve/Downloads/GTechFinal/gui.cc" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/gui.cc.o"
-  "/home/steve/Downloads/GTechFinal/physics.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/physics.cpp.o"
-  "/home/steve/Downloads/GTechFinal/state.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/gametechp2.dir/state.cpp.o"
+  "/home/steve/Downloads/GTechFinal/Actor.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Actor.cpp.o"
+  "/home/steve/Downloads/GTechFinal/DebugDraw.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/DebugDraw.cpp.o"
+  "/home/steve/Downloads/GTechFinal/Disc.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Disc.cpp.o"
+  "/home/steve/Downloads/GTechFinal/DynamicLineDrawer.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o"
+  "/home/steve/Downloads/GTechFinal/Game.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Game.cpp.o"
+  "/home/steve/Downloads/GTechFinal/Ninja.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Ninja.cpp.o"
+  "/home/steve/Downloads/GTechFinal/gui.cc" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/gui.cc.o"
+  "/home/steve/Downloads/GTechFinal/physics.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/physics.cpp.o"
+  "/home/steve/Downloads/GTechFinal/state.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/state.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

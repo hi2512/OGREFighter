@@ -14,7 +14,7 @@ set(CMAKE_MODULE_PATH "/lusr/opt/bullet-2.86;${CMAKE_MODULE_PATH}")
 set(OGRE_DIR /lusr/opt/ogre-1.11/lib/OGRE/cmake)
 set(BULLET_DIR /lusr/opt/bullet-2.86/lib/cmake/bullet)
 
-project(gametechp2)
+project(Game)
 
 ## [discover_ogre]
 # specify which version and components you need
