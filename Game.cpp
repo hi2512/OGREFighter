@@ -569,6 +569,7 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	gameGui->showHealth2();
 	gameGui->showMeter1();
 	gameGui->showMeter2();
+	gameGui->showTime();
 	/*
 	 if (gameState->shouldExit) {
 	 getRoot()->queueEndRendering();
@@ -607,7 +608,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	phys->dbd->Update();
+	//phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];

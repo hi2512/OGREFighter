@@ -42,6 +42,7 @@ public:
 	void showHealth2();
 	void showMeter1();
 	void showMeter2();
+	void showTime();
 };
 
 

@@ -42,26 +42,36 @@ public:
 	Actor * p1 = NULL;
 	Actor * p2 = NULL;
 
+	const Uint32 maxTime = 7100;
 
 	GameState(void) {
 
 	}
-	~GameState(void){}
-
-	bool gameIsPaused(){
-		return !gameStarted || showingGameScoreboard || showLoseScreen || showWinScreen || showConnectionScreen || waitingOnPlayers;
+	~GameState(void) {
 	}
 
-	void startGame(){
-		playMusic("../assets/Upbeat Forever.wav", SDL_MIX_MAXVOLUME/3);
+	bool gameIsPaused() {
+		return !gameStarted || showingGameScoreboard || showLoseScreen || showWinScreen
+				|| showConnectionScreen || waitingOnPlayers;
+	}
+
+	void startGame() {
+		playMusic("../assets/Upbeat Forever.wav", SDL_MIX_MAXVOLUME / 3);
 		this->gameStarted = true;
 		this->leavePauseState();
-		
+
 	}
 
-	void nextRound(){
-		if(gameIsPaused()){
-			if(!gameStarted) {
+	int getTime() {
+		if (frameCount > maxTime) {
+			return 0;
+		}
+		return (maxTime - frameCount) / 71;
+	}
+
+	void nextRound() {
+		if (gameIsPaused()) {
+			if (!gameStarted) {
 				this->startGame();
 			} else {
 				this->showingGameScoreboard = false;
@@ -72,12 +82,10 @@ public:
 		}
 	}
 
-
 	void enterPauseState();
 
 	void leavePauseState();
 
 };
-
 
 #endif

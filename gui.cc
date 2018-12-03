@@ -3,7 +3,8 @@
 
 using namespace std;
 void GameGui::showHealth1() {
-	ImGui::Begin("Player 1 Health", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Player 1 Health", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::SetWindowPos(ImVec2(100, 500));
 	ImGui::Text("HEALTH                   ");
 	ImGui::ProgressBar(state->p1->getHealth() / state->p1->getMaxHealth());
@@ -11,8 +12,9 @@ void GameGui::showHealth1() {
 }
 
 void GameGui::showHealth2() {
-	ImGui::Begin("Player 2 Health", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(1200, 500));
+	ImGui::Begin("Player 2 Health", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(1100, 500));
 	ImGui::Text("HEALTH                   ");
 	ImGui::ProgressBar(state->p2->getHealth() / state->p2->getMaxHealth());
 	ImGui::End();
@@ -32,7 +34,8 @@ void GameGui::showComboCounter2() {
 }
 
 void GameGui::showMeter1() {
-	ImGui::Begin("Player 1 Meter", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Player 1 Meter", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::SetWindowPos(ImVec2(100, 600));
 	ImGui::Text("SUPER                   ");
 	ImGui::ProgressBar(state->p1->getMeterVal() / state->p1->getMeterMax());
@@ -40,8 +43,9 @@ void GameGui::showMeter1() {
 }
 
 void GameGui::showMeter2() {
-	ImGui::Begin("Player 2 Meter", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(1200, 600));
+	ImGui::Begin("Player 2 Meter", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(1100, 600));
 	ImGui::Text("SUPER                   ");
 	ImGui::ProgressBar(state->p2->getMeterVal() / state->p2->getMeterMax());
 	ImGui::End();
@@ -52,6 +56,13 @@ void GameGui::showFrameCount() {
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Frame Number: %d", this->state->frameCount);
 	//ImGui::SetNextWindowPos(ImVec2(250, 50));
+	ImGui::End();
+}
+
+void GameGui::showTime() {
+	ImGui::Begin("Time", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetWindowPos(ImVec2(650, 50));
+	ImGui::Text("%d  \n", state->getTime());
 	ImGui::End();
 }
 
