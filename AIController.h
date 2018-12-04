@@ -112,10 +112,10 @@ public:
 		return false;
 	}
 	bool readDoubleQCF() {
-		return false;
+		return self->getMeterVal() >= self->getMeterMax();
 	}
 	bool readDoubleQCB() {
-		return false;
+		return self->getMeterVal() >= self->getMeterMax();
 	}
 
 };
