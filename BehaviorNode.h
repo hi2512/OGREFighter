@@ -178,4 +178,11 @@ public:
 	}
 };
 
+class DoNothingNode: public BehaviorNode {
+public:
+	DoNothingNode(Actor * me, Actor * opp, GameState * game) :
+			BehaviorNode(me, opp, game, BehaviorType::DoNothing) {
+	}
+};
+
 #endif /* BEHAVIORNODE_H_ */
