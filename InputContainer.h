@@ -2,6 +2,12 @@
 #define INPUTCONTAINER_H_
 
 #include <SDL2/SDL.h>
+
+enum InputType {
+	UP, DOWN, LEFT, RIGHT, DOWNRIGHT, DOWNLEFT, L, M, H, S
+
+};
+
 struct KeyInput {
 	int key;
 	Uint32 frame;

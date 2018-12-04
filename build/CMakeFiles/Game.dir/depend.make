@@ -6,6 +6,7 @@ CMakeFiles/Game.dir/audio.c.o: ../audio.h
 
 CMakeFiles/Game.dir/Actor.cpp.o: ../Actor.cpp
 CMakeFiles/Game.dir/Actor.cpp.o: ../Actor.h
+CMakeFiles/Game.dir/Actor.cpp.o: ../ActorController.h
 CMakeFiles/Game.dir/Actor.cpp.o: ../DebugDraw.h
 CMakeFiles/Game.dir/Actor.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/Game.dir/Actor.cpp.o: ../Hitbox.h
@@ -572,6 +573,7 @@ CMakeFiles/Game.dir/DebugDraw.cpp.o: /usr/local/include/bullet/btBulletCollision
 CMakeFiles/Game.dir/DebugDraw.cpp.o: /usr/local/include/bullet/btBulletDynamicsCommon.h
 
 CMakeFiles/Game.dir/Disc.cpp.o: ../Actor.h
+CMakeFiles/Game.dir/Disc.cpp.o: ../ActorController.h
 CMakeFiles/Game.dir/Disc.cpp.o: ../DebugDraw.h
 CMakeFiles/Game.dir/Disc.cpp.o: ../Disc.cpp
 CMakeFiles/Game.dir/Disc.cpp.o: ../Disc.h
@@ -1044,6 +1046,7 @@ CMakeFiles/Game.dir/Game.cpp.o: ../ogre-imgui/ImguiRenderable.h
 CMakeFiles/Game.dir/Game.cpp.o: ../ogre-imgui/imgui/imconfig.h
 CMakeFiles/Game.dir/Game.cpp.o: ../ogre-imgui/imgui/imgui.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Actor.h
+CMakeFiles/Game.dir/Game.cpp.o: ../ActorController.h
 CMakeFiles/Game.dir/Game.cpp.o: ../DebugDraw.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Disc.h
 CMakeFiles/Game.dir/Game.cpp.o: ../DynamicLineDrawer.h
@@ -1051,6 +1054,7 @@ CMakeFiles/Game.dir/Game.cpp.o: ../Game.cpp
 CMakeFiles/Game.dir/Game.cpp.o: ../Ground.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Hitbox.h
 CMakeFiles/Game.dir/Game.cpp.o: ../InputContainer.h
+CMakeFiles/Game.dir/Game.cpp.o: ../KeyboardController.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Ninja.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Spark.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Wall.h
@@ -1371,6 +1375,7 @@ CMakeFiles/Game.dir/Game.cpp.o: /usr/local/include/bullet/btBulletCollisionCommo
 CMakeFiles/Game.dir/Game.cpp.o: /usr/local/include/bullet/btBulletDynamicsCommon.h
 
 CMakeFiles/Game.dir/Ninja.cpp.o: ../Actor.h
+CMakeFiles/Game.dir/Ninja.cpp.o: ../ActorController.h
 CMakeFiles/Game.dir/Ninja.cpp.o: ../DebugDraw.h
 CMakeFiles/Game.dir/Ninja.cpp.o: ../Disc.h
 CMakeFiles/Game.dir/Ninja.cpp.o: ../DynamicLineDrawer.h
@@ -1695,6 +1700,7 @@ CMakeFiles/Game.dir/gui.cc.o: ../ogre-imgui/ImguiRenderable.h
 CMakeFiles/Game.dir/gui.cc.o: ../ogre-imgui/imgui/imconfig.h
 CMakeFiles/Game.dir/gui.cc.o: ../ogre-imgui/imgui/imgui.h
 CMakeFiles/Game.dir/gui.cc.o: ../Actor.h
+CMakeFiles/Game.dir/gui.cc.o: ../ActorController.h
 CMakeFiles/Game.dir/gui.cc.o: ../DebugDraw.h
 CMakeFiles/Game.dir/gui.cc.o: ../DynamicLineDrawer.h
 CMakeFiles/Game.dir/gui.cc.o: ../Hitbox.h
@@ -2268,6 +2274,7 @@ CMakeFiles/Game.dir/physics.cpp.o: /usr/local/include/bullet/btBulletCollisionCo
 CMakeFiles/Game.dir/physics.cpp.o: /usr/local/include/bullet/btBulletDynamicsCommon.h
 
 CMakeFiles/Game.dir/state.cpp.o: ../Actor.h
+CMakeFiles/Game.dir/state.cpp.o: ../ActorController.h
 CMakeFiles/Game.dir/state.cpp.o: ../DebugDraw.h
 CMakeFiles/Game.dir/state.cpp.o: ../DynamicLineDrawer.h
 CMakeFiles/Game.dir/state.cpp.o: ../Hitbox.h

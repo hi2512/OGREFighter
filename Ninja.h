@@ -67,11 +67,8 @@ protected:
 public:
 	Ninja(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
-			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int up, int down, int light,
-			int medium, int heavy) :
-			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, inBuf,
-					relBuf, kBuf, left, right, up, down, light, medium, heavy) {
+			btQuaternion orientation, ActorController * con) :
+			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, con) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
 
 		ninOffsetNode->attachObject(rootNode->detachObject((unsigned short) 0));

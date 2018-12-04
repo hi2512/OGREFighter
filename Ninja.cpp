@@ -212,7 +212,7 @@ void Ninja::createSpecial1LBox() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
-	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di,
 			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
 			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 6, 0, 0),
 			btVector3(0, 0, 0), hbd, this);
@@ -232,7 +232,7 @@ void Ninja::createSpecial1MBox() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -200.0 : 200.0;
-	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di,
 			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
 			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 4, 0, 0), btVector3(0, 0, 0),
 			hbd, this);
@@ -271,7 +271,7 @@ void Ninja::createSpecial1HBox() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
-	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(this->inputBuffer->back().frame), di,
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di,
 			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
 			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 2, 0, 0), btVector3(0, 0, 0),
 			hbd, this);

@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include <cassert>
 #include "audio.h"
+#include <time.h>
 
 void Actor::doSuperFreeze() {
 
@@ -10,30 +11,24 @@ void Actor::checkForSpecial1Cancel() {
 	//printf("cur attack %d, %d\n", this->currentAttack, attackTypeIsNormal(this->currentAttack));
 	if ((!this->isAboveGround()) && (attackTypeIsNormal(this->currentAttack))
 			&& (this->specialMove1Window >= 0)) {
-		for (KeyInput ki : *this->keysHeld) {
-			//skip if key is not binded for this ninja
-			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-				continue;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::L) {
-				this->clearAttack();
-				this->beforeStopState = StateType::ATTACK;
-				this->currentAttack = AttackType::SPECIAL1L;
-				this->actorState = StateType::STOP;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::M) {
-				this->clearAttack();
-				this->beforeStopState = StateType::ATTACK;
-				this->currentAttack = AttackType::SPECIAL1M;
-				this->actorState = StateType::STOP;
-				//printf("CANCELED\n");
-			}
-			if (this->keyBinding.at(ki.key) == InputType::H) {
-				this->clearAttack();
-				this->beforeStopState = StateType::ATTACK;
-				this->currentAttack = AttackType::SPECIAL1H;
-				this->actorState = StateType::STOP;
-			}
+		if (this->myController->checkForInput(InputType::L)) {
+			this->clearAttack();
+			this->beforeStopState = StateType::ATTACK;
+			this->currentAttack = AttackType::SPECIAL1L;
+			this->actorState = StateType::STOP;
+		}
+		if (this->myController->checkForInput(InputType::M)) {
+			this->clearAttack();
+			this->beforeStopState = StateType::ATTACK;
+			this->currentAttack = AttackType::SPECIAL1M;
+			this->actorState = StateType::STOP;
+			//printf("CANCELED\n");
+		}
+		if (this->myController->checkForInput(InputType::H)) {
+			this->clearAttack();
+			this->beforeStopState = StateType::ATTACK;
+			this->currentAttack = AttackType::SPECIAL1H;
+			this->actorState = StateType::STOP;
 		}
 	}
 }
@@ -43,32 +38,26 @@ void Actor::checkForSuperCancel() {
 	if ((!this->isAboveGround()) && (attackTypeIsSpecial(this->currentAttack))
 			&& (this->superMoveWindow >= 0) && (this->superVal.isFull())) {
 		//printf("in window\n");
-		for (KeyInput ki : *this->keysHeld) {
-			//skip if key is not binded for this ninja
-			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-				continue;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::L) {
-				this->clearAttack();
-				this->beforeStopState = StateType::ATTACK;
-				this->currentAttack = AttackType::SUPER;
-				this->actorState = StateType::STOP;
-				this->superVal.reset();
-			}
-			if (this->keyBinding.at(ki.key) == InputType::M) {
-				this->clearAttack();
-				this->beforeStopState = StateType::ATTACK;
-				this->currentAttack = AttackType::SUPER;
-				this->actorState = StateType::STOP;
-				this->superVal.reset();
-			}
-			if (this->keyBinding.at(ki.key) == InputType::H) {
-				this->clearAttack();
-				this->beforeStopState = StateType::ATTACK;
-				this->currentAttack = AttackType::SUPER;
-				this->actorState = StateType::STOP;
-				this->superVal.reset();
-			}
+		if (this->myController->checkForInput(InputType::L)) {
+			this->clearAttack();
+			this->beforeStopState = StateType::ATTACK;
+			this->currentAttack = AttackType::SUPER;
+			this->actorState = StateType::STOP;
+			this->superVal.reset();
+		}
+		if (this->myController->checkForInput(InputType::M)) {
+			this->clearAttack();
+			this->beforeStopState = StateType::ATTACK;
+			this->currentAttack = AttackType::SUPER;
+			this->actorState = StateType::STOP;
+			this->superVal.reset();
+		}
+		if (this->myController->checkForInput(InputType::H)) {
+			this->clearAttack();
+			this->beforeStopState = StateType::ATTACK;
+			this->currentAttack = AttackType::SUPER;
+			this->actorState = StateType::STOP;
+			this->superVal.reset();
 		}
 	}
 }
@@ -82,242 +71,12 @@ Real Actor::hitScaling() {
 	return scale;
 }
 
-bool Actor::keyIsInputType(KeyInput ki, InputType ipt) {
-	if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-		//not mapped
-		return false;
-	}
-	//printf("key is %c\n", ki.key);
-	return this->keyBinding.at(ki.key) == ipt;
-}
-
 bool Actor::readQCFwithOrientation() {
-	return this->onPlayer2Side ? this->readQCB() : this->readQCF();
+	return this->onPlayer2Side ? this->myController->readQCB() : this->myController->readQCF();
 }
 
 bool Actor::readDoubleQCFwithOrientation() {
-	return this->onPlayer2Side ? this->readDoubleQCB() : this->readDoubleQCF();
-}
-
-bool Actor::readQCF() {
-	if (this->inputBuffer->empty()) {
-		return false;
-	}
-	const int cancelWindow = 7;
-	int endInputWindow = inputBuffer->back().frame - cancelWindow;
-	bool right = false;
-	bool drDown = false;
-	bool drRight = false;
-	bool down = false;
-	Uint32 rightFrame, downRightFrame, downFrame;
-	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
-		KeyInput cur = *it;
-		if (cur.frame < endInputWindow) {
-			//printf("INPUTS END\n");
-			break;
-		}
-		if (!right) {
-			//printf("checking right\n");
-			//check for right
-			right = this->keyIsInputType(cur, InputType::RIGHT);
-			if (right) {
-				rightFrame = cur.frame;
-			}
-			continue;
-		}
-		/*
-		 //check for both down and right inputs on the same frame
-		 if (!(drDown && drRight)) {
-		 printf("checking downright\n");
-		 if (cur.frame >= rightFrame) {
-		 continue;
-		 }
-		 //down and right have to held on the same frame
-		 if ((drDown && !drRight) || (!drDown && drRight)) {
-		 if (cur.frame != downRightFrame) {
-		 drDown = false;
-		 drRight = false;
-		 continue;
-		 }
-		 }
-
-		 if (!drDown) {
-		 drDown = this->keyIsInputType(cur, InputType::DOWN);
-		 if (drDown) {
-		 printf("GOT DRDOWN\n");
-		 downRightFrame = cur.frame;
-		 }
-		 continue;
-		 }
-		 if (!drRight) {
-		 drRight = this->keyIsInputType(cur, InputType::RIGHT);
-		 if (drRight) {
-		 printf("GOT DRRIGHT\n");
-		 downRightFrame = cur.frame;
-		 }
-		 continue;
-		 }
-
-		 }
-		 */
-		if (!down) {
-			//printf("checking down\n");
-			//check for down
-			down = this->keyIsInputType(cur, InputType::DOWN);
-			if (down) {
-				//downFrame = cur.frame;
-				//fufilled all requirements
-				return true;
-			}
-			continue;
-		}
-	}
-	return false;
-}
-
-bool Actor::readDoubleQCF() {
-	if (this->inputBuffer->empty()) {
-		return false;
-	}
-	const int cancelWindow = 20;
-	int endInputWindow = inputBuffer->back().frame - cancelWindow;
-	bool right1 = false;
-	bool down1 = false;
-	bool right2 = false;
-	bool down2 = false;
-	Uint32 right1Frame, down1Frame, right2Frame, down2Frame;
-	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
-		KeyInput cur = *it;
-		if (cur.frame < endInputWindow) {
-			//printf("INPUTS END\n");
-			break;
-		}
-		if (!right1) {
-			//check for right
-			right1 = this->keyIsInputType(cur, InputType::RIGHT);
-			if (right1) {
-				//printf("A\n");
-				right1Frame = cur.frame;
-			}
-			continue;
-		}
-		if (!down1) {
-			down1 = this->keyIsInputType(cur, InputType::DOWN);
-			if (down1) {
-				//printf("B\n");
-				down1Frame = cur.frame;
-			}
-			continue;
-		}
-		if (!right2) {
-			right2 = this->keyIsInputType(cur, InputType::RIGHT);
-			if (right2) {
-				//printf("C\n");
-				right2Frame = cur.frame;
-			}
-			continue;
-		}
-		if (!down2) {
-			down2 = this->keyIsInputType(cur, InputType::DOWN);
-			if (down2) {
-				//printf("D\n");
-				return true;
-			}
-			continue;
-		}
-	}
-
-	return false;
-}
-
-bool Actor::readQCB() {
-	if (this->inputBuffer->empty()) {
-		return false;
-	}
-	const int cancelWindow = 7;
-	int endInputWindow = inputBuffer->back().frame - cancelWindow;
-	bool right = false;
-	bool drDown = false;
-	bool drRight = false;
-	bool down = false;
-	Uint32 rightFrame, downRightFrame, downFrame;
-	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
-		KeyInput cur = *it;
-		if (cur.frame < endInputWindow) {
-			//printf("INPUTS END\n");
-			break;
-		}
-		if (!right) {
-			//check for right
-			right = this->keyIsInputType(cur, InputType::LEFT);
-			if (right) {
-				rightFrame = cur.frame;
-			}
-			continue;
-		}
-
-		if (!down) {
-			down = this->keyIsInputType(cur, InputType::DOWN);
-			if (down) {
-				//downFrame = cur.frame;
-				//fufilled all requirements
-				return true;
-			}
-			continue;
-		}
-	}
-	return false;
-}
-
-bool Actor::readDoubleQCB() {
-	if (this->inputBuffer->empty()) {
-		return false;
-	}
-	const int cancelWindow = 20;
-	int endInputWindow = inputBuffer->back().frame - cancelWindow;
-	bool left1 = false;
-	bool down1 = false;
-	bool left2 = false;
-	bool down2 = false;
-	Uint32 left1Frame, down1Frame, left2Frame, down2Frame;
-	for (auto it = this->inputBuffer->rbegin(); it != this->inputBuffer->rend(); it++) {
-		KeyInput cur = *it;
-		if (cur.frame < endInputWindow) {
-			//printf("INPUTS END\n");
-			break;
-		}
-		if (!left1) {
-			//check for right
-			left1 = this->keyIsInputType(cur, InputType::LEFT);
-			if (left1) {
-				left1Frame = cur.frame;
-			}
-			continue;
-		}
-		if (!down1) {
-			down1 = this->keyIsInputType(cur, InputType::DOWN);
-			if (down1) {
-				down1Frame = cur.frame;
-			}
-			continue;
-		}
-		if (!left2) {
-			left2 = this->keyIsInputType(cur, InputType::LEFT);
-			if (left2) {
-				left2Frame = cur.frame;
-			}
-			continue;
-		}
-		if (!down2) {
-			down2 = this->keyIsInputType(cur, InputType::DOWN);
-			if (down2) {
-				return true;
-			}
-			continue;
-		}
-	}
-
-	return false;
+	return this->onPlayer2Side ? this->myController->readDoubleQCB() : this->myController->readDoubleQCF();
 }
 
 bool Actor::isAboveGround() {
@@ -350,16 +109,12 @@ bool Actor::isBlocking() {
 	bool blocking = false;
 	InputType directionToBlock = this->onPlayer2Side ? InputType::RIGHT : InputType::LEFT;
 	InputType forwardDir = this->onPlayer2Side ? InputType::LEFT : InputType::RIGHT; //Can't block if holding forward
-	for (KeyInput ki : *this->keysHeld) {
-		if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-			continue;
-		}
-		if (this->keyBinding.at(ki.key) == directionToBlock) {
-			blocking = true;
-		}
-		if (this->keyBinding.at(ki.key) == forwardDir) {
-			return false;
-		}
+
+	if (this->myController->checkForInput(directionToBlock)) {
+		blocking = true;
+	}
+	if (this->myController->checkForInput(forwardDir)) {
+		return false;
 	}
 	return blocking;
 }
@@ -421,7 +176,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 					auto hitPoint = context.body->getWorldTransform().getOrigin();
 					new Spark("Examples/Flare3", this->sceneMgr,
 							this->sceneMgr->getRootSceneNode()->createChildSceneNode(),
-							this->name + to_string(this->inputBuffer->back().frame), this->physics,
+							this->name + to_string(time(NULL)), this->physics,
 							Vector3(hitPoint.getX() / 3.0, hitPoint.getY() / 3.0, 100));
 					this->recieveBlock(hbd);
 				} else if (this->actorState != StateType::FALLING) {
@@ -432,7 +187,7 @@ void Actor::doCollision(const FrameEvent& evt) {
 					 */
 					new Spark("Spark", this->sceneMgr,
 							this->sceneMgr->getRootSceneNode()->createChildSceneNode(),
-							this->name + to_string(this->inputBuffer->back().frame), this->physics,
+							this->name + to_string(time(NULL)), this->physics,
 							Vector3(hitPoint.getX() / 3.0, hitPoint.getY() / 3.0, 100)); //THE COORDINATES ARE AFFECTED BY THE SCALE OF THE NODE
 					this->recieveHit(hbd);
 				}
@@ -646,18 +401,13 @@ void Actor::animate(const Ogre::FrameEvent& evt) {
 			break;
 		}
 		//read inputs for a jump attack
-		for (KeyInput ki : *this->keysHeld) {
-			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-				continue;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::H) {
-				//printf("got command for air heavy\n");
-				this->currentAttack = AttackType::AIRHEAVY;
-				if (!this->jumpAttack) {
-					this->hitboxes.at(currentAttack)->myHbd.active = true;
-					this->attackFrameCount = this->jhAttackFrames;
-					this->jumpAttack = true;
-				}
+		if (this->myController->checkForInput(InputType::H)) {
+			//printf("got command for air heavy\n");
+			this->currentAttack = AttackType::AIRHEAVY;
+			if (!this->jumpAttack) {
+				this->hitboxes.at(currentAttack)->myHbd.active = true;
+				this->attackFrameCount = this->jhAttackFrames;
+				this->jumpAttack = true;
 			}
 		}
 		//CHANGE STATE TYPE IN JUMP ANIMATION
@@ -776,64 +526,58 @@ void Actor::animate(const Ogre::FrameEvent& evt) {
 		Real move = walkSpeed * evt.timeSinceLastFrame;
 		Real moveX = 0;
 		//bool holdDown = false;
-		for (KeyInput ki : *this->keysHeld) {
-			//skip if key is not binded for this ninja
-			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-				continue;
+		if (this->myController->checkForInput(InputType::UP)) {
+			startJump = true;
+			this->actorState = StateType::JUMPING;
+		}
+		if (this->myController->checkForInput(InputType::LEFT)) {
+			moveX -= move;
+			reverse = true;
+		}
+		if (this->myController->checkForInput(InputType::RIGHT)) {
+			moveX += move;
+		}
+		if (this->myController->checkForInput(InputType::DOWN)) {
+			//holdDown = true;
+		}
+		if (this->myController->checkForInput(InputType::L)) {
+			this->actorState = StateType::ATTACK;
+			this->currentAttack = AttackType::LIGHT;
+			if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
+				//printf("DO SPECIAL MOVE\n");
+				this->currentAttack = AttackType::SPECIAL1L;
+				this->specialMove1Window = -1;
 			}
-			if (this->keyBinding.at(ki.key) == InputType::UP) {
-				startJump = true;
-				this->actorState = StateType::JUMPING;
+			if (this->superMoveWindow > -1 && this->superVal.isFull()) {
+				this->superVal.reset();
+				this->currentAttack = AttackType::SUPER;
+				this->superMoveWindow = -1;
 			}
-			if (this->keyBinding.at(ki.key) == InputType::LEFT) {
-				moveX -= move;
-				reverse = true;
+		}
+		if (this->myController->checkForInput(InputType::M)) {
+			this->actorState = StateType::ATTACK;
+			this->currentAttack = AttackType::MEDIUM;
+			if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
+				this->currentAttack = AttackType::SPECIAL1M;
+				this->specialMove1Window = -1;
 			}
-			if (this->keyBinding.at(ki.key) == InputType::RIGHT) {
-				moveX += move;
+			if (this->superMoveWindow > -1 && this->superVal.isFull()) {
+				this->superVal.reset();
+				this->currentAttack = AttackType::SUPER;
+				this->superMoveWindow = -1;
 			}
-			if (this->keyBinding.at(ki.key) == InputType::DOWN) {
-				//holdDown = true;
+		}
+		if (this->myController->checkForInput(InputType::H)) {
+			this->actorState = StateType::ATTACK;
+			this->currentAttack = AttackType::HEAVY;
+			if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
+				this->currentAttack = AttackType::SPECIAL1H;
+				this->specialMove1Window = -1;
 			}
-			if (this->keyBinding.at(ki.key) == InputType::L) {
-				this->actorState = StateType::ATTACK;
-				this->currentAttack = AttackType::LIGHT;
-				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
-					//printf("DO SPECIAL MOVE\n");
-					this->currentAttack = AttackType::SPECIAL1L;
-					this->specialMove1Window = -1;
-				}
-				if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-					this->superVal.reset();
-					this->currentAttack = AttackType::SUPER;
-					this->superMoveWindow = -1;
-				}
-			}
-			if (this->keyBinding.at(ki.key) == InputType::M) {
-				this->actorState = StateType::ATTACK;
-				this->currentAttack = AttackType::MEDIUM;
-				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
-					this->currentAttack = AttackType::SPECIAL1M;
-					this->specialMove1Window = -1;
-				}
-				if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-					this->superVal.reset();
-					this->currentAttack = AttackType::SUPER;
-					this->superMoveWindow = -1;
-				}
-			}
-			if (this->keyBinding.at(ki.key) == InputType::H) {
-				this->actorState = StateType::ATTACK;
-				this->currentAttack = AttackType::HEAVY;
-				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
-					this->currentAttack = AttackType::SPECIAL1H;
-					this->specialMove1Window = -1;
-				}
-				if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-					this->superVal.reset();
-					this->currentAttack = AttackType::SUPER;
-					this->superMoveWindow = -1;
-				}
+			if (this->superMoveWindow > -1 && this->superVal.isFull()) {
+				this->superVal.reset();
+				this->currentAttack = AttackType::SUPER;
+				this->superMoveWindow = -1;
 			}
 		}
 		//set up jump

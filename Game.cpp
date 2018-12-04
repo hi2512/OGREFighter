@@ -26,11 +26,13 @@
 #include "Ground.h"
 //! [our file includes]
 #include "Actor.h"
+#include "ActorController.h"
 #include "Ninja.h"
 #include "InputContainer.h"
 #include "Disc.h"
 #include "Spark.h"
 #include "Wall.h"
+#include "KeyboardController.h"
 
 #include "ball.h"
 
@@ -94,14 +96,19 @@ private:
 	bool debug = false;
 
 	//key and frame
-	std::deque<KeyInput> inputBuffer;
-	std::deque<KeyInput> releaseBuffer;
-	//stores what key is held and the time it was pressed
-	std::vector<KeyInput> keysHeld;
+	/*
+	 std::deque<KeyInput> inputBuffer;
+	 std::deque<KeyInput> releaseBuffer;
+	 //stores what key is held and the time it was pressed
+	 std::vector<KeyInput> keysHeld;
 
-	std::deque<KeyInput> inputBuffer2;
-	std::deque<KeyInput> releaseBuffer2;
-	std::vector<KeyInput> keysHeld2;
+	 std::deque<KeyInput> inputBuffer2;
+	 std::deque<KeyInput> releaseBuffer2;
+	 std::vector<KeyInput> keysHeld2;
+	 */
+	std::deque<KeyInput> inputBuffer;
+	ActorController * p1con;
+	ActorController * p2con;
 
 	Actor * player1;
 	Actor * player2;
@@ -115,8 +122,10 @@ Game::Game() :
 		OgreBites::ApplicationContext("GameTechFinal") {
 	gameState = new GameState();
 	gameState->inputBuffer = &inputBuffer;
-	gameState->releaseBuffer = &releaseBuffer;
+	//gameState->releaseBuffer = &releaseBuffer;
 	gameGui = new GameGui(gameState);
+	p1con = new KeyboardController('a', 'd', 'w', 's', 'x', 'c', 'v');
+	p2con = new KeyboardController('j', 'l', 'i', 'k', 'b', 'n', 'm');
 }
 //! [constructor]
 
@@ -143,20 +152,23 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	}
 
 	this->inputBuffer.push_back(KeyInput { evt.keysym.sym, this->frameCount });
+	((KeyboardController *) p1con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
+	((KeyboardController *) p2con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
+	/*
+	 if (!inKeysHeld(evt, keysHeld)) {
+	 this->keysHeld.push_back(KeyInput { evt.keysym.sym, this->frameCount });
+	 }
 
-	if (!inKeysHeld(evt, keysHeld)) {
-		this->keysHeld.push_back(KeyInput { evt.keysym.sym, this->frameCount });
-	}
+	 if (inputBuffer2.size() > 200) {
+	 inputBuffer2.pop_front();
+	 }
 
-	if (inputBuffer2.size() > 200) {
-		inputBuffer2.pop_front();
-	}
+	 this->inputBuffer2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 
-	this->inputBuffer2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
-
-	if (!inKeysHeld(evt, keysHeld2)) {
-		this->keysHeld2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
-	}
+	 if (!inKeysHeld(evt, keysHeld2)) {
+	 this->keysHeld2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
+	 }
+	 */
 
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_ESCAPE:
@@ -231,36 +243,39 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	 return true;
 	 }
 	 */
-	if (releaseBuffer.size() > 200) {
-		releaseBuffer.pop_front();
-	}
-	this->releaseBuffer.push_back(KeyInput { evt.keysym.sym, this->frameCount });
+	/*
+	 if (releaseBuffer.size() > 200) {
+	 releaseBuffer.pop_front();
+	 }
+	 this->releaseBuffer.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 
-	//remove from keys held
-	for (auto it = keysHeld.begin(); it != keysHeld.end(); it++) {
-		KeyInput t = *it;
-		if (evt.keysym.sym == t.key) {
-			keysHeld.erase(it);
-			break;
-		}
-	}
+	 //remove from keys held
+	 for (auto it = keysHeld.begin(); it != keysHeld.end(); it++) {
+	 KeyInput t = *it;
+	 if (evt.keysym.sym == t.key) {
+	 keysHeld.erase(it);
+	 break;
+	 }
+	 }
 
-	if (releaseBuffer2.size() > 200) {
-		releaseBuffer2.pop_front();
-	}
-	this->releaseBuffer2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
+	 if (releaseBuffer2.size() > 200) {
+	 releaseBuffer2.pop_front();
+	 }
+	 this->releaseBuffer2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 
-	//remove from keys held
-	for (auto it = keysHeld2.begin(); it != keysHeld2.end(); it++) {
-		KeyInput t = *it;
-		if (evt.keysym.sym == t.key) {
-			keysHeld2.erase(it);
-			break;
-		}
-	}
-
-	LogManager::getSingleton().logMessage("Num of keys held");
-	LogManager::getSingleton().logMessage(to_string(keysHeld.size()));
+	 //remove from keys held
+	 for (auto it = keysHeld2.begin(); it != keysHeld2.end(); it++) {
+	 KeyInput t = *it;
+	 if (evt.keysym.sym == t.key) {
+	 keysHeld2.erase(it);
+	 break;
+	 }
+	 }
+	 */
+	((KeyboardController *) p1con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
+	((KeyboardController *) p2con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
+	//LogManager::getSingleton().logMessage("Num of keys held");
+	//LogManager::getSingleton().logMessage(to_string(keysHeld.size()));
 	switch (evt.keysym.sym) {
 	case OgreBites::SDLK_UP:
 	case OgreBites::SDLK_DOWN:
@@ -453,16 +468,14 @@ void Game::setup(void) {
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
 	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
 	Actor * p1 = new Ninja(false, scnMgr, p1Node, "P1", p1Entity, phys, p1Box,
-			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), &inputBuffer,
-			&releaseBuffer, &keysHeld, 'a', 'd', 'w', 's', 'x', 'c', 'v');
+			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
 
 	Entity * p2Entity = scnMgr->createEntity("ninja.mesh");
 	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode("P2Node");
 	auto p2OgreBox = p2Entity->getBoundingBox().getSize();
 	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
 	Actor * p2 = new Ninja(true, scnMgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
-			btQuaternion(0.0, -0.707, 0.0, -0.707), &inputBuffer2, &releaseBuffer2, &keysHeld2, 'j',
-			'l', 'i', 'k', 'b', 'n', 'm');
+			btQuaternion(0.0, -0.707, 0.0, -0.707), p2con);
 	p1->setOpponent(p2);
 	p2->setOpponent(p1);
 	player1 = p1;
@@ -527,23 +540,21 @@ void Game::restart() {
 	gameState = new GameState();
 	gameGui = new GameGui(gameState);
 	gameState->inputBuffer = &inputBuffer;
-	gameState->releaseBuffer = &releaseBuffer;
+	//gameState->releaseBuffer = &releaseBuffer;
 	Entity * p1Entity = mgr->createEntity("ninja.mesh");
 	//p1Entity->setMaterialName("Examples/BumpyMetal");
 	SceneNode * p1Node = mgr->getRootSceneNode()->createChildSceneNode("P1Node");
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
 	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
 	Actor * p1 = new Ninja(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
-			btQuaternion(0.0, -0.707, 0.0, 0.707), &inputBuffer, &releaseBuffer, &keysHeld, 'a',
-			'd', 'w', 's', 'x', 'c', 'v');
+			btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
 
 	Entity * p2Entity = mgr->createEntity("ninja.mesh");
 	SceneNode * p2Node = mgr->getRootSceneNode()->createChildSceneNode("P2Node");
 	auto p2OgreBox = p2Entity->getBoundingBox().getSize();
 	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
 	Actor * p2 = new Ninja(true, mgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
-			btQuaternion(0.0, -0.707, 0.0, -0.707), &inputBuffer2, &releaseBuffer2, &keysHeld2, 'j',
-			'l', 'i', 'k', 'b', 'n', 'm');
+			btQuaternion(0.0, -0.707, 0.0, -0.707), p2con);
 	camNode->setPosition(defaultCamPosition);
 	frameCount = 0;
 	p1->setOpponent(p2);
@@ -607,10 +618,10 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	gameGui->showMeter1();
 	gameGui->showMeter2();
 	gameGui->showTime();
-	if(gameState->gameOver()) {
+	if (gameState->gameOver()) {
 		gameGui->showWinScreen();
 	}
-	if(gameState->gameRestartReady()) {
+	if (gameState->gameRestartReady()) {
 		restart();
 	}
 	/*
@@ -674,9 +685,9 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		go->animate(evt);
 
 	}
-	if(player1->isDead()) {
+	if (player1->isDead()) {
 		gameState->endGame(player2);
-	} else if(player2->isDead()) {
+	} else if (player2->isDead()) {
 		gameState->endGame(player1);
 	} else if (gameState->getTime() <= 0) {
 		gameState->endGame(NULL);

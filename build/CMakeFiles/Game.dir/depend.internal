@@ -7,6 +7,7 @@ CMakeFiles/Game.dir/audio.c.o
 CMakeFiles/Game.dir/Actor.cpp.o
  /home/steve/Downloads/GTechFinal/Actor.cpp
  /home/steve/Downloads/GTechFinal/Actor.h
+ /home/steve/Downloads/GTechFinal/ActorController.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
  /home/steve/Downloads/GTechFinal/Hitbox.h
@@ -573,6 +574,7 @@ CMakeFiles/Game.dir/DebugDraw.cpp.o
  /usr/local/include/bullet/btBulletDynamicsCommon.h
 CMakeFiles/Game.dir/Disc.cpp.o
  /home/steve/Downloads/GTechFinal/Actor.h
+ /home/steve/Downloads/GTechFinal/ActorController.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/Disc.cpp
  /home/steve/Downloads/GTechFinal/Disc.h
@@ -1045,6 +1047,7 @@ CMakeFiles/Game.dir/Game.cpp.o
  ../ogre-imgui/imgui/imconfig.h
  ../ogre-imgui/imgui/imgui.h
  /home/steve/Downloads/GTechFinal/Actor.h
+ /home/steve/Downloads/GTechFinal/ActorController.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/Disc.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
@@ -1052,6 +1055,7 @@ CMakeFiles/Game.dir/Game.cpp.o
  /home/steve/Downloads/GTechFinal/Ground.h
  /home/steve/Downloads/GTechFinal/Hitbox.h
  /home/steve/Downloads/GTechFinal/InputContainer.h
+ /home/steve/Downloads/GTechFinal/KeyboardController.h
  /home/steve/Downloads/GTechFinal/Ninja.h
  /home/steve/Downloads/GTechFinal/Spark.h
  /home/steve/Downloads/GTechFinal/Wall.h
@@ -1372,6 +1376,7 @@ CMakeFiles/Game.dir/Game.cpp.o
  /usr/local/include/bullet/btBulletDynamicsCommon.h
 CMakeFiles/Game.dir/Ninja.cpp.o
  /home/steve/Downloads/GTechFinal/Actor.h
+ /home/steve/Downloads/GTechFinal/ActorController.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/Disc.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
@@ -1696,6 +1701,7 @@ CMakeFiles/Game.dir/gui.cc.o
  ../ogre-imgui/imgui/imconfig.h
  ../ogre-imgui/imgui/imgui.h
  /home/steve/Downloads/GTechFinal/Actor.h
+ /home/steve/Downloads/GTechFinal/ActorController.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
  /home/steve/Downloads/GTechFinal/Hitbox.h
@@ -2269,6 +2275,7 @@ CMakeFiles/Game.dir/physics.cpp.o
  /usr/local/include/bullet/btBulletDynamicsCommon.h
 CMakeFiles/Game.dir/state.cpp.o
  /home/steve/Downloads/GTechFinal/Actor.h
+ /home/steve/Downloads/GTechFinal/ActorController.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
  /home/steve/Downloads/GTechFinal/Hitbox.h
