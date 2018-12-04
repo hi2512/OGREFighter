@@ -19,6 +19,7 @@ private:
 
 protected:
 	const String walkName = "Walk";
+	const String idleName = "Idle1";
 	const String jumpName = "JumpNoHeight";
 	const String superName = "HighJump";
 	void createLightBox();
@@ -50,16 +51,25 @@ protected:
 	Vector3 getSuperPos() {
 		return this->getRootNode()->getPosition() + Vector3(0, 380, 0);
 	}
-
-
-
-
+	const String getWalkName() {
+		return walkName;
+	}
+	const String getIdleName() {
+		return idleName;
+	}
+	const String getJumpName() {
+		return jumpName;
+	}
+	const String getSuperName() {
+		return superName;
+	}
 
 public:
 	Ninja(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode, String name, Entity * e,
 			Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, std::deque<KeyInput> * inBuf, std::deque<KeyInput> * relBuf,
-			std::vector<KeyInput> * kBuf, int left, int right, int up, int down, int light, int medium, int heavy) :
+			std::vector<KeyInput> * kBuf, int left, int right, int up, int down, int light,
+			int medium, int heavy) :
 			Actor(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, inBuf,
 					relBuf, kBuf, left, right, up, down, light, medium, heavy) {
 		ninOffsetNode = rootNode->createChildSceneNode("NinOffset" + name);
@@ -106,7 +116,7 @@ public:
 	~Ninja() {
 		this->sceneMgr->destroySceneNode(ninOffsetNode);
 	}
-	void animate(const Ogre::FrameEvent& evt);
+	//void animate(const Ogre::FrameEvent& evt);
 
 };
 

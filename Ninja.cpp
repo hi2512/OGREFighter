@@ -621,10 +621,10 @@ void Ninja::mediumAnimation() {
 }
 
 void Ninja::special1LAnimation() {
-	this->setAnimation("Spin");
+	this->setAnimation("Attack2");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setLoop(false);
-	as->addTime(0.012);
+	as->addTime(0.01);
 
 	int frameTime = -this->attackFrameCount + 30;
 	//printf("frametime: %d\n", frameTime);
@@ -640,10 +640,10 @@ void Ninja::special1LAnimation() {
 }
 
 void Ninja::special1MAnimation() {
-	this->setAnimation("Spin");
+	this->setAnimation("Attack2");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setLoop(false);
-	as->addTime(0.012);
+	as->addTime(0.01);
 
 	int frameTime = -this->attackFrameCount + 40;
 	//printf("frametime: %d\n", frameTime);
@@ -659,10 +659,10 @@ void Ninja::special1MAnimation() {
 }
 
 void Ninja::special1HAnimation() {
-	this->setAnimation("Spin");
+	this->setAnimation("Attack2");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setLoop(false);
-	as->addTime(0.012);
+	as->addTime(0.01);
 
 	int frameTime = -this->attackFrameCount + 50;
 	//printf("frametime: %d\n", frameTime);
@@ -764,322 +764,3 @@ void Ninja::doDeath() {
 	asd->addTime(0.01);
 
 }
-
-void Ninja::animate(const Ogre::FrameEvent& evt) {
-	//Actor::animate(evt);
-
-	bool reverse = false;
-	bool startJump = false;
-
-	btTransform trans;
-	this->body->getMotionState()->getWorldTransform(trans);
-	Vector3 ogrePos(rootNode->convertLocalToWorldPosition(Vector3::ZERO));
-	btVector3 pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
-
-	//read for special move
-	if (this->readQCFwithOrientation()) {
-		//this->actorState = StateType::STOP;
-		//this->stopFrameCount = 40;
-		//this->createSpecialBox();
-		this->specialMove1Window = 7;
-	}
-
-	if (this->readDoubleQCFwithOrientation()) {
-		this->superMoveWindow = 6;
-	}
-
-	switch (this->actorState) {
-	case StateType::DEAD:
-		this->doDeath();
-		break;
-	case StateType::FALLING:
-		this->doFall();
-		//printf("FALL POS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
-		break;
-	case StateType::JUMPING:
-		//printf("jump attack frame count %d\n", this->attackFrameCount);
-		//printf("playing animation %s \n", this->playingAnimation.c_str());
-		if (this->attackFrameCount == 0) {
-			//printf("finished jump attack\n");
-			this->cancelJump();
-			this->clearAttack();
-			//this->actorState = StateType::FALLING;
-			break;
-		}
-		//read inputs for a jump attack
-		for (KeyInput ki : *this->keysHeld) {
-			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-				continue;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::H) {
-				//printf("got command for air heavy\n");
-				this->currentAttack = AttackType::AIRHEAVY;
-				if (!this->jumpAttack) {
-					this->hitboxes.at(currentAttack)->myHbd.active = true;
-					this->attackFrameCount = this->jhAttackFrames;
-					this->jumpAttack = true;
-				}
-			}
-		}
-		//CHANGE STATE TYPE IN JUMP ANIMATION
-		this->playJumpAnimation(this->jumpType);
-		if (jumpAttack) {
-			//printf("STARTING JUMP ATTACK\n");
-			this->jumpAttackAnimation();
-			this->attackFrameCount -= 1;
-		}
-		ogrePos = rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-		//printf("JUMP  OGREPOS x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
-		pos = btVector3(ogrePos.x, ogrePos.y, ogrePos.z);
-		break;
-	case StateType::BLOCKSTUN:
-		this->playBlockAnimation();
-		if (this->blockstunFrames == 0) {
-			this->actorState = StateType::FREE;
-		}
-		this->blockstunFrames -= 1;
-		break;
-	case StateType::HITSTUN:
-		//printf("hitstun frames: %d\n", this->hitstunFrames);
-		this->playHitAnimation();
-		if (this->hitstunFrames == 0) {
-			this->actorState = StateType::FREE;
-			this->comboCounter = 0;
-		}
-		this->hitstunFrames -= 1;
-		break;
-	case StateType::STOP:
-		//printf("Stop frame count: %d\n", this->stopFrameCount);
-		if (this->stopFrameCount == 0) {
-			this->exitStopState();
-			//printf("exit actor state%d\n", this->actorState);
-		} else {
-			//check for cancel
-			this->checkForSpecial1Cancel();
-			this->checkForSuperCancel();
-		}
-		this->stopFrameCount -= 1;
-		break;
-	case StateType::ATTACK:
-		//printf("attack reached, attack frame count %d\n", this->attackFrameCount);
-		if (this->attackFrameCount == 0) {
-			//reset animation
-			this->clearAttack();
-			break;
-		}
-		if (this->attackFrameCount == -1) {
-			switch (this->currentAttack) {
-			case AttackType::LIGHT:
-				this->attackFrameCount = this->lAttackFrames;
-				this->hitboxes.at(currentAttack)->myHbd.active = true;
-				playSound("../assets/swing1.wav", SDL_MIX_MAXVOLUME / 3);
-				break;
-			case AttackType::MEDIUM:
-				this->attackFrameCount = this->mAttackFrames;
-				this->hitboxes.at(currentAttack)->myHbd.active = true;
-				playSound("../assets/swing1.wav", SDL_MIX_MAXVOLUME / 2);
-				break;
-			case AttackType::HEAVY:
-				this->attackFrameCount = this->hAttackFrames;
-				this->hitboxes.at(currentAttack)->myHbd.active = true;
-				break;
-			case AttackType::SPECIAL1L:
-				//projectile with activate on creation
-				this->attackFrameCount = this->s1LAttackFrames;
-				this->superVal.addVal(10.0);
-				break;
-			case AttackType::SPECIAL1M:
-				this->attackFrameCount = this->s1MAttackFrames;
-				this->superVal.addVal(10.0);
-				break;
-			case AttackType::SPECIAL1H:
-				this->attackFrameCount = this->s1HAttackFrames;
-				this->superVal.addVal(10.0);
-				break;
-			case AttackType::SUPER:
-				this->attackFrameCount = this->superAttackFrames;
-				this->hitboxes.at(currentAttack)->myHbd.active = true;
-				break;
-			}
-		}
-		switch (this->currentAttack) {
-		case AttackType::LIGHT:
-			this->lightAnimation();
-			break;
-		case AttackType::MEDIUM:
-			this->mediumAnimation();
-			break;
-		case AttackType::HEAVY:
-			this->heavyAnimation();
-			break;
-		case AttackType::SPECIAL1L:
-			//printf("entering special animation\n");
-			this->special1LAnimation();
-			break;
-		case AttackType::SPECIAL1M:
-			this->special1MAnimation();
-			break;
-		case AttackType::SPECIAL1H:
-			this->special1HAnimation();
-			break;
-		case AttackType::SUPER:
-			this->superAnimation();
-			break;
-		}
-		this->attackFrameCount -= 1;
-		break;
-	case StateType::FREE:
-		//check to see if still needs to fall
-		if (this->isAboveGround()) {
-			this->actorState = StateType::FALLING;
-			break;
-		}
-		Real move = walkSpeed * evt.timeSinceLastFrame;
-		Real moveX = 0;
-		//bool holdDown = false;
-		for (KeyInput ki : *this->keysHeld) {
-			//skip if key is not binded for this ninja
-			if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
-				continue;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::UP) {
-				startJump = true;
-				this->actorState = StateType::JUMPING;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::LEFT) {
-				moveX -= move;
-				reverse = true;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::RIGHT) {
-				moveX += move;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::DOWN) {
-				//holdDown = true;
-			}
-			if (this->keyBinding.at(ki.key) == InputType::L) {
-				this->actorState = StateType::ATTACK;
-				this->currentAttack = AttackType::LIGHT;
-				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
-					//printf("DO SPECIAL MOVE\n");
-					this->currentAttack = AttackType::SPECIAL1L;
-					this->specialMove1Window = -1;
-				}
-				if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-					this->superVal.reset();
-					this->currentAttack = AttackType::SUPER;
-					this->superMoveWindow = -1;
-				}
-			}
-			if (this->keyBinding.at(ki.key) == InputType::M) {
-				this->actorState = StateType::ATTACK;
-				this->currentAttack = AttackType::MEDIUM;
-				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
-					this->currentAttack = AttackType::SPECIAL1M;
-					this->specialMove1Window = -1;
-				}
-				if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-					this->superVal.reset();
-					this->currentAttack = AttackType::SUPER;
-					this->superMoveWindow = -1;
-				}
-			}
-			if (this->keyBinding.at(ki.key) == InputType::H) {
-				this->actorState = StateType::ATTACK;
-				this->currentAttack = AttackType::HEAVY;
-				if (this->specialMove1Window > -1 && !this->hasActiveProjectile()) {
-					this->currentAttack = AttackType::SPECIAL1H;
-					this->specialMove1Window = -1;
-				}
-				if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-					this->superVal.reset();
-					this->currentAttack = AttackType::SUPER;
-					this->superMoveWindow = -1;
-				}
-			}
-		}
-		//set up jump
-
-		if (this->actorState == StateType::JUMPING) {
-			if (moveX > 0) {
-				this->jumpType = InputType::RIGHT;
-				this->createJumpRightArc();
-			} else if (moveX < 0) {
-				this->jumpType = InputType::LEFT;
-				this->createJumpLeftArc();
-			} else {
-				//equals 0
-				this->jumpType = InputType::UP;
-				this->createJumpUpArc();
-			}
-		}
-		/*
-		if(holdDown && moveX) {
-			moveX = 0;
-		}
-		*/
-
-		//if walking
-		if (moveX) {
-			this->setAnimation("Walk");
-		} else {
-			//not walking
-			this->setAnimation("Idle1");
-		}
-		/*
-		//check if movement locked
-		if (moveLock) {
-			printf("MOVE LOCKED\n");
-			moveX = 0;
-			this->setAnimation("Block");
-			AnimationState * asb = this->geom->getAnimationState(this->playingAnimation);
-			asb->addTime(0.005);
-			break;
-		}
-		*/
-		pos = btVector3(ogrePos.x + moveX, ogrePos.y, ogrePos.z);
-		//play animation
-		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-		Real timeToAdd = reverse ? -evt.timeSinceLastFrame : evt.timeSinceLastFrame;
-		as->addTime(evt.timeSinceLastFrame);
-		break;
-	}
-	if (this->actorState != StateType::FALLING) {
-		//keep orientation
-		btQuaternion rot = trans.getRotation();
-
-		trans.setOrigin(pos);
-		trans.setRotation(rot);
-		this->body->getMotionState()->setWorldTransform(trans);
-
-		btVector3 btpos = trans.getOrigin();
-		Vector3 gloPos(btpos.getX(), btpos.getY(), btpos.getZ());
-		//auto relativePos = this->rootNode->convertWorldToLocalPosition(gloPos);
-		this->rootNode->setPosition(gloPos);
-
-		btQuaternion btori = trans.getRotation();
-		Quaternion ori(btori.w(), btori.x(), btori.y(), btori.z());
-
-		this->rootNode->setOrientation(ori);
-	} else {
-		/*
-		 printf("FALL POS x: %f, y: %f, z: %f\n", trans.getOrigin().getX(), trans.getOrigin().getY(),
-		 trans.getOrigin().getZ());
-		 */
-		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-		as->addTime(0.003);
-		GameObject::animate(evt);
-		//AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-		//as->addTime(0.005);
-	}
-
-	if (specialMove1Window > -1) {
-		this->specialMove1Window -= 1;
-	}
-	if (superMoveWindow > -1) {
-		this->superMoveWindow -= 1;
-	}
-	this->moveLock = false;
-	this->doCollision(evt);
-
-}
-

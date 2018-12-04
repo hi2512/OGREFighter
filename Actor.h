@@ -190,6 +190,18 @@ protected:
 	void doSuperFreeze();
 	virtual void doSuperFreezeAnimation() {
 	}
+	virtual const String getWalkName() {
+		return "NOWALK";
+	}
+	virtual const String getIdleName() {
+		return "NOIDLE";
+	}
+	virtual const String getJumpName() {
+		return "NOJUMP";
+	}
+	virtual const String getSuperName() {
+		return "NOSUPER";
+	}
 
 public:
 
@@ -220,6 +232,7 @@ public:
 		this->sceneMgr->destroyEntity(geom);
 		this->sceneMgr->destroySceneNode(rootNode);
 	}
+	virtual void animate(const Ogre::FrameEvent& evt);
 	void enterStopState(int stopFrames);
 	int comboCount() {
 		return this->comboCounter;
