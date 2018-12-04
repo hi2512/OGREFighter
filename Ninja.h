@@ -103,7 +103,9 @@ public:
 		this->createJumpRightArc();
 
 	}
-
+	~Ninja() {
+		this->sceneMgr->destroySceneNode(ninOffsetNode);
+	}
 	void animate(const Ogre::FrameEvent& evt);
 
 };

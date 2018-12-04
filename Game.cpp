@@ -55,6 +55,7 @@ public:
 	void cameraZoom(const Vector3& point);
 	void cameraSwap();
 	void cameraTracking(Real time);
+	void restart();
 private:
 	bool inKeysHeld(const OgreBites::KeyboardEvent& evt, std::vector<KeyInput> kh);
 	void initPhys();
@@ -76,6 +77,7 @@ private:
 	GameGui* gameGui;
 	GameGui* healthDisplay;
 	Vector3 camDir = Ogre::Vector3(0, 0, 0);
+	const Vector3 defaultCamPosition = Vector3(0, 300, 1400);
 	Quaternion defaultCamOrientation;
 
 	Vector3 moveDir = Vector3(0, 0, 0);
@@ -179,6 +181,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	case OgreBites::SDLK_SPACE:
 		break;
 	case OgreBites::SDLK_F1:
+		restart();
 		//player1->setP1Orientation();
 		break;
 	case OgreBites::SDLK_F2:
@@ -354,7 +357,7 @@ void Game::setup(void) {
 	shaderGen->addSceneManager(scnMgr);
 
 	// set up camera node's position
-	camNode = scnMgr->getRootSceneNode()->createChildSceneNode(Vector3(0, 300, 1400));
+	camNode = scnMgr->getRootSceneNode()->createChildSceneNode(defaultCamPosition);
 	camNode->lookAt(Vector3(0, 50, -1), Node::TS_PARENT);
 
 	// create the camera and attach it to the node we just created
@@ -517,6 +520,35 @@ void Game::setup(void) {
 	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
 }
 
+void Game::restart() {
+	delete (player1);
+	delete (player2);
+	Entity * p1Entity = mgr->createEntity("ninja.mesh");
+	//p1Entity->setMaterialName("Examples/BumpyMetal");
+	SceneNode * p1Node = mgr->getRootSceneNode()->createChildSceneNode("P1Node");
+	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
+	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
+	Actor * p1 = new Ninja(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
+			btQuaternion(0.0, -0.707, 0.0, 0.707), &inputBuffer, &releaseBuffer, &keysHeld, 'a',
+			'd', 'w', 's', 'x', 'c', 'v');
+
+	Entity * p2Entity = mgr->createEntity("ninja.mesh");
+	SceneNode * p2Node = mgr->getRootSceneNode()->createChildSceneNode("P2Node");
+	auto p2OgreBox = p2Entity->getBoundingBox().getSize();
+	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
+	Actor * p2 = new Ninja(true, mgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
+			btQuaternion(0.0, -0.707, 0.0, -0.707), &inputBuffer2, &releaseBuffer2, &keysHeld2, 'j',
+			'l', 'i', 'k', 'b', 'n', 'm');
+	camNode->setPosition(defaultCamPosition);
+	frameCount = 0;
+	p1->setOpponent(p2);
+	p2->setOpponent(p1);
+	player1 = p1;
+	player2 = p2;
+	gameState->p1 = p1;
+	gameState->p2 = p2;
+}
+
 void Game::initPhys() {
 	//PHYSICS INIT
 	phys = new Physics();
@@ -553,7 +585,7 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	Ogre::ImguiManager::getSingleton().newFrame(evt.timeSinceLastFrame,
 			Ogre::Rect(0, 0, getRenderWindow()->getWidth(), getRenderWindow()->getHeight()));
 	if (debug) {
-		gameGui->showFrameCount();
+		gameGui->showFrameCount(this->getRenderWindow()->getStatistics().lastFPS);
 		gameState->camPos = Vector3(camNode->getPosition());
 		//gameState->camPos = Vector3(mgr->getSceneNode("SuperCamNode")->getPosition());
 		gameGui->showCamPos();
@@ -608,7 +640,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	//phys->dbd->Update();
+	phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];

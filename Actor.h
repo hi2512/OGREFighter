@@ -214,6 +214,12 @@ public:
 		keyBinding.insert(pair<int, InputType>(heavy, InputType::H));
 
 	}
+	virtual ~Actor() {
+		printf("deleting actor\n");
+		this->physics->dynamicsWorld->removeRigidBody(body);
+		this->sceneMgr->destroyEntity(geom);
+		this->sceneMgr->destroySceneNode(rootNode);
+	}
 	void enterStopState(int stopFrames);
 	int comboCount() {
 		return this->comboCounter;

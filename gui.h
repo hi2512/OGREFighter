@@ -33,7 +33,7 @@ public:
 	void showWaitingOnPlayers();
 	void showSingleSelect();
 
-	void showFrameCount();
+	void showFrameCount(float);
 	void showCamPos();
 	void showInputBuffer();
 	void showComboCounter1();

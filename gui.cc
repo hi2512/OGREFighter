@@ -5,7 +5,9 @@ using namespace std;
 void GameGui::showHealth1() {
 	ImGui::Begin("Player 1 Health", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(100, 500));
+	auto size = ImGui::GetIO().DisplaySize;
+	//ImGui::SetWindowPos(ImVec2(100, 500));
+	ImGui::SetWindowPos(ImVec2(size.x / 14, size.y / 1.5));
 	ImGui::Text("HEALTH                   ");
 	ImGui::ProgressBar(state->p1->getHealth() / state->p1->getMaxHealth());
 	ImGui::End();
@@ -14,7 +16,9 @@ void GameGui::showHealth1() {
 void GameGui::showHealth2() {
 	ImGui::Begin("Player 2 Health", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(1100, 500));
+	auto size = ImGui::GetIO().DisplaySize;
+	//ImGui::SetWindowPos(ImVec2(1100, 500));
+	ImGui::SetWindowPos(ImVec2(size.x / 1.254, size.y / 1.5));
 	ImGui::Text("HEALTH                   ");
 	ImGui::ProgressBar(state->p2->getHealth() / state->p2->getMaxHealth());
 	ImGui::End();
@@ -22,13 +26,17 @@ void GameGui::showHealth2() {
 
 void GameGui::showComboCounter1() {
 	ImGui::Begin("Player 1", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(100, 50));
+	auto size = ImGui::GetIO().DisplaySize;
+	//ImGui::SetWindowPos(ImVec2(100, 50));
+	ImGui::SetWindowPos(ImVec2(size.x / 14, size.y / 15.6));
 	ImGui::Text("%d Hits    ", this->state->p1->comboCount());
 	ImGui::End();
 }
 void GameGui::showComboCounter2() {
 	ImGui::Begin("Player 2", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(1100, 50));
+	auto size = ImGui::GetIO().DisplaySize;
+	//ImGui::SetWindowPos(ImVec2(1100, 50));
+	ImGui::SetWindowPos(ImVec2(size.x / 1.254, size.y / 15.6));
 	ImGui::Text("%d Hits    ", this->state->p2->comboCount());
 	ImGui::End();
 }
@@ -36,7 +44,9 @@ void GameGui::showComboCounter2() {
 void GameGui::showMeter1() {
 	ImGui::Begin("Player 1 Meter", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(100, 600));
+	auto size = ImGui::GetIO().DisplaySize;
+	//ImGui::SetWindowPos(ImVec2(100, 600));
+	ImGui::SetWindowPos(ImVec2(size.x / 14, size.y / 1.3));
 	ImGui::Text("SUPER                   ");
 	ImGui::ProgressBar(state->p1->getMeterVal() / state->p1->getMeterMax());
 	ImGui::End();
@@ -45,23 +55,28 @@ void GameGui::showMeter1() {
 void GameGui::showMeter2() {
 	ImGui::Begin("Player 2 Meter", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(1100, 600));
+	auto size = ImGui::GetIO().DisplaySize;
+	//ImGui::SetWindowPos(ImVec2(1100, 600));
+	ImGui::SetWindowPos(ImVec2(size.x / 1.254, size.y / 1.3));
 	ImGui::Text("SUPER                   ");
 	ImGui::ProgressBar(state->p2->getMeterVal() / state->p2->getMeterMax());
 	ImGui::End();
 }
 
-void GameGui::showFrameCount() {
+void GameGui::showFrameCount(float fps) {
 	ImGui::Begin("Frame Count", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Frame Number: %d", this->state->frameCount);
+	ImGui::Text("FPS: %f", fps);
 	//ImGui::SetNextWindowPos(ImVec2(250, 50));
 	ImGui::End();
 }
 
 void GameGui::showTime() {
 	ImGui::Begin("Time", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SetWindowPos(ImVec2(650, 50));
+	auto size = ImGui::GetIO().DisplaySize;
+	//ImGui::SetWindowPos(ImVec2(650, 50));
+	ImGui::SetWindowPos(ImVec2(size.x / 2.12, size.y / 15.6));
 	ImGui::Text("%d  \n", state->getTime());
 	ImGui::End();
 }
@@ -79,6 +94,11 @@ void GameGui::showCamPos() {
 
 	ImGui::Text("Window X Position: %f", windowPos.x);
 	ImGui::Text("Window Y Position: %f", windowPos.y);
+
+	auto size = ImGui::GetIO().DisplaySize;
+	ImGui::Text("Render Window X Size: %f", size.x);
+	ImGui::Text("Render Window Y Size: %f", size.y);
+
 	//ImGui::SetNextWindowPos(ImVec2(250, 200));
 	ImGui::End();
 
@@ -160,7 +180,7 @@ void GameGui::showLoseScreen() {
 
 void GameGui::showWinScreen() {
 	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::Text("You won!");
+	ImGui::Text("Player1 wins!");
 	if (ImGui::Button("Exit")) {
 		this->state->shouldExit = true;
 	}
