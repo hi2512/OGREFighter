@@ -33,6 +33,7 @@
 #include "Spark.h"
 #include "Wall.h"
 #include "KeyboardController.h"
+#include "AIController.h"
 
 #include "ball.h"
 
@@ -153,7 +154,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 
 	this->inputBuffer.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 	((KeyboardController *) p1con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
-	((KeyboardController *) p2con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
+	//((KeyboardController *) p2con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
 	/*
 	 if (!inKeysHeld(evt, keysHeld)) {
 	 this->keysHeld.push_back(KeyInput { evt.keysym.sym, this->frameCount });
@@ -273,7 +274,7 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	 }
 	 */
 	((KeyboardController *) p1con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
-	((KeyboardController *) p2con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
+	//((KeyboardController *) p2con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
 	//LogManager::getSingleton().logMessage("Num of keys held");
 	//LogManager::getSingleton().logMessage(to_string(keysHeld.size()));
 	switch (evt.keysym.sym) {
@@ -476,6 +477,7 @@ void Game::setup(void) {
 	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
 	Actor * p2 = new Ninja(true, scnMgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
 			btQuaternion(0.0, -0.707, 0.0, -0.707), p2con);
+	p2->setController(new AIController(p2, p1, gameState));
 	p1->setOpponent(p2);
 	p2->setOpponent(p1);
 	player1 = p1;

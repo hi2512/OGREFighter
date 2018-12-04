@@ -26,16 +26,22 @@ protected:
 		return false;
 	}
 	bool keyIsInputType(KeyInput ki, InputType ipt) {
-		if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+		if (!keyIsMapped(ki)) {
 			//not mapped
 			return false;
 		}
 		return this->keyBinding.at(ki.key) == ipt;
 	}
+	bool keyIsMapped(KeyInput ki) {
+		if (this->keyBinding.find(ki.key) == this->keyBinding.end()) {
+			//not mapped
+			return false;
+		}
+		return true;
+	}
 
 public:
-	KeyboardController(int left, int right, int up, int down, int light,
-			int medium, int heavy) {
+	KeyboardController(int left, int right, int up, int down, int light, int medium, int heavy) {
 		keyBinding.insert(pair<int, InputType>(left, InputType::LEFT));
 		keyBinding.insert(pair<int, InputType>(right, InputType::RIGHT));
 		keyBinding.insert(pair<int, InputType>(up, InputType::UP));
@@ -46,6 +52,10 @@ public:
 
 	}
 	void addKey(KeyInput ki) {
+		//printf("adding key %c\n", ki.key);
+		if (!keyIsMapped(ki)) {
+			return;
+		}
 		if (inputBuffer.size() > sizeLimit) {
 			inputBuffer.pop_front();
 		}
@@ -55,6 +65,9 @@ public:
 		}
 	}
 	void releaseKey(KeyInput ki) {
+		if (!keyIsMapped(ki)) {
+			return;
+		}
 		if (releaseBuffer.size() > 200) {
 			releaseBuffer.pop_front();
 		}
@@ -75,7 +88,7 @@ public:
 				return false;
 			}
 			//printf("key is %c\n", ki.key);
-			if(this->keyBinding.at(ki.key) == it) {
+			if (this->keyBinding.at(ki.key) == it) {
 				return true;
 			}
 		}

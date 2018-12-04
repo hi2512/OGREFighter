@@ -1045,8 +1045,10 @@ CMakeFiles/Game.dir/Game.cpp.o: ../ogre-imgui/ImguiManager.h
 CMakeFiles/Game.dir/Game.cpp.o: ../ogre-imgui/ImguiRenderable.h
 CMakeFiles/Game.dir/Game.cpp.o: ../ogre-imgui/imgui/imconfig.h
 CMakeFiles/Game.dir/Game.cpp.o: ../ogre-imgui/imgui/imgui.h
+CMakeFiles/Game.dir/Game.cpp.o: ../AIController.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Actor.h
 CMakeFiles/Game.dir/Game.cpp.o: ../ActorController.h
+CMakeFiles/Game.dir/Game.cpp.o: ../BehaviorNode.h
 CMakeFiles/Game.dir/Game.cpp.o: ../DebugDraw.h
 CMakeFiles/Game.dir/Game.cpp.o: ../Disc.h
 CMakeFiles/Game.dir/Game.cpp.o: ../DynamicLineDrawer.h

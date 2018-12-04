@@ -8,6 +8,10 @@ enum InputType {
 
 };
 
+enum BehaviorType {
+	Test, DoNothing, Push, SpaceAttack, JumpAttack, ProjectileAttack, CounterAttack, Stall, Defend
+};
+
 struct KeyInput {
 	int key;
 	Uint32 frame;

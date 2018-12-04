@@ -296,6 +296,9 @@ public:
 	Real getMeterMax() {
 		return this->superVal.getMax();
 	}
+	void setController(ActorController * con) {
+		this->myController = con;
+	}
 
 };
 

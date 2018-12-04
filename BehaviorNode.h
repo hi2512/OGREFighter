@@ -13,7 +13,9 @@ protected:
 	Actor * myPlayer;
 	Actor * opponent;
 	GameState * gs;
-
+	virtual BehaviorNode * test() {
+		return rand() % 2 ? t : f;
+	}
 public:
 	BehaviorNode(Actor * me, Actor * opp, GameState * game) :
 			myPlayer(me), opponent(opp), gs(game) {
@@ -28,9 +30,6 @@ public:
 	}
 	void setRight(BehaviorNode * right) {
 		f = right;
-	}
-	virtual BehaviorNode * test() {
-		return rand() % 2 ? t : f;
 	}
 	BehaviorType decide() {
 		if (behavior == BehaviorType::Test) {
@@ -60,11 +59,6 @@ public:
 class NearOpponentDistanceNode: public BehaviorNode {
 protected:
 	Real distanceThreshold;
-
-public:
-	NearOpponentDistanceNode(Actor * me, Actor * opp, GameState * game, Real dist) :
-			BehaviorNode(me, opp, game), distanceThreshold(dist) {
-	}
 	BehaviorNode * test() {
 		auto myDist = myPlayer->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
 		auto oppDist = opponent->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
@@ -74,15 +68,15 @@ public:
 			return f;
 		}
 	}
+public:
+	NearOpponentDistanceNode(Actor * me, Actor * opp, GameState * game, Real dist) :
+			BehaviorNode(me, opp, game), distanceThreshold(dist) {
+	}
 };
 
 class CloseToCenterDistanceNode: public BehaviorNode {
 protected:
 	Real distanceThreshold;
-public:
-	CloseToCenterDistanceNode(Actor * me, Actor * opp, GameState * game, Real dist) :
-			BehaviorNode(me, opp, game), distanceThreshold(dist) {
-	}
 	BehaviorNode * test() {
 		if (abs(myPlayer->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO).x)
 				< distanceThreshold) {
@@ -92,16 +86,16 @@ public:
 		}
 
 	}
+public:
+	CloseToCenterDistanceNode(Actor * me, Actor * opp, GameState * game, Real dist) :
+			BehaviorNode(me, opp, game), distanceThreshold(dist) {
+	}
 
 };
 
 class HealthLeadNode: public BehaviorNode {
 protected:
 	Real healthThreshold;
-public:
-	HealthLeadNode(Actor * me, Actor * opp, GameState * game, Real health) :
-			BehaviorNode(me, opp, game), healthThreshold(health) {
-	}
 	BehaviorNode * test() {
 		Real myHealth = myPlayer->getHealth();
 		Real oppHealth = opponent->getHealth();
@@ -111,15 +105,15 @@ public:
 			return f;
 		}
 	}
+public:
+	HealthLeadNode(Actor * me, Actor * opp, GameState * game, Real health) :
+			BehaviorNode(me, opp, game), healthThreshold(health) {
+	}
 };
 
 class HealthTrailNode: public BehaviorNode {
 protected:
 	Real healthThreshold;
-public:
-	HealthTrailNode(Actor * me, Actor * opp, GameState * game, Real health) :
-			BehaviorNode(me, opp, game), healthThreshold(health) {
-	}
 	BehaviorNode * test() {
 		Real myHealth = myPlayer->getHealth();
 		Real oppHealth = opponent->getHealth();
@@ -128,6 +122,10 @@ public:
 		} else {
 			return f;
 		}
+	}
+public:
+	HealthTrailNode(Actor * me, Actor * opp, GameState * game, Real health) :
+			BehaviorNode(me, opp, game), healthThreshold(health) {
 	}
 };
 

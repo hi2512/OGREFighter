@@ -1046,8 +1046,10 @@ CMakeFiles/Game.dir/Game.cpp.o
  ../ogre-imgui/ImguiRenderable.h
  ../ogre-imgui/imgui/imconfig.h
  ../ogre-imgui/imgui/imgui.h
+ /home/steve/Downloads/GTechFinal/AIController.h
  /home/steve/Downloads/GTechFinal/Actor.h
  /home/steve/Downloads/GTechFinal/ActorController.h
+ /home/steve/Downloads/GTechFinal/BehaviorNode.h
  /home/steve/Downloads/GTechFinal/DebugDraw.h
  /home/steve/Downloads/GTechFinal/Disc.h
  /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
