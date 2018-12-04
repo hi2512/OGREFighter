@@ -65,7 +65,8 @@ private:
 	Real hitScaling();
 
 protected:
-	const Real maxHealth = 1000.0;
+	const int counterValue = 15;
+	Real maxHealth = 1000.0;
 	Real health = maxHealth;
 	SuperVal superVal;
 	//SceneNode * jumpNode;

@@ -227,7 +227,7 @@ void Actor::recieveHit(HitboxData * hbd) {
 		 */
 		this->clearAttack();
 		//counter status
-		counterFrames = 5;
+		counterFrames = counterValue;
 	}
 	if (this->actorState == StateType::JUMPING) {
 		this->cancelJump();
