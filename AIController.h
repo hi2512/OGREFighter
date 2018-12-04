@@ -2,10 +2,11 @@
 #define AICONTROLLER_H_
 
 enum BehaviorType {
-	Test, Push, SpaceAttack, JumpAttack, ProjectileAttack, CounterAttack, Stall
+	Test, Push, SpaceAttack, JumpAttack, ProjectileAttack, CounterAttack, Stall, Defend
 };
 
 class AIController {
+	BehaviorNode * behaviorRoot;
 
 };
 
