@@ -210,6 +210,12 @@ Ogre.h
 physics.h
 /home/steve/Downloads/GTechFinal/physics.h
 
+/home/steve/Downloads/GTechFinal/gui.cc
+gui.h
+/home/steve/Downloads/GTechFinal/gui.h
+ImguiManager.h
+-
+
 /home/steve/Downloads/GTechFinal/gui.h
 Ogre.h
 -
@@ -235,6 +241,10 @@ map
 -
 DebugDraw.h
 /home/steve/Downloads/GTechFinal/DebugDraw.h
+
+/home/steve/Downloads/GTechFinal/state.cpp
+state.h
+/home/steve/Downloads/GTechFinal/state.h
 
 /home/steve/Downloads/GTechFinal/state.h
 Ogre.h

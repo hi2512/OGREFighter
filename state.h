@@ -42,7 +42,11 @@ public:
 	Actor * p1 = NULL;
 	Actor * p2 = NULL;
 
-	const Uint32 maxTime = 7100;
+	Actor * winner = NULL;
+	const int restartTime = 300;
+	int restartTimer = restartTime;
+
+	const Uint32 maxTime = 4500;
 
 	GameState(void) {
 
@@ -62,11 +66,29 @@ public:
 
 	}
 
+
+
+	void endGame(Actor * winningPlayer) {
+		if(restartTimer < restartTime) {
+			restartTimer -= 1;
+			return;
+		}
+		restartTimer -= 1;
+		this->winner = winningPlayer;
+	}
+	bool gameOver() {
+		return restartTimer < restartTime;
+	}
+
+	bool gameRestartReady() {
+		return restartTimer == 0;
+	}
+
 	int getTime() {
 		if (frameCount > maxTime) {
 			return 0;
 		}
-		return (maxTime - frameCount) / 71;
+		return (maxTime - frameCount) / (maxTime / 100);
 	}
 
 	void nextRound() {

@@ -225,6 +225,9 @@ public:
 		return this->comboCounter;
 	}
 	bool isBlocking();
+	bool isDead() {
+		return this->health <= 0;
+	}
 	void pushBack(Real dist);
 	void setP1Orientation();
 	void setP2Orientation();

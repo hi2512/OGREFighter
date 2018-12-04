@@ -476,7 +476,7 @@ void Ninja::heavyAnimation() {
 	//printf("hitbox pos %f, %f, %f\n", tv.getX(), tv.getY(), tv.getZ());
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	Real xPos = curPos.x + 350;
+	Real xPos = curPos.x + 300;
 
 	Real yPos = curPos.y + 10;
 	std::vector<btVector3> hitFrames;
@@ -491,7 +491,7 @@ void Ninja::heavyAnimation() {
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos, curPos.z));
 	} else {
-		xPos = curPos.x - 350;
+		xPos = curPos.x - 300;
 		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 20, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 20, yPos + 10, curPos.z));
@@ -579,7 +579,7 @@ void Ninja::mediumAnimation() {
 	trans = hbox->getWorldTransform();
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
-	Real xPos = curPos.x + 200;
+	Real xPos = curPos.x + 160;
 
 	Real yPos = curPos.y + 80;
 	std::vector<btVector3> hitFrames;
@@ -592,7 +592,7 @@ void Ninja::mediumAnimation() {
 		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
 		hitFrames.push_back(btVector3(xPos + 40, yPos + 30, curPos.z));
 	} else {
-		xPos = curPos.x - 200;
+		xPos = curPos.x - 160;
 		hitFrames.push_back(btVector3(xPos, yPos + 140, curPos.z));
 		hitFrames.push_back(btVector3(xPos, yPos + 140, curPos.z));
 		hitFrames.push_back(btVector3(xPos - 80, yPos + 100, curPos.z));
@@ -610,7 +610,7 @@ void Ninja::mediumAnimation() {
 	if (frameTime >= 0 && frameTime <= 6) {
 		pos = hitFrames.at(frameTime);
 	}
-	if (frameTime >= -10 && frameTime <= 12) {
+	if (frameTime >= -10 && frameTime <= 18) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, .75, 1.8));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));

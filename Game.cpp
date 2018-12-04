@@ -523,6 +523,11 @@ void Game::setup(void) {
 void Game::restart() {
 	delete (player1);
 	delete (player2);
+	playMusic("../assets/Wicked_Things.wav", SDL_MIX_MAXVOLUME / 3);
+	gameState = new GameState();
+	gameGui = new GameGui(gameState);
+	gameState->inputBuffer = &inputBuffer;
+	gameState->releaseBuffer = &releaseBuffer;
 	Entity * p1Entity = mgr->createEntity("ninja.mesh");
 	//p1Entity->setMaterialName("Examples/BumpyMetal");
 	SceneNode * p1Node = mgr->getRootSceneNode()->createChildSceneNode("P1Node");
@@ -602,6 +607,12 @@ bool Game::frameStarted(const FrameEvent &evt) {
 	gameGui->showMeter1();
 	gameGui->showMeter2();
 	gameGui->showTime();
+	if(gameState->gameOver()) {
+		gameGui->showWinScreen();
+	}
+	if(gameState->gameRestartReady()) {
+		restart();
+	}
 	/*
 	 if (gameState->shouldExit) {
 	 getRoot()->queueEndRendering();
@@ -662,6 +673,13 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 
 		go->animate(evt);
 
+	}
+	if(player1->isDead()) {
+		gameState->endGame(player2);
+	} else if(player2->isDead()) {
+		gameState->endGame(player1);
+	} else if (gameState->getTime() <= 0) {
+		gameState->endGame(NULL);
 	}
 	//check which side players should be facing
 	Real p1X = player1->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO).x;

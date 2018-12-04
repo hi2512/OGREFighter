@@ -180,10 +180,20 @@ void GameGui::showLoseScreen() {
 
 void GameGui::showWinScreen() {
 	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::Text("Player1 wins!");
+	auto size = ImGui::GetIO().DisplaySize;
+	ImGui::SetWindowPos(ImVec2(size.x / 2.12, size.y / 2));
+	if (state->winner == NULL) {
+		ImGui::Text("TIME OVER");
+	} else if (state->winner == state->p1) {
+		ImGui::Text("Player 1 wins!");
+	} else {
+		ImGui::Text("Player 2 wins!");
+	}
+	/*
 	if (ImGui::Button("Exit")) {
 		this->state->shouldExit = true;
 	}
+	*/
 	ImGui::End();
 }
 
