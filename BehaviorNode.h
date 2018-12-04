@@ -31,6 +31,12 @@ public:
 	void setRight(BehaviorNode * right) {
 		f = right;
 	}
+	BehaviorNode * getLeft() {
+		return t;
+	}
+	BehaviorNode * getRight() {
+		return f;
+	}
 	BehaviorType decide() {
 		if (behavior == BehaviorType::Test) {
 			return test()->decide();
@@ -74,6 +80,24 @@ public:
 	}
 };
 
+class FarOpponentDistanceNode: public BehaviorNode {
+protected:
+	Real distanceThreshold;
+	BehaviorNode * test() {
+		auto myDist = myPlayer->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
+		auto oppDist = opponent->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
+		if (myDist.distance(oppDist) > distanceThreshold) {
+			return t;
+		} else {
+			return f;
+		}
+	}
+public:
+	FarOpponentDistanceNode(Actor * me, Actor * opp, GameState * game, Real dist) :
+			BehaviorNode(me, opp, game), distanceThreshold(dist) {
+	}
+};
+
 class CloseToCenterDistanceNode: public BehaviorNode {
 protected:
 	Real distanceThreshold;
@@ -88,6 +112,25 @@ protected:
 	}
 public:
 	CloseToCenterDistanceNode(Actor * me, Actor * opp, GameState * game, Real dist) :
+			BehaviorNode(me, opp, game), distanceThreshold(dist) {
+	}
+
+};
+
+class FarFromCenterDistanceNode: public BehaviorNode {
+protected:
+	Real distanceThreshold;
+	BehaviorNode * test() {
+		if (abs(myPlayer->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO).x)
+				> distanceThreshold) {
+			return t;
+		} else {
+			return f;
+		}
+
+	}
+public:
+	FarFromCenterDistanceNode(Actor * me, Actor * opp, GameState * game, Real dist) :
 			BehaviorNode(me, opp, game), distanceThreshold(dist) {
 	}
 
@@ -130,13 +173,17 @@ public:
 };
 
 class OpponentIsJumpingNode: public BehaviorNode {
-public:
+protected:
 	BehaviorNode * test() {
 		if (opponent->getRootNode()->getPosition().y > 300) {
 			return t;
 		} else {
 			return f;
 		}
+	}
+public:
+	OpponentIsJumpingNode(Actor * me, Actor * opp, GameState * game) :
+			BehaviorNode(me, opp, game) {
 	}
 
 };
@@ -180,6 +227,20 @@ class DoNothingNode: public BehaviorNode {
 public:
 	DoNothingNode(Actor * me, Actor * opp, GameState * game) :
 			BehaviorNode(me, opp, game, BehaviorType::DoNothing) {
+	}
+};
+
+class ProjectileAttackNode: public BehaviorNode {
+public:
+	ProjectileAttackNode(Actor * me, Actor * opp, GameState * game) :
+			BehaviorNode(me, opp, game, BehaviorType::ProjectileAttack) {
+	}
+};
+
+class CloseAttackNode: public BehaviorNode {
+public:
+	CloseAttackNode(Actor * me, Actor * opp, GameState * game) :
+			BehaviorNode(me, opp, game, BehaviorType::CloseAttack) {
 	}
 };
 

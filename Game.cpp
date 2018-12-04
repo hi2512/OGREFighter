@@ -536,8 +536,9 @@ void Game::setup(void) {
 }
 
 void Game::restart() {
-	delete (player1);
+	//ai controller must be deleted first!!
 	delete (player2);
+	delete (player1);
 	p1con = new KeyboardController('a', 'd', 'w', 's', 'x', 'c', 'v');
 	p2con = new KeyboardController('j', 'l', 'i', 'k', 'b', 'n', 'm');
 	printf("done deleting\n");

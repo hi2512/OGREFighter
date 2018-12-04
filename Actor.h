@@ -219,6 +219,7 @@ public:
 	virtual ~Actor() {
 		printf("deleting actor\n");
 		delete(this->myController);
+		this->clearAttack();
 		this->physics->dynamicsWorld->removeRigidBody(body);
 		this->sceneMgr->destroyEntity(geom);
 		this->sceneMgr->destroySceneNode(rootNode);

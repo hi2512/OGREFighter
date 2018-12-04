@@ -9,7 +9,7 @@ enum InputType {
 };
 
 enum BehaviorType {
-	Test, DoNothing, Push, SpaceAttack, JumpAttack, ProjectileAttack, CounterAttack, Stall, Defend
+	Test, DoNothing, Push, SpaceAttack, JumpAttack, ProjectileAttack, CounterAttack, Stall, Defend, CloseAttack
 };
 
 struct KeyInput {

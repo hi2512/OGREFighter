@@ -66,6 +66,16 @@ BehaviorNode.h
 mutex
 -
 
+/home/steve/Downloads/GTechFinal/Actor.cpp
+Actor.h
+/home/steve/Downloads/GTechFinal/Actor.h
+cassert
+-
+audio.h
+/home/steve/Downloads/GTechFinal/audio.h
+time.h
+-
+
 /home/steve/Downloads/GTechFinal/Actor.h
 Ogre.h
 -
@@ -105,6 +115,12 @@ Ogre.h
 -
 DynamicLineDrawer.h
 /home/steve/Downloads/GTechFinal/DynamicLineDrawer.h
+
+/home/steve/Downloads/GTechFinal/Disc.cpp
+Disc.h
+/home/steve/Downloads/GTechFinal/Disc.h
+audio.h
+/home/steve/Downloads/GTechFinal/audio.h
 
 /home/steve/Downloads/GTechFinal/Disc.h
 Ogre.h
@@ -220,6 +236,24 @@ map
 ActorController.h
 /home/steve/Downloads/GTechFinal/ActorController.h
 
+/home/steve/Downloads/GTechFinal/Ninja.cpp
+Ogre.h
+-
+physics.h
+/home/steve/Downloads/GTechFinal/physics.h
+OgreApplicationContext.h
+-
+btBulletCollisionCommon.h
+-
+btBulletDynamicsCommon.h
+-
+BulletCollision/CollisionDispatch/btGhostObject.h
+-
+Ninja.h
+/home/steve/Downloads/GTechFinal/Ninja.h
+audio.h
+/home/steve/Downloads/GTechFinal/audio.h
+
 /home/steve/Downloads/GTechFinal/Ninja.h
 Ogre.h
 -
@@ -258,6 +292,12 @@ Ogre.h
 physics.h
 /home/steve/Downloads/GTechFinal/physics.h
 
+/home/steve/Downloads/GTechFinal/gui.cc
+gui.h
+/home/steve/Downloads/GTechFinal/gui.h
+ImguiManager.h
+-
+
 /home/steve/Downloads/GTechFinal/gui.h
 Ogre.h
 -
@@ -283,6 +323,10 @@ map
 -
 DebugDraw.h
 /home/steve/Downloads/GTechFinal/DebugDraw.h
+
+/home/steve/Downloads/GTechFinal/state.cpp
+state.h
+/home/steve/Downloads/GTechFinal/state.h
 
 /home/steve/Downloads/GTechFinal/state.h
 Ogre.h

@@ -134,7 +134,7 @@ void Ninja::createLightBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 6.0, 12.0, 16.0, 20.0, 40.0, 10.0, 10.0, 10.0, 42, 35, 4, 4, false };
+	HitboxData hbd { hbox, 18.0, 12.0, 28.0, 20.0, 40.0, 10.0, 10.0, 10.0, 30, 28, 4, 4, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::LIGHT, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::LIGHT));
