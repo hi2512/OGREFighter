@@ -218,9 +218,11 @@ public:
 	}
 	virtual ~Actor() {
 		printf("deleting actor\n");
+		delete(this->myController);
 		this->physics->dynamicsWorld->removeRigidBody(body);
 		this->sceneMgr->destroyEntity(geom);
 		this->sceneMgr->destroySceneNode(rootNode);
+		printf("deleting actor done\n");
 	}
 	virtual void animate(const Ogre::FrameEvent& evt);
 	void enterStopState(int stopFrames);

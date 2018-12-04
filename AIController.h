@@ -8,7 +8,7 @@
 #include <set>
 #include "Actor.h"
 #include "BehaviorNode.h"
-
+#include <mutex>
 
 class AIController: public ActorController {
 protected:
@@ -19,14 +19,23 @@ protected:
 	Actor * self;
 	Actor * opponent;
 	std::thread * stateChecker;
+	std::mutex sleepLock;
+	std::mutex deleteLock;
+	std::condition_variable cond;
 	void testForBehavior() {
 		while (1) {
-			sleep(0.5);
-			currentBehavior =  behaviorRoot->decide();
+			if (sleepLock.try_lock()) {
+				sleep(0.5);
+				currentBehavior = behaviorRoot->decide();
+				sleepLock.unlock();
+			} else {
+				printf("break\n");
+				break;
+			}
 		}
 	}
 	void doBehavior() {
-		switch(currentBehavior) {
+		switch (currentBehavior) {
 		case BehaviorType::DoNothing:
 			activeInputs.clear();
 			break;
@@ -44,9 +53,13 @@ public:
 		behaviorRoot->setLeft(new DoNothingNode(self, opponent, gs));
 		behaviorRoot->setRight(new PushNode(self, opponent, gs));
 		stateChecker = new std::thread(&AIController::testForBehavior, this);
+
 	}
 	~AIController() {
+		printf("deleting aicontroller\n");
+		sleepLock.lock();
 		stateChecker->join();
+		printf("joined\n");
 	}
 	bool checkForInput(InputType it) {
 		doBehavior();

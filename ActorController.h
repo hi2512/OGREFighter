@@ -7,6 +7,8 @@ class ActorController {
 protected:
 
 public:
+	virtual ~ActorController() {
+	}
 	virtual bool checkForInput(InputType it) {
 		return false;
 	}

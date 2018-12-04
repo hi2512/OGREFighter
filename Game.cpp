@@ -154,7 +154,7 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 
 	this->inputBuffer.push_back(KeyInput { evt.keysym.sym, this->frameCount });
 	((KeyboardController *) p1con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
-	//((KeyboardController *) p2con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
+	((KeyboardController *) p2con)->addKey(KeyInput { evt.keysym.sym, this->frameCount });
 	/*
 	 if (!inKeysHeld(evt, keysHeld)) {
 	 this->keysHeld.push_back(KeyInput { evt.keysym.sym, this->frameCount });
@@ -274,7 +274,7 @@ bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
 	 }
 	 */
 	((KeyboardController *) p1con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
-	//((KeyboardController *) p2con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
+	((KeyboardController *) p2con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
 	//LogManager::getSingleton().logMessage("Num of keys held");
 	//LogManager::getSingleton().logMessage(to_string(keysHeld.size()));
 	switch (evt.keysym.sym) {
@@ -538,6 +538,9 @@ void Game::setup(void) {
 void Game::restart() {
 	delete (player1);
 	delete (player2);
+	p1con = new KeyboardController('a', 'd', 'w', 's', 'x', 'c', 'v');
+	p2con = new KeyboardController('j', 'l', 'i', 'k', 'b', 'n', 'm');
+	printf("done deleting\n");
 	playMusic("../assets/Wicked_Things.wav", SDL_MIX_MAXVOLUME / 3);
 	gameState = new GameState();
 	gameGui = new GameGui(gameState);
@@ -565,6 +568,7 @@ void Game::restart() {
 	player2 = p2;
 	gameState->p1 = p1;
 	gameState->p2 = p2;
+	printf("done restarting\n");
 }
 
 void Game::initPhys() {
