@@ -498,6 +498,7 @@ void Actor::animate(const Ogre::FrameEvent& evt) {
 				this->superVal.addVal(10.0);
 				break;
 			case AttackType::SUPER:
+				this->superVal.reset();
 				this->attackFrameCount = this->superAttackFrames;
 				this->hitboxes.at(currentAttack)->myHbd.active = true;
 				break;
@@ -561,7 +562,6 @@ void Actor::animate(const Ogre::FrameEvent& evt) {
 				this->specialMove1Window = -1;
 			}
 			if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-				this->superVal.reset();
 				this->currentAttack = AttackType::SUPER;
 				this->superMoveWindow = -1;
 			}
@@ -574,7 +574,6 @@ void Actor::animate(const Ogre::FrameEvent& evt) {
 				this->specialMove1Window = -1;
 			}
 			if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-				this->superVal.reset();
 				this->currentAttack = AttackType::SUPER;
 				this->superMoveWindow = -1;
 			}
@@ -587,7 +586,6 @@ void Actor::animate(const Ogre::FrameEvent& evt) {
 				this->specialMove1Window = -1;
 			}
 			if (this->superMoveWindow > -1 && this->superVal.isFull()) {
-				this->superVal.reset();
 				this->currentAttack = AttackType::SUPER;
 				this->superMoveWindow = -1;
 			}

@@ -216,10 +216,12 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 		moveDir.x = moveVal;
 		break;
 	case 'y':
+		/*
 		cameraSwap();
 		createCameraSwingAnimation(player1->getRootNode()->getPosition(), player1->onP1Side());
 		curSuperPlayer = player1;
 		swing = !swing;
+		*/
 		break;
 	case 'p':
 		//gameState->incrementScore(0);
