@@ -233,7 +233,7 @@ public:
 	}
 	bool isBlocking();
 	bool isDead() {
-		return this->health <= 0;
+		return this->actorState == StateType::DEAD;
 	}
 	void pushBack(Real dist);
 	void setP1Orientation();

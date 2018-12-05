@@ -19,7 +19,14 @@ struct BulletContactCallback;
 struct CollisionContext;
 
 enum CollisionType {
-	COLLISIONBOX = 2, HITBOX_P1 = 8, HITBOX_P2 = 16, HURTBOX_P1 = 32, HURTBOX_P2 = 64, WALL = 1, GROUND = 128, COL_NONE = 256
+	COLLISIONBOX = 2,
+	HITBOX_P1 = 8,
+	HITBOX_P2 = 16,
+	HURTBOX_P1 = 32,
+	HURTBOX_P2 = 64,
+	WALL = 1,
+	GROUND = 128,
+	COL_NONE = 256
 };
 
 struct HitboxData {
@@ -250,11 +257,19 @@ public:
 		 }
 		 */
 		if ((((GameObject *) body0->getUserPointer())->getCollisionType()
+				== CollisionType::GROUND)
+				|| (((GameObject *) body1->getUserPointer())->getCollisionType()
+						== CollisionType::GROUND)) {
+			return btCollisionDispatcher::needsCollision(body0, body1);
+		}
+
+		if ((((GameObject *) body0->getUserPointer())->getCollisionType()
 				!= CollisionType::COLLISIONBOX)
 				|| (((GameObject *) body1->getUserPointer())->getCollisionType()
 						!= CollisionType::COLLISIONBOX)) {
 			return false;
 		}
+
 		return btCollisionDispatcher::needsCollision(body0, body1);
 
 		//GameObject *phyBody1 = (GameObject*) body0->getUserPointer();
@@ -277,10 +292,12 @@ public:
 		 }
 		 */
 		//LogManager::getSingleton().logMessage("RES col check");
-		if (body0->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT
-				|| body1->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT) {
-			return false;
-		}
+		/*
+		 if (body0->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT
+		 || body1->getCollisionFlags() == btCollisionObject::CO_GHOST_OBJECT) {
+		 return false;
+		 }
+		 */
 		return btCollisionDispatcher::needsResponse(body0, body1);
 
 		//GameObject *phyBody1 = (GameObject*) body0->getUserPointer();

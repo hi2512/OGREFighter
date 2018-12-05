@@ -531,8 +531,10 @@ void Game::setup(void) {
 	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
 	 btVector3(0, 0, 0));
 	 */
+	 //bl->setCollisionType(CollisionType::COL_NONE);
 	//SceneNode * spNode = mgr->getRootSceneNode()->createChildSceneNode();
 	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
+	//btStaticPlaneShape()
 }
 
 void Game::restart() {
@@ -667,7 +669,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 return frameVal;
 	 }
 	 */
-	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
+	phys->dynamicsWorld->stepSimulation(1.0f / 4.0f, 120);
 
 	phys->dbd->Update();
 
