@@ -80,6 +80,7 @@ public:
 
 		this->walkSpeed = 350.0;
 
+		/*
 		AnimationStateSet *mAnims = this->geom->getAllAnimationStates();
 		AnimationStateIterator it = mAnims->getAnimationStateIterator();
 		while (it.hasMoreElements()) {
@@ -87,6 +88,7 @@ public:
 			LogManager::getSingleton().logMessage(as->getAnimationName());
 			as->setLoop(true);
 		}
+		*/
 		this->groundHeight = 200;
 		this->lAttackFrames = 25;
 		this->mAttackFrames = 40;

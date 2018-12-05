@@ -95,7 +95,7 @@ void Actor::doFall() {
 		Real fallAway = this->onPlayer2Side ? 10 : -10;
 		this->body->setLinearVelocity(btVector3(fallAway, -45, 0));
 	} else {
-		printf("EEEended fall\n");
+		//printf("EEEended fall\n");
 		//stop falling
 		this->actorState = StateType::FREE;
 		this->body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);

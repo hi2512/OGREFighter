@@ -90,7 +90,7 @@ public:
 		sleepLock.lock();
 		//printf("delete has lock\n");
 		stateChecker->join();
-		printf("joined\n");
+		//printf("joined\n");
 	}
 	bool checkForInput(InputType it) {
 		doBehavior();
