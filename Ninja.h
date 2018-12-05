@@ -113,7 +113,7 @@ public:
 	~Ninja() {
 		this->sceneMgr->destroySceneNode(ninOffsetNode);
 	}
-	//void animate(const Ogre::FrameEvent& evt);
+	void animate(const Ogre::FrameEvent& evt);
 
 };
 

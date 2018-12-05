@@ -89,22 +89,19 @@ bool Actor::isAboveGround() {
 }
 
 void Actor::doFall() {
-	btTransform trans;
-	body->getMotionState()->getWorldTransform(trans);
-	btVector3 from(trans.getOrigin());
-	btVector3 to(trans.getOrigin());
-	to.setY(-1000);
-	btCollisionWorld::ClosestRayResultCallback call(from, to);
-	this->physics->getWorld()->rayTest(from, to, call);
 	if (isAboveGround()) {
 		this->body->setCollisionFlags(0);
 		//this->setCollisionType(CollisionType::COL_NONE);
 		Real fallAway = this->onPlayer2Side ? 10 : -10;
 		this->body->setLinearVelocity(btVector3(fallAway, -45, 0));
 	} else {
+		printf("EEEended fall\n");
 		//stop falling
 		this->actorState = StateType::FREE;
 		this->body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+		if (this->health <= 0) {
+			this->actorState = StateType::DEAD;
+		}
 	}
 }
 
@@ -268,12 +265,18 @@ void Actor::enterStopState(int stopFrames) {
 	if (actorState == StateType::STOP) {
 		return;
 	}
+	if (actorState == StateType::FALLING) {
+		this->body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+	}
 	this->beforeStopState = this->actorState;
 	this->stopFrameCount = stopFrames;
 	this->actorState = StateType::STOP;
 }
 
 void Actor::exitStopState() {
+	if (this->beforeStopState == StateType::FALLING) {
+		this->body->setCollisionFlags(0);
+	}
 	this->actorState = this->beforeStopState;
 }
 

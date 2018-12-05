@@ -78,7 +78,10 @@ public:
 		cur->setRight(new FarFromCenterDistanceNode(self, opponent, gs, 300.0));
 		cur = cur->getRight();
 		cur->setLeft(new PushNode(self, opponent, gs));
-		cur->setRight(new ProjectileAttackNode(self, opponent, gs));
+		cur->setRight(new BehaviorNode(self, opponent, gs));
+		cur = cur->getRight();
+		cur->setLeft(new ProjectileAttackNode(self, opponent, gs));
+		cur->setRight(new DoNothingNode(self, opponent, gs));
 		stateChecker = new std::thread(&AIController::testForBehavior, this);
 
 	}
@@ -98,7 +101,7 @@ public:
 			return true;
 		}
 		if (currentBehavior == BehaviorType::ProjectileAttack) {
-			return true;
+			return !self->hasActiveProjectile();
 		}
 		return false;
 	}
@@ -107,7 +110,7 @@ public:
 			return true;
 		}
 		if (currentBehavior == BehaviorType::ProjectileAttack) {
-			return true;
+			return !self->hasActiveProjectile();
 		}
 		return false;
 	}

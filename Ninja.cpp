@@ -212,10 +212,9 @@ void Ninja::createSpecial1LBox() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
-	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di,
-			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
-			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 6, 0, 0),
-			btVector3(0, 0, 0), hbd, this);
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di, physics, diShape,
+			curPos + Vector3(frontPos, -50.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
+			btVector3(frontPos / 6, 0, 0), btVector3(0, 0, 0), hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
 }
@@ -232,10 +231,9 @@ void Ninja::createSpecial1MBox() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -200.0 : 200.0;
-	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di,
-			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
-			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 4, 0, 0), btVector3(0, 0, 0),
-			hbd, this);
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di, physics, diShape,
+			curPos + Vector3(frontPos, -50.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
+			btVector3(frontPos / 4, 0, 0), btVector3(0, 0, 0), hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
 	//this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::SPECIAL1, hitObj));
@@ -271,10 +269,9 @@ void Ninja::createSpecial1HBox() {
 
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	Real frontPos = this->onPlayer2Side ? -140.0 : 140.0;
-	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di,
-			physics, diShape, curPos + Vector3(frontPos, -50.0, 0.0),
-			btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(frontPos / 2, 0, 0), btVector3(0, 0, 0),
-			hbd, this);
+	Disc * dObj = new Disc(sceneMgr, dn, name + to_string(time(NULL)), di, physics, diShape,
+			curPos + Vector3(frontPos, -50.0, 0.0), btQuaternion(1.0f, 0.0f, 0.0f, 0.0f),
+			btVector3(frontPos / 2, 0, 0), btVector3(0, 0, 0), hbd, this);
 	dObj->getRigidBody()->setUserIndex(this->myHitType());
 	this->activeProjectile = dObj;
 }
@@ -294,7 +291,7 @@ void Ninja::createJumpAttackBox() {
 	 hbox->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	 physics->dynamicsWorld->addCollisionObject(hbox);
 	 */
-	HitboxData hbd { hbox, 10.0, 5.0, 0.0, 0.0, 90.0, 30.0, 15.0, 15.0, 52, 30, 8, 6, false };
+	HitboxData hbd { hbox, 10.0, 5.0, 0.0, 0.0, 90.0, 30.0, 15.0, 15.0, 52, 30, 10, 8, false };
 	/*
 	 this->hitboxes.insert(pair<AttackType, HitboxData>(AttackType::AIRHEAVY, hbd));
 	 hbox->setUserPointer(&this->hitboxes.at(AttackType::AIRHEAVY));
@@ -454,7 +451,7 @@ void Ninja::jumpAttackAnimation() {
 		pos = hitFrames.at(frameTime);
 	}
 	if (frameTime >= -30 && frameTime <= 25) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 2));
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.1, 1.8));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
@@ -762,5 +759,27 @@ void Ninja::doDeath() {
 	AnimationState * asd = this->geom->getAnimationState(this->playingAnimation);
 	asd->setLoop(false);
 	asd->addTime(0.01);
+
+}
+
+void Ninja::animate(const Ogre::FrameEvent& evt) {
+	Actor::animate(evt);
+	//fix...
+	this->ninOffsetNode->detachObject(geom);
+	this->ninOffsetNode->attachObject(geom);
+	/*
+	if (!this->isPlayer2) {
+
+		auto ogrePos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+		printf("root   x: %f, y: %f, z: %f\n", ogrePos.x, ogrePos.y, ogrePos.z);
+
+		auto grePos = this->ninOffsetNode->getPosition();
+		printf("locset x: %f, y: %f, z: %f\n", grePos.x, grePos.y, grePos.z);
+
+		auto oogrePos = this->ninOffsetNode->convertLocalToWorldPosition(Vector3::ZERO);
+		printf("offset x: %f, y: %f, z: %f", oogrePos.x, oogrePos.y, oogrePos.z);
+		printf("%s\n", this->ninOffsetNode->getParentSceneNode()->getName().c_str());
+	}
+	*/
 
 }
