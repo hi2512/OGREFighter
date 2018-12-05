@@ -84,7 +84,7 @@ bool Actor::isAboveGround() {
 	 printf("my height %f, ground height %f\n",
 	 this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y, this->groundHeight);
 	 */
-	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight + 0.3;
+	return this->rootNode->convertLocalToWorldPosition(Vector3::ZERO).y > this->groundHeight;
 }
 
 void Actor::doFall() {
