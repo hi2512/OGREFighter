@@ -47,7 +47,43 @@ void NinjaAlternate::createSpecial1LBox() {
 	if (this->sceneMgr->hasAnimation("DashL" + name)) {
 		this->sceneMgr->destroyAnimation("DashL" + name);
 	}
-	Ogre::Animation * animation = sceneMgr->createAnimation("DashL" + name, 1.0);
+	Ogre::Animation * animation = sceneMgr->createAnimation("DashL" + name, 0.8);
+	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
+	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(0, this->rootNode);
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Quaternion curRot = this->rootNode->convertLocalToWorldOrientation(Quaternion::IDENTITY);
+	const Real wallDist = 1150;
+	const Real maxDist = 300;
+	Real curX = this->rootNode->getPosition().x;
+
+	Real midX = this->onP2Side() ? curX - maxDist / 2 : curX + maxDist / 2;
+	if (midX > abs(wallDist)) {
+		midX = this->onP2Side() ? -wallDist : wallDist;
+	}
+	Real endX = this->onP2Side() ? curX - maxDist : curX + maxDist;
+	if (endX > abs(wallDist)) {
+		endX = this->onP2Side() ? -wallDist : wallDist;
+	}
+	TransformKeyFrame * key;
+	key = track->createNodeKeyFrame(0.0f);
+	key->setTranslate(curPos);
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(0.3f);
+	key->setTranslate(Vector3(midX, curPos.y, curPos.z));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(0.6f);
+	key->setTranslate(Vector3(endX, curPos.y, curPos.z));
+	key->setRotation(curRot);
+
+	sceneMgr->createAnimationState("DashL" + name);
+}
+void NinjaAlternate::createSpecial1MBox() {
+	if (this->sceneMgr->hasAnimation("DashM" + name)) {
+		this->sceneMgr->destroyAnimation("DashM" + name);
+	}
+	Ogre::Animation * animation = sceneMgr->createAnimation("DashM" + name, 1.0);
 	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
 	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(0, this->rootNode);
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
@@ -77,13 +113,43 @@ void NinjaAlternate::createSpecial1LBox() {
 	key->setTranslate(Vector3(endX, curPos.y, curPos.z));
 	key->setRotation(curRot);
 
-	sceneMgr->createAnimationState("DashL" + name);
-}
-void NinjaAlternate::createSpecial1MBox() {
-
+	sceneMgr->createAnimationState("DashM" + name);
 }
 void NinjaAlternate::createSpecial1HBox() {
+	if (this->sceneMgr->hasAnimation("DashH" + name)) {
+		this->sceneMgr->destroyAnimation("DashH" + name);
+	}
+	Ogre::Animation * animation = sceneMgr->createAnimation("DashH" + name, 1.4);
+	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
+	Ogre::NodeAnimationTrack * track = animation->createNodeTrack(0, this->rootNode);
+	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
+	Quaternion curRot = this->rootNode->convertLocalToWorldOrientation(Quaternion::IDENTITY);
+	const Real wallDist = 1150;
+	const Real maxDist = 600;
+	Real curX = this->rootNode->getPosition().x;
 
+	Real midX = this->onP2Side() ? curX - maxDist / 2 : curX + maxDist / 2;
+	if (midX > abs(wallDist)) {
+		midX = this->onP2Side() ? -wallDist : wallDist;
+	}
+	Real endX = this->onP2Side() ? curX - maxDist : curX + maxDist;
+	if (endX > abs(wallDist)) {
+		endX = this->onP2Side() ? -wallDist : wallDist;
+	}
+	TransformKeyFrame * key;
+	key = track->createNodeKeyFrame(0.0f);
+	key->setTranslate(curPos);
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(0.6f);
+	key->setTranslate(Vector3(midX, curPos.y, curPos.z));
+	key->setRotation(curRot);
+
+	key = track->createNodeKeyFrame(1.0f);
+	key->setTranslate(Vector3(endX, curPos.y, curPos.z));
+	key->setRotation(curRot);
+
+	sceneMgr->createAnimationState("DashH" + name);
 }
 
 void NinjaAlternate::lightAnimation() {
@@ -179,7 +245,7 @@ void NinjaAlternate::heavyAnimation() {
 	this->setAnimation("Spin");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setLoop(false);
-	as->addTime(0.022);
+	as->addTime(0.03);
 
 	btTransform trans;
 	btCollisionObject * hbox = this->hitboxes.at(currentAttack)->myHbd.hitbox;
@@ -214,7 +280,7 @@ void NinjaAlternate::heavyAnimation() {
 		pos = hitFrames.at(frameTime);
 	}
 	if (frameTime >= -10 && frameTime <= 10) {
-		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1.2, 1.75));
 	} else {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 	}
@@ -225,7 +291,7 @@ void NinjaAlternate::heavyAnimation() {
 
 void NinjaAlternate::clearAttack() {
 	Actor::clearAttack();
-	if(this->attackTypeIsSpecial(currentAttack)) {
+	if (this->attackTypeIsSpecial(currentAttack)) {
 		AnimationState * dashAnim = this->sceneMgr->getAnimationState(dashName);
 		dashAnim->setEnabled(false);
 	}
@@ -234,7 +300,7 @@ void NinjaAlternate::special1LAnimation() {
 	this->setAnimation("Stealth");
 	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
 	as->setLoop(false);
-	as->addTime(0.023);
+	as->addTime(0.028);
 
 	if (this->attackFrameCount == this->s1LAttackFrames) {
 		this->createSpecial1LBox();
@@ -245,22 +311,72 @@ void NinjaAlternate::special1LAnimation() {
 	dashAnim->setEnabled(true);
 	dashAnim->addTime(0.02);
 
-	int frameTime = -this->attackFrameCount + 55;
-	if (frameTime >= 0 && frameTime <= 30) {
+	int frameTime = -this->attackFrameCount + 36;
+	if (frameTime >= 0 && frameTime <= 15) {
 		this->invincible = true;
 	}
-	if (frameTime >= 31 && frameTime <= 53) {
+	if (frameTime >= 16 && frameTime <= 34) {
 		this->invincible = false;
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.6));
 	}
-	if (frameTime == 54) {
+	if (frameTime == 35) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 		dashAnim->setEnabled(false);
 	}
 }
 void NinjaAlternate::special1MAnimation() {
+	this->setAnimation("Stealth");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.023);
 
+	if (this->attackFrameCount == this->s1MAttackFrames) {
+		this->createSpecial1MBox();
+	}
+	this->dashName = "DashM" + name;
+	AnimationState * dashAnim = this->sceneMgr->getAnimationState(dashName);
+	dashAnim->setLoop(false);
+	dashAnim->setEnabled(true);
+	dashAnim->addTime(0.02);
+
+	int frameTime = -this->attackFrameCount + 50;
+	if (frameTime >= 0 && frameTime <= 30) {
+		this->invincible = true;
+	}
+	if (frameTime >= 31 && frameTime <= 48) {
+		this->invincible = false;
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.6));
+	}
+	if (frameTime == 49) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+		dashAnim->setEnabled(false);
+	}
 }
 void NinjaAlternate::special1HAnimation() {
+	this->setAnimation("Stealth");
+	AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+	as->setLoop(false);
+	as->addTime(0.02);
 
+	if (this->attackFrameCount == this->s1HAttackFrames) {
+		this->createSpecial1HBox();
+	}
+	this->dashName = "DashH" + name;
+	AnimationState * dashAnim = this->sceneMgr->getAnimationState(dashName);
+	dashAnim->setLoop(false);
+	dashAnim->setEnabled(true);
+	dashAnim->addTime(0.02);
+
+	int frameTime = -this->attackFrameCount + 57;
+	if (frameTime >= 0 && frameTime <= 25) {
+		this->invincible = true;
+	}
+	if (frameTime >= 26 && frameTime <= 55) {
+		this->invincible = false;
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.6));
+	}
+	if (frameTime == 56) {
+		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
+		dashAnim->setEnabled(false);
+	}
 }

@@ -44,9 +44,9 @@ public:
 		this->lAttackFrames = 20;
 		this->mAttackFrames = 35;
 		this->hAttackFrames = 45;
-		this->s1LAttackFrames = 60;
-		this->s1MAttackFrames = 60;
-		this->s1HAttackFrames = 60;
+		this->s1LAttackFrames = 40;
+		this->s1MAttackFrames = 55;
+		this->s1HAttackFrames = 65;
 
 		this->hitboxes.erase(AttackType::LIGHT);
 		this->hitboxes.erase(AttackType::MEDIUM);

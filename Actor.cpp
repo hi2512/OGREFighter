@@ -72,6 +72,9 @@ Real Actor::hitScaling() {
 	if (health / maxHealth <= .25) {
 		scale *= 0.8;
 	}
+	if(scale < 0.1) {
+		scale = 0.1;
+	}
 	return scale;
 }
 
