@@ -35,7 +35,7 @@ public:
 			Entity * e, Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
 			btQuaternion orientation, ActorController * con) :
 			Ninja(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, con) {
-		geom->setMaterialName("Examples/BumpyMetal");
+		geom->setMaterialName("Examples/Chrome");
 
 		this->walkSpeed = 475;
 		this->health = 850;
@@ -54,7 +54,6 @@ public:
 		this->createLightBox();
 		this->createMediumBox();
 		this->createHeavyBox();
-		//this->createSpecial1LBox();
 	}
 };
 
