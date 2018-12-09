@@ -153,7 +153,7 @@ protected:
 	virtual void superAnimation() {
 	}
 	void setBox(btCollisionObject * box, const btVector3& targetPos);
-	void clearAttack();
+	virtual void clearAttack();
 	void recieveHit(HitboxData * hbd);
 	void recieveBlock(HitboxData * hbd);
 	void exitStopState();

@@ -28,6 +28,8 @@ protected:
 	void special1LAnimation();
 	void special1MAnimation();
 	void special1HAnimation();
+	void clearAttack();
+	String dashName = "";
 public:
 	NinjaAlternate(bool isPlayer2, SceneManager * sceneMgr, SceneNode * rootNode, String name,
 			Entity * e, Physics * phys, btCollisionShape * shape, const Ogre::Vector3& origin,
@@ -35,12 +37,24 @@ public:
 			Ninja(isPlayer2, sceneMgr, rootNode, name, e, phys, shape, origin, orientation, con) {
 		geom->setMaterialName("Examples/BumpyMetal");
 
+		this->walkSpeed = 475;
+		this->health = 850;
+		this->maxHealth = 850;
+
 		this->lAttackFrames = 20;
 		this->mAttackFrames = 35;
-		this->hAttackFrames = 50;
+		this->hAttackFrames = 45;
 		this->s1LAttackFrames = 60;
 		this->s1MAttackFrames = 60;
 		this->s1HAttackFrames = 60;
+
+		this->hitboxes.erase(AttackType::LIGHT);
+		this->hitboxes.erase(AttackType::MEDIUM);
+		this->hitboxes.erase(AttackType::HEAVY);
+		this->createLightBox();
+		this->createMediumBox();
+		this->createHeavyBox();
+		//this->createSpecial1LBox();
 	}
 };
 
