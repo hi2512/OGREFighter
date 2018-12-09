@@ -179,6 +179,8 @@ KeyboardController.h
 /home/steve/Downloads/GTechFinal/KeyboardController.h
 AIController.h
 /home/steve/Downloads/GTechFinal/AIController.h
+NinjaAlternate.h
+/home/steve/Downloads/GTechFinal/NinjaAlternate.h
 ball.h
 /home/steve/Downloads/GTechFinal/ball.h
 
@@ -237,6 +239,26 @@ InputContainer.h
 /home/steve/Downloads/GTechFinal/InputContainer.h
 Disc.h
 /home/steve/Downloads/GTechFinal/Disc.h
+
+/home/steve/Downloads/GTechFinal/NinjaAlternate.h
+Ogre.h
+-
+physics.h
+/home/steve/Downloads/GTechFinal/physics.h
+btBulletCollisionCommon.h
+-
+btBulletDynamicsCommon.h
+-
+Actor.h
+/home/steve/Downloads/GTechFinal/Actor.h
+SDL2/SDL.h
+-
+InputContainer.h
+/home/steve/Downloads/GTechFinal/InputContainer.h
+Disc.h
+/home/steve/Downloads/GTechFinal/Disc.h
+Ninja.h
+/home/steve/Downloads/GTechFinal/Ninja.h
 
 /home/steve/Downloads/GTechFinal/Spark.h
 Ogre.h

@@ -315,56 +315,6 @@ void Ninja::createSuperBox() {
 
 }
 
-void Ninja::playJumpAnimation(InputType jumpType) {
-	if (!jumpAttack) {
-		this->setAnimation("JumpNoHeight");
-		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
-		as->addTime(0.005);
-	}
-
-	String animName;
-	if (jumpType == InputType::RIGHT) {
-		animName = "JumpR" + name;
-	} else if (jumpType == InputType::LEFT) {
-		animName = "JumpL" + name;
-	} else if (jumpType == InputType::UP) {
-		//printf("jumpN called\n");
-		animName = "JumpN" + name;
-	}
-	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
-	jumpAnim->setLoop(false);
-	jumpAnim->setEnabled(true);
-	jumpAnim->addTime(0.05);
-	if (jumpAnim->hasEnded()) {
-		jumpAnim->setTimePosition(0);
-		jumpAnim->setEnabled(false);
-		this->actorState = StateType::FREE;
-		this->jumpAttack = false;
-		this->clearAttack();
-	}
-
-}
-
-void Ninja::cancelJump() {
-	String animName;
-	if (jumpType == InputType::RIGHT) {
-		animName = "JumpR" + name;
-	} else if (jumpType == InputType::LEFT) {
-		animName = "JumpL" + name;
-	} else if (jumpType == InputType::UP) {
-		printf("jumpN called\n");
-		animName = "JumpN" + name;
-	}
-	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
-	jumpAnim->setLoop(false);
-	jumpAnim->setTimePosition(0);
-	jumpAnim->setEnabled(false);
-	this->jumpAttack = false;
-	this->actorState = StateType::FALLING;
-	if (this->currentAttack != AttackType::NONE) {
-		this->clearAttack();
-	}
-}
 
 void Ninja::playHitAnimation() {
 	this->setAnimation("Death1");

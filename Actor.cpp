@@ -9,7 +9,9 @@ void Actor::doSuperFreeze() {
 
 void Actor::checkForSpecial1Cancel() {
 	//printf("cur attack %d, %d\n", this->currentAttack, attackTypeIsNormal(this->currentAttack));
-	if ((!this->isAboveGround()) && (attackTypeIsNormal(this->currentAttack))
+	if ((!this->isAboveGround())
+			&& (attackTypeIsNormal(this->currentAttack)
+					&& (this->beforeStopState == StateType::ATTACK))
 			&& (this->specialMove1Window >= 0)) {
 		if (this->myController->checkForInput(InputType::L)) {
 			this->clearAttack();
@@ -35,8 +37,10 @@ void Actor::checkForSpecial1Cancel() {
 
 void Actor::checkForSuperCancel() {
 	//printf("check for super cancel\n");
-	if ((!this->isAboveGround()) && (attackTypeIsSpecial(this->currentAttack))
-			&& (this->superMoveWindow >= 0) && (this->superVal.isFull())) {
+	if ((!this->isAboveGround())
+			&& (attackTypeIsSpecial(this->currentAttack)
+					&& (this->beforeStopState == StateType::ATTACK)) && (this->superMoveWindow >= 0)
+			&& (this->superVal.isFull())) {
 		//printf("in window\n");
 		if (this->myController->checkForInput(InputType::L)) {
 			this->clearAttack();
@@ -164,7 +168,9 @@ void Actor::doCollision(const FrameEvent& evt) {
 		 }
 		 */
 		//printf("check for hit context, %d\n", context.body->getUserIndex());
-		//printf("check for hit context, %d to %d\n", ((GameObject *) context.body->getUserPointer())->getCollisionType(), this->oppHitType());
+		/*printf("check for hit context, %d to %d\n",
+				((GameObject *) context.body->getUserPointer())->getCollisionType(),
+				this->oppHitType());*/
 		//CHECK IF I WAS HIT
 		//if (context.body->getUserIndex() == this->oppHitType() && !invincible) {
 		if (((GameObject *) context.body->getUserPointer())->getCollisionType()
@@ -661,6 +667,57 @@ void Actor::animate(const Ogre::FrameEvent& evt) {
 		this->superMoveWindow -= 1;
 	}
 	this->moveLock = false;
-	this->doCollision(evt);
+	//this->doCollision(evt);
+}
+
+void Actor::playJumpAnimation(InputType jumpType) {
+	if (!jumpAttack) {
+		this->setAnimation(this->getJumpName());
+		AnimationState * as = this->geom->getAnimationState(this->playingAnimation);
+		as->addTime(0.005);
+	}
+
+	String animName;
+	if (jumpType == InputType::RIGHT) {
+		animName = "JumpR" + name;
+	} else if (jumpType == InputType::LEFT) {
+		animName = "JumpL" + name;
+	} else if (jumpType == InputType::UP) {
+		//printf("jumpN called\n");
+		animName = "JumpN" + name;
+	}
+	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
+	jumpAnim->setLoop(false);
+	jumpAnim->setEnabled(true);
+	jumpAnim->addTime(0.05);
+	if (jumpAnim->hasEnded()) {
+		jumpAnim->setTimePosition(0);
+		jumpAnim->setEnabled(false);
+		this->actorState = StateType::FREE;
+		this->jumpAttack = false;
+		this->clearAttack();
+	}
+
+}
+
+void Actor::cancelJump() {
+	String animName;
+	if (jumpType == InputType::RIGHT) {
+		animName = "JumpR" + name;
+	} else if (jumpType == InputType::LEFT) {
+		animName = "JumpL" + name;
+	} else if (jumpType == InputType::UP) {
+		printf("jumpN called\n");
+		animName = "JumpN" + name;
+	}
+	AnimationState * jumpAnim = this->sceneMgr->getAnimationState(animName);
+	jumpAnim->setLoop(false);
+	jumpAnim->setTimePosition(0);
+	jumpAnim->setEnabled(false);
+	this->jumpAttack = false;
+	this->actorState = StateType::FALLING;
+	if (this->currentAttack != AttackType::NONE) {
+		this->clearAttack();
+	}
 }
 

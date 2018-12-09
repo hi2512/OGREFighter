@@ -46,7 +46,7 @@ public:
 	const int restartTime = 300;
 	int restartTimer = restartTime;
 
-	const Uint32 maxTime = 4500;
+	const Uint32 maxTime = 6500;
 
 	GameState(void) {
 

@@ -34,6 +34,7 @@
 #include "Wall.h"
 #include "KeyboardController.h"
 #include "AIController.h"
+#include "NinjaAlternate.h"
 
 #include "ball.h"
 
@@ -126,7 +127,7 @@ Game::Game() :
 	//gameState->releaseBuffer = &releaseBuffer;
 	gameGui = new GameGui(gameState);
 	p1con = new KeyboardController('a', 'd', 'w', 's', 'x', 'c', 'v');
-	p2con = new KeyboardController('j', 'l', 'i', 'k', 'b', 'n', 'm');
+	p2con = new KeyboardController('j', 'l', 'i', 'k', ',', '.', '/');
 }
 //! [constructor]
 
@@ -432,6 +433,7 @@ void Game::setup(void) {
 			btVector3(btScalar(1000.), btScalar(1500.), btScalar(50)));
 	Wall * wallL = new Wall(scnMgr, wallLeftNode, "WallLeftObject", wallLeft, phys, wallLeftShape,
 			Vector3(-1500, 1500, 0));
+			//Vector3(0, 100, 0));
 
 	Ogre::Plane wallRightPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0);
 	Ogre::MeshPtr wallRightPlanePtr = Ogre::MeshManager::getSingleton().createPlane("WallRight",
@@ -466,7 +468,6 @@ void Game::setup(void) {
 	tWallNode->setPosition(Vector3(1000, 3000, -1000));
 
 	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
-	//p1Entity->setMaterialName("Examples/BumpyMetal");
 	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode("P1Node");
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
 	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
@@ -544,7 +545,7 @@ void Game::restart() {
 	delete (player2);
 	delete (player1);
 	p1con = new KeyboardController('a', 'd', 'w', 's', 'x', 'c', 'v');
-	p2con = new KeyboardController('j', 'l', 'i', 'k', 'b', 'n', 'm');
+	p2con = new KeyboardController('j', 'l', 'i', 'k', ',', '.', '/');
 	printf("done deleting\n");
 	playMusic("../assets/Wicked_Things.wav", SDL_MIX_MAXVOLUME / 3);
 	gameState = new GameState();
@@ -556,7 +557,11 @@ void Game::restart() {
 	SceneNode * p1Node = mgr->getRootSceneNode()->createChildSceneNode("P1Node");
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
 	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
+	/*
 	Actor * p1 = new Ninja(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
+			btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
+	*/
+	Actor * p1 = new NinjaAlternate(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
 			btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
 
 	Entity * p2Entity = mgr->createEntity("ninja.mesh");
@@ -673,7 +678,7 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	 */
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
-	//phys->dbd->Update();
+	phys->dbd->Update();
 
 	for (int i = 0; i < phys->dynamicsWorld->getNumCollisionObjects(); i++) {
 		btCollisionObject* obj = phys->dynamicsWorld->getCollisionObjectArray()[i];
@@ -694,8 +699,9 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		 */
 
 		go->animate(evt);
-
 	}
+	player1->doCollision(evt);
+	player2->doCollision(evt);
 	if (player1->isDead()) {
 		gameState->endGame(player2);
 	} else if (player2->isDead()) {
@@ -741,8 +747,6 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 		//printf("start camera swing\n");
 		cameraSwing(evt.timeSinceLastFrame, curSuperPlayer->getSuperPos());
 	}
-	//cameraTracking(evt.timeSinceLastFrame);
-
 	//camNode->translate(camDir * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	leftMouseRelease = false;

@@ -311,6 +311,33 @@ Ninja.cpp.s:
 	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Ninja.cpp.s
 .PHONY : Ninja.cpp.s
 
+NinjaAlternate.o: NinjaAlternate.cpp.o
+
+.PHONY : NinjaAlternate.o
+
+# target to build an object file
+NinjaAlternate.cpp.o:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/NinjaAlternate.cpp.o
+.PHONY : NinjaAlternate.cpp.o
+
+NinjaAlternate.i: NinjaAlternate.cpp.i
+
+.PHONY : NinjaAlternate.i
+
+# target to preprocess a source file
+NinjaAlternate.cpp.i:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/NinjaAlternate.cpp.i
+.PHONY : NinjaAlternate.cpp.i
+
+NinjaAlternate.s: NinjaAlternate.cpp.s
+
+.PHONY : NinjaAlternate.s
+
+# target to generate assembly for a file
+NinjaAlternate.cpp.s:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/NinjaAlternate.cpp.s
+.PHONY : NinjaAlternate.cpp.s
+
 audio.o: audio.c.o
 
 .PHONY : audio.o
@@ -610,6 +637,9 @@ help:
 	@echo "... Ninja.o"
 	@echo "... Ninja.i"
 	@echo "... Ninja.s"
+	@echo "... NinjaAlternate.o"
+	@echo "... NinjaAlternate.i"
+	@echo "... NinjaAlternate.s"
 	@echo "... audio.o"
 	@echo "... audio.i"
 	@echo "... audio.s"

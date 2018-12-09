@@ -22,28 +22,28 @@ protected:
 	const String idleName = "Idle1";
 	const String jumpName = "JumpNoHeight";
 	const String superName = "HighJump";
-	void createLightBox();
-	void createMediumBox();
-	void createHeavyBox();
-	void createSpecial1LBox();
-	void createSpecial1MBox();
-	void createSpecial1HBox();
+	virtual void createLightBox();
+	virtual void createMediumBox();
+	virtual void createHeavyBox();
+	virtual void createSpecial1LBox();
+	virtual void createSpecial1MBox();
+	virtual void createSpecial1HBox();
 	void createJumpAttackBox();
 	void createSuperBox();
-	void lightAnimation();
-	void mediumAnimation();
-	void heavyAnimation();
-	void special1LAnimation();
-	void special1MAnimation();
-	void special1HAnimation();
+	virtual void lightAnimation();
+	virtual void mediumAnimation();
+	virtual void heavyAnimation();
+	virtual void special1LAnimation();
+	virtual void special1MAnimation();
+	virtual void special1HAnimation();
 	void jumpAttackAnimation();
 	void superAnimation();
 
 	void createJumpUpArc();
 	void createJumpLeftArc();
 	void createJumpRightArc();
-	void playJumpAnimation(InputType jumpType);
-	void cancelJump();
+	//void playJumpAnimation(InputType jumpType);
+	//void cancelJump();
 	//void clearJumpAnimation();
 	void playHitAnimation();
 	void playBlockAnimation();
@@ -80,7 +80,7 @@ public:
 
 		this->walkSpeed = 350.0;
 
-		/*
+
 		AnimationStateSet *mAnims = this->geom->getAllAnimationStates();
 		AnimationStateIterator it = mAnims->getAnimationStateIterator();
 		while (it.hasMoreElements()) {
@@ -88,7 +88,7 @@ public:
 			LogManager::getSingleton().logMessage(as->getAnimationName());
 			as->setLoop(true);
 		}
-		*/
+
 		this->groundHeight = 200;
 		this->lAttackFrames = 25;
 		this->mAttackFrames = 40;

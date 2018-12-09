@@ -34,6 +34,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/steve/Downloads/GTechFinal/DynamicLineDrawer.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o"
   "/home/steve/Downloads/GTechFinal/Game.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Game.cpp.o"
   "/home/steve/Downloads/GTechFinal/Ninja.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/Ninja.cpp.o"
+  "/home/steve/Downloads/GTechFinal/NinjaAlternate.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/NinjaAlternate.cpp.o"
   "/home/steve/Downloads/GTechFinal/gui.cc" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/gui.cc.o"
   "/home/steve/Downloads/GTechFinal/physics.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/physics.cpp.o"
   "/home/steve/Downloads/GTechFinal/state.cpp" "/home/steve/Downloads/GTechFinal/build/CMakeFiles/Game.dir/state.cpp.o"

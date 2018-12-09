@@ -159,16 +159,14 @@ protected:
 	void exitStopState();
 	void doFall();
 	bool isAboveGround();
-	virtual void cancelJump() {
-	}
+	void cancelJump();
 	virtual void createJumpUpArc() {
 	}
 	virtual void createJumpLeftArc() {
 	}
 	virtual void createJumpRightArc() {
 	}
-	virtual void playJumpAnimation(InputType jumpType) {
-	}
+	void playJumpAnimation(InputType jumpType);
 	//virtual void clearJumpAnimation() {}
 	virtual void playHitAnimation() {
 	}
