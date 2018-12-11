@@ -156,7 +156,7 @@ void GameGui::showScore() {
 
 bool GameGui::showGameStart() {
 	bool result = true;
-	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("OGRE Fighter", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	auto size = ImGui::GetIO().DisplaySize;
 	ImGui::SetWindowPos(ImVec2(size.x / 2.5, size.y / 2.5));
 	if (ImGui::Button("Single Player")) {
