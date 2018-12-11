@@ -43,6 +43,8 @@ public:
 	void showMeter1();
 	void showMeter2();
 	void showTime();
+	bool showCharacterSelect1();
+	bool showCharacterSelect2();
 };
 
 

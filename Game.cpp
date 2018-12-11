@@ -60,6 +60,9 @@ public:
 	void cameraSwap();
 	void cameraTracking(Real time);
 	void restart();
+	void startAI();
+	Actor * loadActorP1(CharacterType, ActorController *);
+	Actor * loadActorP2(CharacterType, ActorController *);
 private:
 	bool inKeysHeld(const OgreBites::KeyboardEvent& evt, std::vector<KeyInput> kh);
 	void initPhys();
@@ -112,8 +115,8 @@ private:
 	ActorController * p1con;
 	ActorController * p2con;
 
-	Actor * player1;
-	Actor * player2;
+	Actor * player1 = NULL;
+	Actor * player2 = NULL;
 
 	Actor * curSuperPlayer;
 
@@ -195,7 +198,9 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 	case OgreBites::SDLK_SPACE:
 		break;
 	case OgreBites::SDLK_F1:
-		restart();
+		gameState->isPaused = true;
+		gameState->gameStartScreen = true;
+		//restart();
 		//player1->setP1Orientation();
 		break;
 	case OgreBites::SDLK_F2:
@@ -218,11 +223,11 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 		break;
 	case 'y':
 		/*
-		cameraSwap();
-		createCameraSwingAnimation(player1->getRootNode()->getPosition(), player1->onP1Side());
-		curSuperPlayer = player1;
-		swing = !swing;
-		*/
+		 cameraSwap();
+		 createCameraSwingAnimation(player1->getRootNode()->getPosition(), player1->onP1Side());
+		 curSuperPlayer = player1;
+		 swing = !swing;
+		 */
 		break;
 	case 'p':
 		//gameState->incrementScore(0);
@@ -433,7 +438,7 @@ void Game::setup(void) {
 			btVector3(btScalar(1000.), btScalar(1500.), btScalar(50)));
 	Wall * wallL = new Wall(scnMgr, wallLeftNode, "WallLeftObject", wallLeft, phys, wallLeftShape,
 			Vector3(-1500, 1500, 0));
-			//Vector3(0, 100, 0));
+	//Vector3(0, 100, 0));
 
 	Ogre::Plane wallRightPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0);
 	Ogre::MeshPtr wallRightPlanePtr = Ogre::MeshManager::getSingleton().createPlane("WallRight",
@@ -466,7 +471,7 @@ void Game::setup(void) {
 	Ogre::SceneNode * tWallNode = scnMgr->getRootSceneNode()->createChildSceneNode();
 	tWallNode->attachObject(topEntity);
 	tWallNode->setPosition(Vector3(1000, 3000, -1000));
-
+	/*
 	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
 	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode("P1Node");
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
@@ -487,6 +492,7 @@ void Game::setup(void) {
 	player2 = p2;
 	gameState->p1 = p1;
 	gameState->p2 = p2;
+	*/
 
 	/*
 	 Entity * p3Entity = scnMgr->createEntity("Sinbad.mesh");
@@ -534,42 +540,92 @@ void Game::setup(void) {
 	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
 	 btVector3(0, 0, 0));
 	 */
-	 //bl->setCollisionType(CollisionType::COL_NONE);
+	//bl->setCollisionType(CollisionType::COL_NONE);
 	//SceneNode * spNode = mgr->getRootSceneNode()->createChildSceneNode();
 	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
 	//btStaticPlaneShape()
 }
 
-void Game::restart() {
-	//ai controller must be deleted first!!
-	delete (player2);
-	delete (player1);
-	p1con = new KeyboardController('a', 'd', 'w', 's', 'x', 'c', 'v');
-	p2con = new KeyboardController('j', 'l', 'i', 'k', ',', '.', '/');
-	printf("done deleting\n");
-	playMusic("../assets/Wicked_Things.wav", SDL_MIX_MAXVOLUME / 3);
-	gameState = new GameState();
-	gameGui = new GameGui(gameState);
-	gameState->inputBuffer = &inputBuffer;
-	//gameState->releaseBuffer = &releaseBuffer;
+Actor * Game::loadActorP1(CharacterType ct, ActorController * con) {
+	Actor * res;
 	Entity * p1Entity = mgr->createEntity("ninja.mesh");
-	//p1Entity->setMaterialName("Examples/BumpyMetal");
 	SceneNode * p1Node = mgr->getRootSceneNode()->createChildSceneNode("P1Node");
 	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
 	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
-	/*
-	Actor * p1 = new Ninja(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
-			btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
-	*/
-	Actor * p1 = new NinjaAlternate(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
-			btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
+	switch (ct) {
+	case CharacterType::NINJA:
+		res = new Ninja(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
+				btQuaternion(0.0, -0.707, 0.0, 0.707), con);
+		break;
+	case CharacterType::NINJAALT:
+		res = new NinjaAlternate(false, mgr, p1Node, "P1", p1Entity, phys, p1Box,
+				Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), con);
+		break;
+	}
+	return res;
+}
 
+Actor * Game::loadActorP2(CharacterType ct, ActorController * con) {
+	Actor * res;
 	Entity * p2Entity = mgr->createEntity("ninja.mesh");
 	SceneNode * p2Node = mgr->getRootSceneNode()->createChildSceneNode("P2Node");
 	auto p2OgreBox = p2Entity->getBoundingBox().getSize();
 	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
-	Actor * p2 = new Ninja(true, mgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
-			btQuaternion(0.0, -0.707, 0.0, -0.707), p2con);
+	switch (ct) {
+	case CharacterType::NINJA:
+		res = new Ninja(true, mgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
+				btQuaternion(0.0, -0.707, 0.0, -0.707), con);
+		break;
+	case CharacterType::NINJAALT:
+		res = new NinjaAlternate(true, mgr, p2Node, "P2", p2Entity, phys, p2Box,
+				Vector3(400, 200, 0), btQuaternion(0.0, -0.707, 0.0, -0.707), con);
+		break;
+	}
+	return res;
+}
+
+void Game::restart() {
+	//ai controller must be deleted first!!
+	if (player2 != NULL) {
+		delete (player2);
+	}
+	if (player1 != NULL) {
+		delete (player1);
+	}
+	p1con = new KeyboardController('a', 'd', 'w', 's', 'x', 'c', 'v');
+	p2con = new KeyboardController('j', 'l', 'i', 'k', ',', '.', '/');
+	printf("done deleting\n");
+	playMusic("../assets/Wicked_Things.wav", SDL_MIX_MAXVOLUME / 3);
+	auto oldState = gameState;
+	gameState = new GameState();
+	gameGui = new GameGui(gameState);
+	gameState->inputBuffer = &inputBuffer;
+	//gameState->releaseBuffer = &releaseBuffer;
+
+	/*
+	 Entity * p1Entity = mgr->createEntity("ninja.mesh");
+	 //p1Entity->setMaterialName("Examples/BumpyMetal");
+	 SceneNode * p1Node = mgr->getRootSceneNode()->createChildSceneNode("P1Node");
+	 auto p1OgreBox = p1Entity->getBoundingBox().getSize();
+	 btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
+	 //Actor * p1 = new Ninja(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
+	 //		btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
+	 Actor * p1 = new NinjaAlternate(false, mgr, p1Node, "P1", p1Entity, phys, p1Box,
+	 Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
+	 */
+	Actor * p1 = loadActorP1(oldState->p1Char, p1con);
+	/*
+	 Entity * p2Entity = mgr->createEntity("ninja.mesh");
+	 SceneNode * p2Node = mgr->getRootSceneNode()->createChildSceneNode("P2Node");
+	 auto p2OgreBox = p2Entity->getBoundingBox().getSize();
+	 btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
+	 Actor * p2 = new Ninja(true, mgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
+	 btQuaternion(0.0, -0.707, 0.0, -0.707), p2con);
+	 */
+	Actor * p2 = loadActorP2(oldState->p2Char, p2con);
+	if(!oldState->multiplayer) {
+		p2->setController(new AIController(p2, p1, gameState));
+	}
 	camNode->setPosition(defaultCamPosition);
 	frameCount = 0;
 	p1->setOpponent(p2);
@@ -616,6 +672,31 @@ bool Game::frameStarted(const FrameEvent &evt) {
 
 	Ogre::ImguiManager::getSingleton().newFrame(evt.timeSinceLastFrame,
 			Ogre::Rect(0, 0, getRenderWindow()->getWidth(), getRenderWindow()->getHeight()));
+	if (gameState->shouldExit) {
+		getRoot()->queueEndRendering();
+		return false;
+	}
+	if (gameState->gameStartScreen) {
+		bool res = gameGui->showGameStart();
+		gameState->gameStartScreen = res;
+		return true;
+	}
+	if (gameState->showP1Select || gameState->showP2Select) {
+		if (gameState->showP1Select) {
+			gameState->showP1Select = gameGui->showCharacterSelect1();
+			//gameGui->showCamPos();
+		}
+		if (gameState->showP2Select) {
+			gameState->showP2Select = gameGui->showCharacterSelect2();
+		}
+		if(!(gameState->showP1Select || gameState->showP2Select)) {
+			restart();
+			gameState->gameStartScreen = false;
+			gameState->isPaused = false;
+		}
+		return true;
+	}
+	//printf("gameSTART\n");
 	if (debug) {
 		gameGui->showFrameCount(this->getRenderWindow()->getStatistics().lastFPS);
 		gameState->camPos = Vector3(camNode->getPosition());
@@ -638,14 +719,12 @@ bool Game::frameStarted(const FrameEvent &evt) {
 		gameGui->showWinScreen();
 	}
 	if (gameState->gameRestartReady()) {
-		restart();
+		gameState->isPaused = true;
+		gameState->gameStartScreen = true;
+		//restart();
 	}
-	/*
-	 if (gameState->shouldExit) {
-	 getRoot()->queueEndRendering();
-	 return false;
-	 }
 
+	/*
 	 if (gameState->waitingOnPlayers) {
 	 gameGui->showWaitingOnPlayers();
 	 return true;
@@ -671,11 +750,12 @@ bool Game::frameStarted(const FrameEvent &evt) {
 
 bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	bool frameVal = OgreBites::ApplicationContext::frameRenderingQueued(evt);
-	/*
-	 if (gameState->gameIsPaused()) {
-	 return frameVal;
-	 }
-	 */
+
+	if (gameState->gameIsPaused()) {
+		//printf("is paused\n");
+		return frameVal;
+	}
+
 	phys->dynamicsWorld->stepSimulation(1.0f / 6.0f, 100);
 
 	//phys->dbd->Update();

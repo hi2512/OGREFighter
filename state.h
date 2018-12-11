@@ -13,13 +13,18 @@ class NetBase;
 
 using namespace std;
 
+enum CharacterType {
+	NINJA, NINJAALT
+};
+
 class GameState {
 public:
 
 	//bool isServer = true;
 	//NetBase* netManager = NULL;
 
-	bool gameStarted = false;
+	bool isPaused = true;
+	bool gameStartScreen = true;
 	bool showingGameScoreboard = false;
 	bool shouldExit = false;
 
@@ -32,6 +37,10 @@ public:
 	bool waitingOnPlayers = false;
 	bool multiplayer = false;
 	bool showSingleSelect = false;
+	bool showP1Select = false;
+	bool showP2Select = false;
+	CharacterType p1Char = CharacterType::NINJA;
+	CharacterType p2Char = CharacterType::NINJA;
 
 	Uint32 frameCount = 0;
 	Ogre::Vector3 camPos = Ogre::Vector3(0, 0, 0);
@@ -55,13 +64,12 @@ public:
 	}
 
 	bool gameIsPaused() {
-		return !gameStarted || showingGameScoreboard || showLoseScreen || showWinScreen
-				|| showConnectionScreen || waitingOnPlayers;
+		return isPaused;
 	}
 
 	void startGame() {
-		playMusic("../assets/Upbeat Forever.wav", SDL_MIX_MAXVOLUME / 3);
-		this->gameStarted = true;
+		//playMusic("../assets/Upbeat Forever.wav", SDL_MIX_MAXVOLUME / 3);
+		//this->gameStarted = true;
 		this->leavePauseState();
 
 	}
@@ -92,6 +100,7 @@ public:
 	}
 
 	void nextRound() {
+		/*
 		if (gameIsPaused()) {
 			if (!gameStarted) {
 				this->startGame();
@@ -102,6 +111,7 @@ public:
 			}
 			leavePauseState();
 		}
+		*/
 	}
 
 	void enterPauseState();

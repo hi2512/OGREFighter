@@ -18,7 +18,7 @@ void NinjaAlternate::createLightBox() {
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
 
-	HitboxData hbd { hbox, 25.0, 20.0, 35.0, 16.0, 20.0, 5.0, 10.0, 10.0, 35, 20, 4, 4, false };
+	HitboxData hbd { hbox, 30.0, 20.0, 40.0, 16.0, 30.0, 5.0, 10.0, 10.0, 35, 20, 4, 4, false };
 	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "LIGHT", physics, hbox, pos, hbd,
 			this->myHitType());
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::LIGHT, hitObj));
@@ -28,7 +28,7 @@ void NinjaAlternate::createMediumBox() {
 	hbox->setCollisionShape(new btBoxShape(btVector3(50, 50, 50)));
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
-	HitboxData hbd { hbox, 25.0, 35.0, 45.0, 45.0, 30.0, 10.0, 15.0, 15.0, 50, 15, 6, 4, false };
+	HitboxData hbd { hbox, 30.0, 35.0, 50.0, 45.0, 40.0, 10.0, 15.0, 15.0, 47, 15, 6, 4, false };
 	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "MEDIUM", physics, hbox, pos, hbd,
 			this->myHitType());
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::MEDIUM, hitObj));
@@ -38,7 +38,7 @@ void NinjaAlternate::createHeavyBox() {
 	hbox->setCollisionShape(new btBoxShape(btVector3(120, 50, 50)));
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 500, curPos.z);
-	HitboxData hbd { hbox, 15.0, 30.0, 30.0, 35.0, 60.0, 20.0, 15.0, 15.0, 40, 30, 8, 6, false };
+	HitboxData hbd { hbox, 15.0, 30.0, 30.0, 35.0, 70.0, 20.0, 15.0, 15.0, 40, 30, 8, 6, false };
 	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "HEAVY", physics, hbox, pos, hbd,
 			this->myHitType());
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::HEAVY, hitObj));
@@ -290,11 +290,11 @@ void NinjaAlternate::heavyAnimation() {
 }
 
 void NinjaAlternate::clearAttack() {
-	Actor::clearAttack();
 	if (this->attackTypeIsSpecial(currentAttack)) {
 		AnimationState * dashAnim = this->sceneMgr->getAnimationState(dashName);
 		dashAnim->setEnabled(false);
 	}
+	Actor::clearAttack();
 }
 void NinjaAlternate::special1LAnimation() {
 	this->setAnimation("Stealth");
@@ -311,15 +311,15 @@ void NinjaAlternate::special1LAnimation() {
 	dashAnim->setEnabled(true);
 	dashAnim->addTime(0.02);
 
-	int frameTime = -this->attackFrameCount + 36;
+	int frameTime = -this->attackFrameCount + 33;
 	if (frameTime >= 0 && frameTime <= 15) {
 		this->invincible = true;
 	}
-	if (frameTime >= 16 && frameTime <= 34) {
+	if (frameTime >= 16 && frameTime <= 31) {
 		this->invincible = false;
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.6));
 	}
-	if (frameTime == 35) {
+	if (frameTime == 32) {
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1));
 		dashAnim->setEnabled(false);
 	}
@@ -340,10 +340,10 @@ void NinjaAlternate::special1MAnimation() {
 	dashAnim->addTime(0.02);
 
 	int frameTime = -this->attackFrameCount + 50;
-	if (frameTime >= 0 && frameTime <= 30) {
+	if (frameTime >= 0 && frameTime <= 40) {
 		this->invincible = true;
 	}
-	if (frameTime >= 31 && frameTime <= 48) {
+	if (frameTime >= 41 && frameTime <= 48) {
 		this->invincible = false;
 		this->body->getCollisionShape()->setLocalScaling(btVector3(1, 1, 1.6));
 	}

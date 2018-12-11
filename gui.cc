@@ -155,11 +155,19 @@ void GameGui::showScore() {
 }
 
 bool GameGui::showGameStart() {
-	bool result = false;
+	bool result = true;
 	ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	auto size = ImGui::GetIO().DisplaySize;
+	ImGui::SetWindowPos(ImVec2(size.x / 2.5, size.y / 2.5));
 	if (ImGui::Button("Single Player")) {
-		this->state->startGame();
-		result = true;
+		this->state->showP1Select = true;
+		result = false;
+	}
+	if (ImGui::Button("Two Players")) {
+		this->state->showP1Select = true;
+		this->state->showP2Select = true;
+		state->multiplayer = true;
+		result = false;
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Exit")) {
@@ -167,6 +175,42 @@ bool GameGui::showGameStart() {
 	}
 	ImGui::End();
 	return result;
+}
+
+bool GameGui::showCharacterSelect1() {
+	ImGui::Begin("Player 1 Character", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	bool res = true;
+	auto size = ImGui::GetIO().DisplaySize;
+	ImGui::SetWindowPos(ImVec2(size.x / 14, size.y / 2));
+	if (ImGui::Button("Ninja        ")) {
+		state->p1Char = CharacterType::NINJA;
+		res = false;
+	}
+	if (ImGui::Button("Silver Ninja    ")) {
+		state->p1Char = CharacterType::NINJAALT;
+		res = false;
+	}
+	ImGui::End();
+	return res;
+}
+
+bool GameGui::showCharacterSelect2() {
+	ImGui::Begin("Player 2 Character", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	bool res = true;
+	auto size = ImGui::GetIO().DisplaySize;
+	ImGui::SetWindowPos(ImVec2(size.x / 1.254, size.y / 2));
+	if (ImGui::Button("Ninja        ")) {
+		state->p2Char = CharacterType::NINJA;
+		res = false;
+	}
+	if (ImGui::Button("Silver Ninja    ")) {
+		state->p2Char = CharacterType::NINJAALT;
+		res = false;
+	}
+	ImGui::End();
+	return res;
 }
 
 void GameGui::showLoseScreen() {
@@ -190,10 +234,10 @@ void GameGui::showWinScreen() {
 		ImGui::Text("Player 2 wins!");
 	}
 	/*
-	if (ImGui::Button("Exit")) {
-		this->state->shouldExit = true;
-	}
-	*/
+	 if (ImGui::Button("Exit")) {
+	 this->state->shouldExit = true;
+	 }
+	 */
 	ImGui::End();
 }
 
