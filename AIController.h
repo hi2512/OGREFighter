@@ -48,9 +48,6 @@ protected:
 				break;
 			}
 		}
-			if (rand() % 100 > 88) {
-				activeInputs.insert(InputType::UP);
-			}
 			break;
 		case BehaviorType::CloseAttack:
 			activeInputs.insert(InputType::L);

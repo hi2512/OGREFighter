@@ -257,40 +257,6 @@ bool Game::keyPressed(const OgreBites::KeyboardEvent& evt) {
 }
 
 bool Game::keyReleased(const OgreBites::KeyboardEvent& evt) {
-	/*
-	 if (gameState->gameIsPaused()) {
-	 return true;
-	 }
-	 */
-	/*
-	 if (releaseBuffer.size() > 200) {
-	 releaseBuffer.pop_front();
-	 }
-	 this->releaseBuffer.push_back(KeyInput { evt.keysym.sym, this->frameCount });
-
-	 //remove from keys held
-	 for (auto it = keysHeld.begin(); it != keysHeld.end(); it++) {
-	 KeyInput t = *it;
-	 if (evt.keysym.sym == t.key) {
-	 keysHeld.erase(it);
-	 break;
-	 }
-	 }
-
-	 if (releaseBuffer2.size() > 200) {
-	 releaseBuffer2.pop_front();
-	 }
-	 this->releaseBuffer2.push_back(KeyInput { evt.keysym.sym, this->frameCount });
-
-	 //remove from keys held
-	 for (auto it = keysHeld2.begin(); it != keysHeld2.end(); it++) {
-	 KeyInput t = *it;
-	 if (evt.keysym.sym == t.key) {
-	 keysHeld2.erase(it);
-	 break;
-	 }
-	 }
-	 */
 	((KeyboardController *) p1con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
 	((KeyboardController *) p2con)->releaseKey(KeyInput { evt.keysym.sym, this->frameCount });
 	//LogManager::getSingleton().logMessage("Num of keys held");
