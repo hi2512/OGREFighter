@@ -165,7 +165,7 @@ bool GameGui::showGameStart() {
 		this->state->showP1Select = true;
 		result = false;
 	}
-	if (ImGui::Button("Two Players")) {
+	if (ImGui::Button("Two Player")) {
 		this->state->showStage = true;
 		this->state->showP1Select = true;
 		this->state->showP2Select = true;
@@ -186,15 +186,15 @@ bool GameGui::showStageSelect() {
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	auto size = ImGui::GetIO().DisplaySize;
 	ImGui::SetWindowPos(ImVec2(size.x / 2.5, size.y / 2.5));
-	if (ImGui::Button("Training    ")) {
+	if (ImGui::Button("Training   ")) {
 		state->stageNumber = -1;
 		res = false;
 	}
-	if (ImGui::Button("Sky    ")) {
+	if (ImGui::Button("Sky        ")) {
 		state->stageNumber = 0;
 		res = false;
 	}
-	if (ImGui::Button("Night    ")) {
+	if (ImGui::Button("Night      ")) {
 		state->stageNumber = 1;
 		res = false;
 	}
