@@ -414,7 +414,6 @@
 				<pathentry include="/home/steve/Downloads/GTechFinal/ogre-imgui" kind="inc" path="" system="true"/>
 				<pathentry include="/home/steve/Downloads/GTechFinal/ogre-imgui/imgui" kind="inc" path="" system="true"/>
 				<pathentry include="/usr/local/include/SDL2" kind="inc" path="" system="true"/>
-				<pathentry include="/usr/include/SDL" kind="inc" path="" system="true"/>
 				<pathentry include="/usr/include/freetype2" kind="inc" path="" system="true"/>
 				<pathentry include="/usr/local/include/OGRE/Bites" kind="inc" path="" system="true"/>
 				<pathentry include="/usr/local/include/OGRE" kind="inc" path="" system="true"/>

@@ -59,8 +59,10 @@ public:
 	void cameraZoom(const Vector3& point);
 	void cameraSwap();
 	void cameraTracking(Real time);
+	void createCameraStartAnim();
+	void cameraStartAnim();
 	void restart();
-	void startAI();
+	void loadStage(int);
 	Actor * loadActorP1(CharacterType, ActorController *);
 	Actor * loadActorP2(CharacterType, ActorController *);
 private:
@@ -78,6 +80,10 @@ private:
 	// define the camera
 	Camera* camera;
 	SceneNode* camNode;
+	std::vector<Entity *> walls;
+	Entity * floor;
+	std::vector<String> stageMaterial;
+	std::vector<String> stageFloorMaterial;
 
 	SceneManager * mgr;
 	GameState* gameState;
@@ -125,6 +131,10 @@ private:
 //! [constructor]
 Game::Game() :
 		OgreBites::ApplicationContext("GameTechFinal") {
+	stageMaterial.push_back("MySky");
+	stageFloorMaterial.push_back("MySky");
+	stageMaterial.push_back("MySpace");
+	stageFloorMaterial.push_back("Examples/WaterStream");
 	gameState = new GameState();
 	gameState->inputBuffer = &inputBuffer;
 	//gameState->releaseBuffer = &releaseBuffer;
@@ -426,6 +436,8 @@ void Game::setup(void) {
 
 	Ground * g = new Ground(scnMgr, groundNode, "GroundObject", entGround, phys, groundShape,
 			Vector3(0, 0, 0));
+	//entGround->setMaterialName("Examples/WaterStream");
+	floor = entGround;
 
 	Ogre::Plane wallLeftPlane(Ogre::Vector3::UNIT_X, 0);
 	Ogre::MeshPtr wallLeftPlanePtr = Ogre::MeshManager::getSingleton().createPlane("WallLeft",
@@ -439,6 +451,8 @@ void Game::setup(void) {
 	Wall * wallL = new Wall(scnMgr, wallLeftNode, "WallLeftObject", wallLeft, phys, wallLeftShape,
 			Vector3(-1500, 1500, 0));
 	//Vector3(0, 100, 0));
+	//wallLeft->setMaterialName("MySpace");
+	walls.push_back(wallLeft);
 
 	Ogre::Plane wallRightPlane(Ogre::Vector3::NEGATIVE_UNIT_X, 0);
 	Ogre::MeshPtr wallRightPlanePtr = Ogre::MeshManager::getSingleton().createPlane("WallRight",
@@ -451,6 +465,8 @@ void Game::setup(void) {
 			btVector3(btScalar(1000.), btScalar(1500.), btScalar(50)));
 	Wall * wallR = new Wall(scnMgr, wallRightNode, "WallRightObject", wallRight, phys,
 			wallRightShape, Vector3(1500, 1500, 0));
+	//wallRight->setMaterialName("MySpace");
+	walls.push_back(wallRight);
 
 	//this wall is just for show
 	Ogre::Plane backWall(Ogre::Vector3::UNIT_Z, 0);
@@ -462,6 +478,8 @@ void Game::setup(void) {
 	Ogre::SceneNode * bWallNode = scnMgr->getRootSceneNode()->createChildSceneNode();
 	bWallNode->attachObject(backEntity);
 	bWallNode->setPosition(Vector3(0, 1500, -2000));
+	//backEntity->setMaterialName("MySpace");
+	walls.push_back(backEntity);
 
 	Ogre::Plane topWall(Ogre::Vector3::NEGATIVE_UNIT_Y, 0);
 	Ogre::MeshManager::getSingleton().createPlane("top",
@@ -471,79 +489,23 @@ void Game::setup(void) {
 	Ogre::SceneNode * tWallNode = scnMgr->getRootSceneNode()->createChildSceneNode();
 	tWallNode->attachObject(topEntity);
 	tWallNode->setPosition(Vector3(1000, 3000, -1000));
-	/*
-	Entity * p1Entity = scnMgr->createEntity("ninja.mesh");
-	SceneNode * p1Node = scnMgr->getRootSceneNode()->createChildSceneNode("P1Node");
-	auto p1OgreBox = p1Entity->getBoundingBox().getSize();
-	btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
-	Actor * p1 = new Ninja(false, scnMgr, p1Node, "P1", p1Entity, phys, p1Box,
-			Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
+	//topEntity->setMaterialName("MySpace");
+	walls.push_back(topEntity);
 
-	Entity * p2Entity = scnMgr->createEntity("ninja.mesh");
-	SceneNode * p2Node = scnMgr->getRootSceneNode()->createChildSceneNode("P2Node");
-	auto p2OgreBox = p2Entity->getBoundingBox().getSize();
-	btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
-	Actor * p2 = new Ninja(true, scnMgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
-			btQuaternion(0.0, -0.707, 0.0, -0.707), p2con);
-	p2->setController(new AIController(p2, p1, gameState));
-	p1->setOpponent(p2);
-	p2->setOpponent(p1);
-	player1 = p1;
-	player2 = p2;
-	gameState->p1 = p1;
-	gameState->p2 = p2;
-	*/
+}
 
-	/*
-	 Entity * p3Entity = scnMgr->createEntity("Sinbad.mesh");
-	 SceneNode * p3Node = scnMgr->getRootSceneNode()->createChildSceneNode("SinbadNode");
-	 p3Node->setPosition(Vector3(0, 200, 0));
-	 p3Node->attachObject(p3Entity);
-	 p3Node->setScale(Vector3(15, 15, 15));
-	 AnimationStateSet *mAnims = p3Entity->getAllAnimationStates();
-	 AnimationStateIterator it = mAnims->getAnimationStateIterator();
-	 while (it.hasMoreElements()) {
-	 AnimationStateMap::mapped_type as = it.getNext();
-	 LogManager::getSingleton().logMessage(as->getAnimationName());
-	 as->setLoop(true);
-	 }
-	 */
-	/*
-	 SceneNode * dn = mgr->getRootSceneNode()->createChildSceneNode("disc");
-	 Entity * di = mgr->createEntity("disc.mesh");
-	 dn->setScale(Vector3(60, 60, 60));
-	 auto diSize = di->getBoundingBox().getSize() * 35.0;
-	 btCollisionShape * diShape = new btBoxShape(btVector3(diSize.x, diSize.y, diSize.z));
-	 //btCollisionShape * diShape = new btSphereShape(diSize.x);
-	 Disc * dObj = new Disc(scnMgr, dn, "Disc", di, phys, diShape, Vector3(0, 100, 0),
-	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(0, 0, 0), btVector3(0, 0, 0));
-	 */
-	/*
-	 auto temp1 = p1->getRigidBody();
-	 phys->dynamicsWorld->removeRigidBody(temp1);
-	 phys->dynamicsWorld->addRigidBody(temp1, 128, 3);
-	 //p1->getRigidBody()->setFlags(128);
-	 //printf("col flags %d\n", p1->getRigidBody()->getFlags());
-
-	 auto temp2 = p2->getRigidBody();
-	 phys->dynamicsWorld->removeRigidBody(temp2);
-	 phys->dynamicsWorld->addRigidBody(temp2, 128, 3);
-	 */
-	/*
-	 Entity* blEnt = scnMgr->createEntity("sphere.mesh");
-	 SceneNode * bl2 = scnMgr->getRootSceneNode()->createChildSceneNode("BallObject");
-	 bl2->setScale(0.2, 0.2, 0.2);
-	 auto camPos2 = camNode->getPosition();
-	 auto blPos = Vector3(camPos2.x + (rand() % 500 - 250), camPos2.y + (rand() % 500 - 350),
-	 camPos2.z + (rand() % 500 - 2000));
-	 Ball * bl = new Ball(scnMgr, bl2, "BallObject", blEnt, phys, blPos,
-	 btQuaternion(1.0f, 0.0f, 0.0f, 0.0f), btVector3(rand() % 10 - 10, rand() % 10 - 10, 100),
-	 btVector3(0, 0, 0));
-	 */
-	//bl->setCollisionType(CollisionType::COL_NONE);
-	//SceneNode * spNode = mgr->getRootSceneNode()->createChildSceneNode();
-	//GameObject * spObj = new Spark(mgr, spNode, "SparkTest1", phys, Vector3(100, 200, 200), 5.0);
-	//btStaticPlaneShape()
+void Game::loadStage(int stageNum) {
+	if(stageNum == -1) {
+		for(Entity * e : walls) {
+			e->setMaterial(MaterialManager::getSingleton().getDefaultMaterial());
+		}
+		floor->setMaterial(MaterialManager::getSingleton().getDefaultMaterial());
+		return;
+	}
+	for(Entity * e : walls) {
+		e->setMaterialName(stageMaterial.at(stageNum));
+	}
+	floor->setMaterialName(stageFloorMaterial.at(stageNum));
 }
 
 Actor * Game::loadActorP1(CharacterType ct, ActorController * con) {
@@ -596,34 +558,14 @@ void Game::restart() {
 	p2con = new KeyboardController('j', 'l', 'i', 'k', ',', '.', '/');
 	printf("done deleting\n");
 	playMusic("../assets/Wicked_Things.wav", SDL_MIX_MAXVOLUME / 3);
+	loadStage(gameState->stageNumber);
 	auto oldState = gameState;
 	gameState = new GameState();
 	gameGui = new GameGui(gameState);
 	gameState->inputBuffer = &inputBuffer;
-	//gameState->releaseBuffer = &releaseBuffer;
-
-	/*
-	 Entity * p1Entity = mgr->createEntity("ninja.mesh");
-	 //p1Entity->setMaterialName("Examples/BumpyMetal");
-	 SceneNode * p1Node = mgr->getRootSceneNode()->createChildSceneNode("P1Node");
-	 auto p1OgreBox = p1Entity->getBoundingBox().getSize();
-	 btCollisionShape * p1Box = new btBoxShape(btVector3(p1OgreBox.x, p1OgreBox.y, p1OgreBox.z));
-	 //Actor * p1 = new Ninja(false, mgr, p1Node, "P1", p1Entity, phys, p1Box, Vector3(-400, 200, 0),
-	 //		btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
-	 Actor * p1 = new NinjaAlternate(false, mgr, p1Node, "P1", p1Entity, phys, p1Box,
-	 Vector3(-400, 200, 0), btQuaternion(0.0, -0.707, 0.0, 0.707), p1con);
-	 */
 	Actor * p1 = loadActorP1(oldState->p1Char, p1con);
-	/*
-	 Entity * p2Entity = mgr->createEntity("ninja.mesh");
-	 SceneNode * p2Node = mgr->getRootSceneNode()->createChildSceneNode("P2Node");
-	 auto p2OgreBox = p2Entity->getBoundingBox().getSize();
-	 btCollisionShape * p2Box = new btBoxShape(btVector3(p2OgreBox.x, p2OgreBox.y, p2OgreBox.z));
-	 Actor * p2 = new Ninja(true, mgr, p2Node, "P2", p2Entity, phys, p2Box, Vector3(400, 200, 0),
-	 btQuaternion(0.0, -0.707, 0.0, -0.707), p2con);
-	 */
 	Actor * p2 = loadActorP2(oldState->p2Char, p2con);
-	if(!oldState->multiplayer) {
+	if (!oldState->multiplayer) {
 		p2->setController(new AIController(p2, p1, gameState));
 	}
 	camNode->setPosition(defaultCamPosition);
@@ -681,6 +623,10 @@ bool Game::frameStarted(const FrameEvent &evt) {
 		gameState->gameStartScreen = res;
 		return true;
 	}
+	if(gameState->showStage) {
+		gameState->showStage = gameGui->showStageSelect();
+		return true;
+	}
 	if (gameState->showP1Select || gameState->showP2Select) {
 		if (gameState->showP1Select) {
 			gameState->showP1Select = gameGui->showCharacterSelect1();
@@ -689,7 +635,7 @@ bool Game::frameStarted(const FrameEvent &evt) {
 		if (gameState->showP2Select) {
 			gameState->showP2Select = gameGui->showCharacterSelect2();
 		}
-		if(!(gameState->showP1Select || gameState->showP2Select)) {
+		if (!(gameState->showP1Select || gameState->showP2Select)) {
 			restart();
 			gameState->gameStartScreen = false;
 			gameState->isPaused = false;
@@ -724,27 +670,6 @@ bool Game::frameStarted(const FrameEvent &evt) {
 		//restart();
 	}
 
-	/*
-	 if (gameState->waitingOnPlayers) {
-	 gameGui->showWaitingOnPlayers();
-	 return true;
-	 }
-
-	 if (!gameState->gameStarted) {
-	 return true;
-	 }
-
-	 if (gameState->showingGameScoreboard) {
-	 gameGui->showScore();
-	 }
-	 if (gameState->showLoseScreen) {
-	 gameGui->showLoseScreen();
-	 }
-
-	 if (gameState->showWinScreen) {
-	 gameGui->showWinScreen();
-	 }
-	 */
 	return true;
 }
 
@@ -832,6 +757,16 @@ bool Game::frameRenderingQueued(const FrameEvent &evt) {
 	leftMouseRelease = false;
 	rightMouseRelease = false;
 	return frameVal;
+}
+
+void Game::cameraStartAnim() {
+
+}
+
+void Game::createCameraStartAnim() {
+	Animation * animation = mgr->createAnimation("CamStart", 10.2);
+	animation->setDefaultInterpolationMode(Animation::IM_SPLINE);
+	SceneNode * startNode = mgr->getRootSceneNode()->createChildSceneNode("CamStartNode");
 }
 
 void Game::createCameraSwingAnimation(const Vector3& point, bool leftSide) {
@@ -941,7 +876,7 @@ void Game::cameraTracking(Real time) {
 	//offset of initial height - average playerheights
 	centerPos.y += 200;
 	Vector3 transDir = centerPos - camNode->getPosition();
-	camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.8, 0) * time, Node::TS_LOCAL);
+	camNode->translate(Vector3(transDir.x * 1.0, transDir.y * 0.9, 0) * time, Node::TS_LOCAL);
 }
 
 bool Game::frameEnded(const FrameEvent &evt) {

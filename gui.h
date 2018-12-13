@@ -45,6 +45,7 @@ public:
 	void showTime();
 	bool showCharacterSelect1();
 	bool showCharacterSelect2();
+	bool showStageSelect();
 };
 
 

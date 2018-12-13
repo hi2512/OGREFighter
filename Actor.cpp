@@ -137,6 +137,9 @@ void Actor::setBox(btCollisionObject * box, const btVector3& targetPos) {
 }
 
 void Actor::doCollision(const FrameEvent& evt) {
+	if(this->actorState == StateType::STOP) {
+		return;
+	}
 	CollisionContext context;
 	BulletContactCallback* thing = new BulletContactCallback(*body, context);
 	this->physics->getWorld()->contactTest(body, *thing);

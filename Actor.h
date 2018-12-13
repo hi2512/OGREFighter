@@ -24,7 +24,6 @@ enum StateType {
 
 };
 
-
 class SuperVal {
 	const Real lim = 100.0;
 	Real val;
@@ -175,11 +174,11 @@ protected:
 	void checkForSpecial1Cancel();
 	void checkForSuperCancel();
 	/*
-	bool readQCF();
-	bool readDoubleQCF();
-	bool readQCB();
-	bool readDoubleQCB();
-	*/
+	 bool readQCF();
+	 bool readDoubleQCF();
+	 bool readQCB();
+	 bool readDoubleQCB();
+	 */
 	bool readQCFwithOrientation();
 	bool readDoubleQCFwithOrientation();
 
@@ -213,11 +212,10 @@ public:
 		//keysHeld = kBuf;
 		playingAnimation = "NOTSET";
 
-
 	}
 	virtual ~Actor() {
 		printf("deleting actor\n");
-		delete(this->myController);
+		delete (this->myController);
 		this->clearAttack();
 		this->physics->dynamicsWorld->removeRigidBody(body);
 		this->sceneMgr->destroyEntity(geom);

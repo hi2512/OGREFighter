@@ -39,8 +39,10 @@ public:
 	bool showSingleSelect = false;
 	bool showP1Select = false;
 	bool showP2Select = false;
+	bool showStage = false;
 	CharacterType p1Char = CharacterType::NINJA;
 	CharacterType p2Char = CharacterType::NINJA;
+	int stageNumber = -1;
 
 	Uint32 frameCount = 0;
 	Ogre::Vector3 camPos = Ogre::Vector3(0, 0, 0);
@@ -55,7 +57,7 @@ public:
 	const int restartTime = 300;
 	int restartTimer = restartTime;
 
-	const Uint32 maxTime = 6500;
+	const Uint32 maxTime = 5500;
 
 	GameState(void) {
 

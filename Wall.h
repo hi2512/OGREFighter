@@ -42,7 +42,9 @@ public:
 
 		//this->rootNode->setOrientation(ori);
 	}
-
+	~Wall() {
+		this->physics->getWorld()->removeRigidBody(body);
+	}
 	void animate(const FrameEvent &evt) {}
 };
 

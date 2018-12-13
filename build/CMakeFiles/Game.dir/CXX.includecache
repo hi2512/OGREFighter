@@ -240,26 +240,6 @@ InputContainer.h
 Disc.h
 /home/steve/Downloads/GTechFinal/Disc.h
 
-/home/steve/Downloads/GTechFinal/NinjaAlternate.cpp
-Ogre.h
--
-physics.h
-/home/steve/Downloads/GTechFinal/physics.h
-OgreApplicationContext.h
--
-btBulletCollisionCommon.h
--
-btBulletDynamicsCommon.h
--
-BulletCollision/CollisionDispatch/btGhostObject.h
--
-Ninja.h
-/home/steve/Downloads/GTechFinal/Ninja.h
-audio.h
-/home/steve/Downloads/GTechFinal/audio.h
-NinjaAlternate.h
-/home/steve/Downloads/GTechFinal/NinjaAlternate.h
-
 /home/steve/Downloads/GTechFinal/NinjaAlternate.h
 Ogre.h
 -

@@ -57,9 +57,33 @@ include CMakeFiles/Game.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Game.dir/flags.make
 
+CMakeFiles/Game.dir/Actor.cpp.o: CMakeFiles/Game.dir/flags.make
+CMakeFiles/Game.dir/Actor.cpp.o: ../../Actor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Game.dir/Actor.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/Actor.cpp.o -c /home/steve/Downloads/GTechFinal/Actor.cpp
+
+CMakeFiles/Game.dir/Actor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Game.dir/Actor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/steve/Downloads/GTechFinal/Actor.cpp > CMakeFiles/Game.dir/Actor.cpp.i
+
+CMakeFiles/Game.dir/Actor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Game.dir/Actor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/steve/Downloads/GTechFinal/Actor.cpp -o CMakeFiles/Game.dir/Actor.cpp.s
+
+CMakeFiles/Game.dir/Actor.cpp.o.requires:
+
+.PHONY : CMakeFiles/Game.dir/Actor.cpp.o.requires
+
+CMakeFiles/Game.dir/Actor.cpp.o.provides: CMakeFiles/Game.dir/Actor.cpp.o.requires
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.o.provides.build
+.PHONY : CMakeFiles/Game.dir/Actor.cpp.o.provides
+
+CMakeFiles/Game.dir/Actor.cpp.o.provides.build: CMakeFiles/Game.dir/Actor.cpp.o
+
+
 CMakeFiles/Game.dir/DebugDraw.cpp.o: CMakeFiles/Game.dir/flags.make
 CMakeFiles/Game.dir/DebugDraw.cpp.o: ../../DebugDraw.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Game.dir/DebugDraw.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Game.dir/DebugDraw.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/DebugDraw.cpp.o -c /home/steve/Downloads/GTechFinal/DebugDraw.cpp
 
 CMakeFiles/Game.dir/DebugDraw.cpp.i: cmake_force
@@ -81,9 +105,33 @@ CMakeFiles/Game.dir/DebugDraw.cpp.o.provides: CMakeFiles/Game.dir/DebugDraw.cpp.
 CMakeFiles/Game.dir/DebugDraw.cpp.o.provides.build: CMakeFiles/Game.dir/DebugDraw.cpp.o
 
 
+CMakeFiles/Game.dir/Disc.cpp.o: CMakeFiles/Game.dir/flags.make
+CMakeFiles/Game.dir/Disc.cpp.o: ../../Disc.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Game.dir/Disc.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/Disc.cpp.o -c /home/steve/Downloads/GTechFinal/Disc.cpp
+
+CMakeFiles/Game.dir/Disc.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Game.dir/Disc.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/steve/Downloads/GTechFinal/Disc.cpp > CMakeFiles/Game.dir/Disc.cpp.i
+
+CMakeFiles/Game.dir/Disc.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Game.dir/Disc.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/steve/Downloads/GTechFinal/Disc.cpp -o CMakeFiles/Game.dir/Disc.cpp.s
+
+CMakeFiles/Game.dir/Disc.cpp.o.requires:
+
+.PHONY : CMakeFiles/Game.dir/Disc.cpp.o.requires
+
+CMakeFiles/Game.dir/Disc.cpp.o.provides: CMakeFiles/Game.dir/Disc.cpp.o.requires
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Disc.cpp.o.provides.build
+.PHONY : CMakeFiles/Game.dir/Disc.cpp.o.provides
+
+CMakeFiles/Game.dir/Disc.cpp.o.provides.build: CMakeFiles/Game.dir/Disc.cpp.o
+
+
 CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o: CMakeFiles/Game.dir/flags.make
 CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o: ../../DynamicLineDrawer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o -c /home/steve/Downloads/GTechFinal/DynamicLineDrawer.cpp
 
 CMakeFiles/Game.dir/DynamicLineDrawer.cpp.i: cmake_force
@@ -107,7 +155,7 @@ CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o.provides.build: CMakeFiles/Game.dir/
 
 CMakeFiles/Game.dir/Game.cpp.o: CMakeFiles/Game.dir/flags.make
 CMakeFiles/Game.dir/Game.cpp.o: ../../Game.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Game.dir/Game.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Game.dir/Game.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/Game.cpp.o -c /home/steve/Downloads/GTechFinal/Game.cpp
 
 CMakeFiles/Game.dir/Game.cpp.i: cmake_force
@@ -129,9 +177,57 @@ CMakeFiles/Game.dir/Game.cpp.o.provides: CMakeFiles/Game.dir/Game.cpp.o.requires
 CMakeFiles/Game.dir/Game.cpp.o.provides.build: CMakeFiles/Game.dir/Game.cpp.o
 
 
+CMakeFiles/Game.dir/Ninja.cpp.o: CMakeFiles/Game.dir/flags.make
+CMakeFiles/Game.dir/Ninja.cpp.o: ../../Ninja.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Game.dir/Ninja.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/Ninja.cpp.o -c /home/steve/Downloads/GTechFinal/Ninja.cpp
+
+CMakeFiles/Game.dir/Ninja.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Game.dir/Ninja.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/steve/Downloads/GTechFinal/Ninja.cpp > CMakeFiles/Game.dir/Ninja.cpp.i
+
+CMakeFiles/Game.dir/Ninja.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Game.dir/Ninja.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/steve/Downloads/GTechFinal/Ninja.cpp -o CMakeFiles/Game.dir/Ninja.cpp.s
+
+CMakeFiles/Game.dir/Ninja.cpp.o.requires:
+
+.PHONY : CMakeFiles/Game.dir/Ninja.cpp.o.requires
+
+CMakeFiles/Game.dir/Ninja.cpp.o.provides: CMakeFiles/Game.dir/Ninja.cpp.o.requires
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Ninja.cpp.o.provides.build
+.PHONY : CMakeFiles/Game.dir/Ninja.cpp.o.provides
+
+CMakeFiles/Game.dir/Ninja.cpp.o.provides.build: CMakeFiles/Game.dir/Ninja.cpp.o
+
+
+CMakeFiles/Game.dir/NinjaAlternate.cpp.o: CMakeFiles/Game.dir/flags.make
+CMakeFiles/Game.dir/NinjaAlternate.cpp.o: ../../NinjaAlternate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Game.dir/NinjaAlternate.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/NinjaAlternate.cpp.o -c /home/steve/Downloads/GTechFinal/NinjaAlternate.cpp
+
+CMakeFiles/Game.dir/NinjaAlternate.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Game.dir/NinjaAlternate.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/steve/Downloads/GTechFinal/NinjaAlternate.cpp > CMakeFiles/Game.dir/NinjaAlternate.cpp.i
+
+CMakeFiles/Game.dir/NinjaAlternate.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Game.dir/NinjaAlternate.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/steve/Downloads/GTechFinal/NinjaAlternate.cpp -o CMakeFiles/Game.dir/NinjaAlternate.cpp.s
+
+CMakeFiles/Game.dir/NinjaAlternate.cpp.o.requires:
+
+.PHONY : CMakeFiles/Game.dir/NinjaAlternate.cpp.o.requires
+
+CMakeFiles/Game.dir/NinjaAlternate.cpp.o.provides: CMakeFiles/Game.dir/NinjaAlternate.cpp.o.requires
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/NinjaAlternate.cpp.o.provides.build
+.PHONY : CMakeFiles/Game.dir/NinjaAlternate.cpp.o.provides
+
+CMakeFiles/Game.dir/NinjaAlternate.cpp.o.provides.build: CMakeFiles/Game.dir/NinjaAlternate.cpp.o
+
+
 CMakeFiles/Game.dir/audio.c.o: CMakeFiles/Game.dir/flags.make
 CMakeFiles/Game.dir/audio.c.o: ../../audio.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/Game.dir/audio.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/Game.dir/audio.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Game.dir/audio.c.o   -c /home/steve/Downloads/GTechFinal/audio.c
 
 CMakeFiles/Game.dir/audio.c.i: cmake_force
@@ -155,7 +251,7 @@ CMakeFiles/Game.dir/audio.c.o.provides.build: CMakeFiles/Game.dir/audio.c.o
 
 CMakeFiles/Game.dir/gui.cc.o: CMakeFiles/Game.dir/flags.make
 CMakeFiles/Game.dir/gui.cc.o: ../../gui.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Game.dir/gui.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/Game.dir/gui.cc.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/gui.cc.o -c /home/steve/Downloads/GTechFinal/gui.cc
 
 CMakeFiles/Game.dir/gui.cc.i: cmake_force
@@ -179,7 +275,7 @@ CMakeFiles/Game.dir/gui.cc.o.provides.build: CMakeFiles/Game.dir/gui.cc.o
 
 CMakeFiles/Game.dir/physics.cpp.o: CMakeFiles/Game.dir/flags.make
 CMakeFiles/Game.dir/physics.cpp.o: ../../physics.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Game.dir/physics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Game.dir/physics.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/physics.cpp.o -c /home/steve/Downloads/GTechFinal/physics.cpp
 
 CMakeFiles/Game.dir/physics.cpp.i: cmake_force
@@ -203,7 +299,7 @@ CMakeFiles/Game.dir/physics.cpp.o.provides.build: CMakeFiles/Game.dir/physics.cp
 
 CMakeFiles/Game.dir/state.cpp.o: CMakeFiles/Game.dir/flags.make
 CMakeFiles/Game.dir/state.cpp.o: ../../state.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Game.dir/state.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/Game.dir/state.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Game.dir/state.cpp.o -c /home/steve/Downloads/GTechFinal/state.cpp
 
 CMakeFiles/Game.dir/state.cpp.i: cmake_force
@@ -227,9 +323,13 @@ CMakeFiles/Game.dir/state.cpp.o.provides.build: CMakeFiles/Game.dir/state.cpp.o
 
 # Object files for target Game
 Game_OBJECTS = \
+"CMakeFiles/Game.dir/Actor.cpp.o" \
 "CMakeFiles/Game.dir/DebugDraw.cpp.o" \
+"CMakeFiles/Game.dir/Disc.cpp.o" \
 "CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o" \
 "CMakeFiles/Game.dir/Game.cpp.o" \
+"CMakeFiles/Game.dir/Ninja.cpp.o" \
+"CMakeFiles/Game.dir/NinjaAlternate.cpp.o" \
 "CMakeFiles/Game.dir/audio.c.o" \
 "CMakeFiles/Game.dir/gui.cc.o" \
 "CMakeFiles/Game.dir/physics.cpp.o" \
@@ -238,9 +338,13 @@ Game_OBJECTS = \
 # External object files for target Game
 Game_EXTERNAL_OBJECTS =
 
+Game: CMakeFiles/Game.dir/Actor.cpp.o
 Game: CMakeFiles/Game.dir/DebugDraw.cpp.o
+Game: CMakeFiles/Game.dir/Disc.cpp.o
 Game: CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o
 Game: CMakeFiles/Game.dir/Game.cpp.o
+Game: CMakeFiles/Game.dir/Ninja.cpp.o
+Game: CMakeFiles/Game.dir/NinjaAlternate.cpp.o
 Game: CMakeFiles/Game.dir/audio.c.o
 Game: CMakeFiles/Game.dir/gui.cc.o
 Game: CMakeFiles/Game.dir/physics.cpp.o
@@ -263,7 +367,7 @@ Game: /usr/local/lib/libOgreVolume.so.1.11.2
 Game: /usr/local/lib/libOgreMain.so.1.11.2
 Game: /usr/local/lib/libfreetype.so
 Game: CMakeFiles/Game.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable Game"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/steve/Downloads/GTechFinal/bin/bin/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable Game"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Game.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -271,9 +375,13 @@ CMakeFiles/Game.dir/build: Game
 
 .PHONY : CMakeFiles/Game.dir/build
 
+CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/Actor.cpp.o.requires
 CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/DebugDraw.cpp.o.requires
+CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/Disc.cpp.o.requires
 CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/DynamicLineDrawer.cpp.o.requires
 CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/Game.cpp.o.requires
+CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/Ninja.cpp.o.requires
+CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/NinjaAlternate.cpp.o.requires
 CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/audio.c.o.requires
 CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/gui.cc.o.requires
 CMakeFiles/Game.dir/requires: CMakeFiles/Game.dir/physics.cpp.o.requires

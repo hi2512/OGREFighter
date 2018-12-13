@@ -149,6 +149,33 @@ Game/fast:
 	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/build
 .PHONY : Game/fast
 
+Actor.o: Actor.cpp.o
+
+.PHONY : Actor.o
+
+# target to build an object file
+Actor.cpp.o:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.o
+.PHONY : Actor.cpp.o
+
+Actor.i: Actor.cpp.i
+
+.PHONY : Actor.i
+
+# target to preprocess a source file
+Actor.cpp.i:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.i
+.PHONY : Actor.cpp.i
+
+Actor.s: Actor.cpp.s
+
+.PHONY : Actor.s
+
+# target to generate assembly for a file
+Actor.cpp.s:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Actor.cpp.s
+.PHONY : Actor.cpp.s
+
 DebugDraw.o: DebugDraw.cpp.o
 
 .PHONY : DebugDraw.o
@@ -175,6 +202,33 @@ DebugDraw.s: DebugDraw.cpp.s
 DebugDraw.cpp.s:
 	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/DebugDraw.cpp.s
 .PHONY : DebugDraw.cpp.s
+
+Disc.o: Disc.cpp.o
+
+.PHONY : Disc.o
+
+# target to build an object file
+Disc.cpp.o:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Disc.cpp.o
+.PHONY : Disc.cpp.o
+
+Disc.i: Disc.cpp.i
+
+.PHONY : Disc.i
+
+# target to preprocess a source file
+Disc.cpp.i:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Disc.cpp.i
+.PHONY : Disc.cpp.i
+
+Disc.s: Disc.cpp.s
+
+.PHONY : Disc.s
+
+# target to generate assembly for a file
+Disc.cpp.s:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Disc.cpp.s
+.PHONY : Disc.cpp.s
 
 DynamicLineDrawer.o: DynamicLineDrawer.cpp.o
 
@@ -229,6 +283,60 @@ Game.s: Game.cpp.s
 Game.cpp.s:
 	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Game.cpp.s
 .PHONY : Game.cpp.s
+
+Ninja.o: Ninja.cpp.o
+
+.PHONY : Ninja.o
+
+# target to build an object file
+Ninja.cpp.o:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Ninja.cpp.o
+.PHONY : Ninja.cpp.o
+
+Ninja.i: Ninja.cpp.i
+
+.PHONY : Ninja.i
+
+# target to preprocess a source file
+Ninja.cpp.i:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Ninja.cpp.i
+.PHONY : Ninja.cpp.i
+
+Ninja.s: Ninja.cpp.s
+
+.PHONY : Ninja.s
+
+# target to generate assembly for a file
+Ninja.cpp.s:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/Ninja.cpp.s
+.PHONY : Ninja.cpp.s
+
+NinjaAlternate.o: NinjaAlternate.cpp.o
+
+.PHONY : NinjaAlternate.o
+
+# target to build an object file
+NinjaAlternate.cpp.o:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/NinjaAlternate.cpp.o
+.PHONY : NinjaAlternate.cpp.o
+
+NinjaAlternate.i: NinjaAlternate.cpp.i
+
+.PHONY : NinjaAlternate.i
+
+# target to preprocess a source file
+NinjaAlternate.cpp.i:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/NinjaAlternate.cpp.i
+.PHONY : NinjaAlternate.cpp.i
+
+NinjaAlternate.s: NinjaAlternate.cpp.s
+
+.PHONY : NinjaAlternate.s
+
+# target to generate assembly for a file
+NinjaAlternate.cpp.s:
+	$(MAKE) -f CMakeFiles/Game.dir/build.make CMakeFiles/Game.dir/NinjaAlternate.cpp.s
+.PHONY : NinjaAlternate.cpp.s
 
 audio.o: audio.c.o
 
@@ -511,15 +619,27 @@ help:
 	@echo "... OgreImgui"
 	@echo "... edit_cache"
 	@echo "... Game"
+	@echo "... Actor.o"
+	@echo "... Actor.i"
+	@echo "... Actor.s"
 	@echo "... DebugDraw.o"
 	@echo "... DebugDraw.i"
 	@echo "... DebugDraw.s"
+	@echo "... Disc.o"
+	@echo "... Disc.i"
+	@echo "... Disc.s"
 	@echo "... DynamicLineDrawer.o"
 	@echo "... DynamicLineDrawer.i"
 	@echo "... DynamicLineDrawer.s"
 	@echo "... Game.o"
 	@echo "... Game.i"
 	@echo "... Game.s"
+	@echo "... Ninja.o"
+	@echo "... Ninja.i"
+	@echo "... Ninja.s"
+	@echo "... NinjaAlternate.o"
+	@echo "... NinjaAlternate.i"
+	@echo "... NinjaAlternate.s"
 	@echo "... audio.o"
 	@echo "... audio.i"
 	@echo "... audio.s"

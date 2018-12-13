@@ -156,14 +156,17 @@ void GameGui::showScore() {
 
 bool GameGui::showGameStart() {
 	bool result = true;
-	ImGui::Begin("OGRE Fighter", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("OGRE Fighter", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	auto size = ImGui::GetIO().DisplaySize;
 	ImGui::SetWindowPos(ImVec2(size.x / 2.5, size.y / 2.5));
 	if (ImGui::Button("Single Player")) {
+		this->state->showStage = true;
 		this->state->showP1Select = true;
 		result = false;
 	}
 	if (ImGui::Button("Two Players")) {
+		this->state->showStage = true;
 		this->state->showP1Select = true;
 		this->state->showP2Select = true;
 		state->multiplayer = true;
@@ -177,20 +180,48 @@ bool GameGui::showGameStart() {
 	return result;
 }
 
+bool GameGui::showStageSelect() {
+	bool res = true;
+	ImGui::Begin("Stage Select", NULL,
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	auto size = ImGui::GetIO().DisplaySize;
+	ImGui::SetWindowPos(ImVec2(size.x / 2.5, size.y / 2.5));
+	if (ImGui::Button("Training    ")) {
+		state->stageNumber = -1;
+		res = false;
+	}
+	if (ImGui::Button("Sky    ")) {
+		state->stageNumber = 0;
+		res = false;
+	}
+	if (ImGui::Button("Night    ")) {
+		state->stageNumber = 1;
+		res = false;
+	}
+	ImGui::End();
+	return res;
+}
+
 bool GameGui::showCharacterSelect1() {
 	ImGui::Begin("Player 1 Character", NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	bool res = true;
 	auto size = ImGui::GetIO().DisplaySize;
 	ImGui::SetWindowPos(ImVec2(size.x / 14, size.y / 2));
-	if (ImGui::Button("Ninja        ")) {
+	ImGui::Text("Move: WASD");
+	ImGui::Text("Attack Keys: XCV");
+	if (ImGui::Button("Ninja")) {
 		state->p1Char = CharacterType::NINJA;
 		res = false;
 	}
-	if (ImGui::Button("Silver Ninja    ")) {
+	ImGui::SameLine();
+	ImGui::Text("Easy to use character with a projectile attack");
+	if (ImGui::Button("Silver Ninja")) {
 		state->p1Char = CharacterType::NINJAALT;
 		res = false;
 	}
+	ImGui::SameLine();
+	ImGui::Text("Low health character with fast movement and an invincible dash");
 	ImGui::End();
 	return res;
 }
@@ -200,15 +231,21 @@ bool GameGui::showCharacterSelect2() {
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	bool res = true;
 	auto size = ImGui::GetIO().DisplaySize;
-	ImGui::SetWindowPos(ImVec2(size.x / 1.254, size.y / 2));
-	if (ImGui::Button("Ninja        ")) {
+	ImGui::SetWindowPos(ImVec2(size.x / 1.7, size.y / 2));
+	ImGui::Text("Move: IJKL");
+	ImGui::Text("Attack Keys: ,./");
+	if (ImGui::Button("Ninja")) {
 		state->p2Char = CharacterType::NINJA;
 		res = false;
 	}
-	if (ImGui::Button("Silver Ninja    ")) {
+	ImGui::SameLine();
+	ImGui::Text("Easy to use character with a projectile attack");
+	if (ImGui::Button("Silver Ninja")) {
 		state->p2Char = CharacterType::NINJAALT;
 		res = false;
 	}
+	ImGui::SameLine();
+	ImGui::Text("Low health character with fast movement and an invincible dash");
 	ImGui::End();
 	return res;
 }

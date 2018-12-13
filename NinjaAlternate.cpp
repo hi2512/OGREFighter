@@ -18,7 +18,7 @@ void NinjaAlternate::createLightBox() {
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
 
-	HitboxData hbd { hbox, 30.0, 20.0, 40.0, 16.0, 30.0, 5.0, 10.0, 10.0, 35, 20, 4, 4, false };
+	HitboxData hbd { hbox, 30.0, 20.0, 48.0, 16.0, 30.0, 5.0, 10.0, 10.0, 32, 20, 4, 4, false };
 	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "LIGHT", physics, hbox, pos, hbd,
 			this->myHitType());
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::LIGHT, hitObj));
@@ -28,7 +28,7 @@ void NinjaAlternate::createMediumBox() {
 	hbox->setCollisionShape(new btBoxShape(btVector3(50, 50, 50)));
 	Vector3 curPos = this->rootNode->convertLocalToWorldPosition(Vector3::ZERO);
 	btVector3 pos(curPos.x, curPos.y - 1500, curPos.z);
-	HitboxData hbd { hbox, 30.0, 35.0, 50.0, 45.0, 40.0, 10.0, 15.0, 15.0, 47, 15, 6, 4, false };
+	HitboxData hbd { hbox, 30.0, 35.0, 60.0, 45.0, 45.0, 10.0, 15.0, 15.0, 47, 15, 6, 4, false };
 	Hitbox * hitObj = new Hitbox(sceneMgr, this->name + "MEDIUM", physics, hbox, pos, hbd,
 			this->myHitType());
 	this->hitboxes.insert(pair<AttackType, Hitbox *>(AttackType::MEDIUM, hitObj));

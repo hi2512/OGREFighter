@@ -106,6 +106,40 @@ material Material.002 {
     }
 }
 
+material MySky
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+
+			texture_unit
+			{
+				texture clouds.jpg
+				scroll_anim 0.15 0
+			}
+		}
+	}
+}
+
+material MySpace
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+
+			texture_unit
+			{
+				texture spacesky.jpg
+			}
+		}
+	}
+}
+
+
 material PaddleHandle {
     receive_shadows on
     technique {

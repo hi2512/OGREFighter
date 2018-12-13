@@ -23,19 +23,18 @@ protected:
 	void testForBehavior() {
 		while (1) {
 			if (sleepLock.try_lock()) {
-				sleep(0.75);
+				sleep(0.7);
 				currentBehavior = behaviorRoot->decide();
 				sleepLock.unlock();
 			} else {
-				//printf("break\n");
 				break;
 			}
 		}
 	}
 	void doBehavior() {
+		activeInputs.clear();
 		switch (currentBehavior) {
 		case BehaviorType::ProjectileAttack: {
-			activeInputs.clear();
 			int ran = rand() % 3;
 			switch (ran) {
 			case 0:
@@ -49,31 +48,47 @@ protected:
 				break;
 			}
 		}
+			if (rand() % 100 > 88) {
+				activeInputs.insert(InputType::UP);
+			}
 			break;
 		case BehaviorType::CloseAttack:
-			activeInputs.clear();
 			activeInputs.insert(InputType::L);
 			break;
 		case BehaviorType::SpaceAttack:
 			activeInputs.insert(InputType::M);
 			break;
 		case BehaviorType::DoNothing:
-			activeInputs.clear();
 			break;
 		case BehaviorType::Push:
 			//walk forward
-			activeInputs.clear();
 			activeInputs.insert(self->onP2Side() ? InputType::LEFT : InputType::RIGHT);
+			break;
+		case BehaviorType::Stall:
+			activeInputs.insert(self->onP2Side() ? InputType::RIGHT : InputType::LEFT);
+			if ((rand() % 100 > 96) && (abs(self->getRootNode()->getPosition().x) < 1000)) {
+				activeInputs.insert(InputType::UP);
+			}
 			break;
 		}
 	}
 public:
 	AIController(Actor * me, Actor * opp, GameState * game) :
 			self(me), opponent(opp), gs(game) {
-		behaviorRoot = new OpponentIsJumpingNode(self, opponent, gs);
-		behaviorRoot->setLeft(new SpaceAttackNode(self, opponent, gs));
-		behaviorRoot->setRight(new NearOpponentDistanceNode(self, opponent, gs, 300));
-		auto cur = behaviorRoot->getRight();
+		behaviorRoot = new OutOfTimeNode(self, opponent, gs, 15);
+		behaviorRoot->setLeft(new HealthLeadNode(self, opponent, gs, 150));
+		behaviorRoot->setRight(new OpponentIsJumpingNode(self, opponent, gs));
+		auto cur = behaviorRoot->getLeft();
+		cur->setLeft(new StallNode(self, opponent, gs));
+		cur->setRight(new FarOpponentDistanceNode(self, opponent, gs, 500));
+		cur = cur->getRight();
+		cur->setLeft(new PushNode(self, opponent, gs));
+		cur->setRight(new SpaceAttackNode(self, opponent, gs));
+
+		cur = behaviorRoot->getRight();
+		cur->setLeft(new SpaceAttackNode(self, opponent, gs));
+		cur->setRight(new NearOpponentDistanceNode(self, opponent, gs, 270));
+		cur = cur->getRight();
 		cur->setLeft(new CloseAttackNode(self, opponent, gs));
 		cur->setRight(new FarFromCenterDistanceNode(self, opponent, gs, 300.0));
 		cur = cur->getRight();

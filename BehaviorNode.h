@@ -49,10 +49,10 @@ public:
 
 class OutOfTimeNode: public BehaviorNode {
 	int timeThreshold;
+public:
 	OutOfTimeNode(Actor * me, Actor * opp, GameState * game, int time) :
 			BehaviorNode(me, opp, game), timeThreshold(time) {
 	}
-public:
 	BehaviorNode * test() {
 		if (gs->getTime() < timeThreshold) {
 			return t;
@@ -68,6 +68,8 @@ protected:
 	BehaviorNode * test() {
 		auto myDist = myPlayer->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
 		auto oppDist = opponent->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
+		//printf("near opp dist res %f\n", myDist.distance(oppDist));
+		//if (abs(abs(myDist.x) - abs(oppDist.x)) < distanceThreshold) {
 		if (myDist.distance(oppDist) < distanceThreshold) {
 			return t;
 		} else {
@@ -86,6 +88,7 @@ protected:
 	BehaviorNode * test() {
 		auto myDist = myPlayer->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
 		auto oppDist = opponent->getRootNode()->convertLocalToWorldPosition(Vector3::ZERO);
+		//if (abs(abs(myDist.x) - abs(oppDist.x)) > distanceThreshold) {
 		if (myDist.distance(oppDist) > distanceThreshold) {
 			return t;
 		} else {

@@ -26,7 +26,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../../ogre-imgui/imgui"
   "/usr/include/freetype2"
   "/usr/local/include/SDL2"
-  "/usr/include/SDL"
   "/usr/local/include/OGRE/Bites"
   "/usr/local/include/OGRE"
   "/usr/local/include/OGRE/Overlay"
