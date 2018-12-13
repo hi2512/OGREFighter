@@ -8,13 +8,14 @@ and use your super attack to finish them off!
 
 How To Build
 Enter ./run.
+(May need to copy resources.cfg into the build folder)
 
 Controls
 Player 1 movement: "WASD" keys
 Player 1 attacks: "XCV" keys
 (Attacks are light, medium, and heavy)
 Player 2 movement: "IJKL" keys
-Player 2 attacks: "BNM" keys
+Player 2 attacks: ",./" keys
 
 How To Play
 Reduce your opponent's health to 0 using your

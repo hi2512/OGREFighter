@@ -1,2 +1,0 @@
-/usr/bin/ar qc libOgreImgui.a  CMakeFiles/OgreImgui.dir/ogre-imgui/imgui/imgui.cpp.o CMakeFiles/OgreImgui.dir/ogre-imgui/imgui/imgui_draw.cpp.o CMakeFiles/OgreImgui.dir/ogre-imgui/imgui/imgui_demo.cpp.o CMakeFiles/OgreImgui.dir/ogre-imgui/imgui/misc/freetype/imgui_freetype.cpp.o CMakeFiles/OgreImgui.dir/ogre-imgui/ImguiManager.cpp.o CMakeFiles/OgreImgui.dir/ogre-imgui/ImguiRenderable.cpp.o
-/usr/bin/ranlib libOgreImgui.a
