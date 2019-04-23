@@ -7,8 +7,14 @@ your shuriken to attack the enemy from a distance
 and use your super attack to finish them off!
 
 How To Build
+
+Using Cmake (Now including OGRESDK and Bullet for your pleasure)
+Build OGRE
+Build Bullet
+
 Enter ./run.
 (May need to copy resources.cfg into the build folder)
+
 
 Controls
 Player 1 movement: "WASD" keys

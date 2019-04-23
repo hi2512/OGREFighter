@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.toolchain.gnu.base.878030104/OGRE_LOC/delimiter=\:
+environment/project/cdt.managedbuild.toolchain.gnu.base.878030104/OGRE_LOC/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.base.878030104/OGRE_LOC/value=/home/steve/Downloads/OgreSDK/ogre-1.11.2/
+environment/project/cdt.managedbuild.toolchain.gnu.base.878030104/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.base.878030104/appendContributed=true

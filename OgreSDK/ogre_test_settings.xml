@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+<language name="C++ Source File">
+<includepath>${OGRE_LOC}/OgreMain/include</includepath>
+<includepath>${OGRE_LOC}/build/include</includepath>
+<includepath>${OGRE_LOC}/Components/RTShaderSystem/include</includepath>
+<includepath>${OGRE_LOC}/Components/Bites/include</includepath>
+<includepath>${OGRE_LOC}/Samples/Common/include</includepath>
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+
+</language>
+</section>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+<language name="C++ Source File">
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+
+</language>
+</section>
+</cdtprojectproperties>
